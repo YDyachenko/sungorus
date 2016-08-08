@@ -1,0 +1,86 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('Sungorus ')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php
+        echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+            ->prependStylesheet($this->basePath() . '/css/main.css')
+            ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+        ?>
+
+        <?php
+        echo $this->headScript()
+            ->prependFile($this->basePath() . '/js/functions.js')
+            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/js/jquery.timeago.js')
+            ->prependFile($this->basePath() . '/js/jquery.min.js')
+        ;
+        ?>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('time.timeago').timeago();
+            })
+        </script>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="pull-right">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th"></span></a>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="<?= $this->url('export') ?>">Export</a>
+                                </li>
+                                <li>
+                                    <a href="<?= $this->url('auth', array('controller' => 'Auth', 'action' => 'changePassword')) ?>">Change password</a>
+                                </li>
+                                <li>
+                                    <a href="<?= $this->url('auth', array('controller' => 'Auth', 'action' => 'clearEncryptionKey')) ?>">Forget encryption key</a>
+                                </li>
+                                <li>
+                                    <a href="<?= $this->url('logout') ?>">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>">Sungorus</a>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <?php echo $this->content; ?>
+        </div> <!-- /container -->
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLable" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="deleteModalLable">Please Confirm</h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure that you want to delete the "<span class="name"></span>" <span class="item-type"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger btn-confirm">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

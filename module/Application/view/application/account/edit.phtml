@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-md-4">
+        <?=
+        $this->partial('/application/folder/partials/folders.phtml', array(
+            'folderId' => $folderId,
+            'folders'  => $folders,
+        ));
+        ?>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-default panel-shadow">
+            <div class="panel-heading">
+
+                <h3 class="panel-title">Account</h3>
+            </div>
+            <div class="panel-body">
+                <?php
+                $newPwdButton = new \Zend\Form\Element\Button(
+                    'newPwdButton', array(
+                    'label'         => '<span class="glyphicon glyphicon-refresh"></span>',
+                    'label_options' => array(
+                        'disable_html_escape' => true
+                    ),
+                ));
+                
+                $form->get('data')->get('password')->setOption('add-on-append', $newPwdButton);
+                $form->get('submit')->setAttribute('class', 'btn btn-primary');
+                echo $this->form($form);
+                
+                $openUrl = $this->url('folder/account/openUrl', array(
+                    'folderId' => $account->getFolderId(),
+                    'accountId' => $account->getId()
+                ));
+                ?>
+                </span>
+            </div>
+            <div class="panel-footer dates">  
+                <strong>Created:</strong> <time class="timeago" datetime="<?= $account->getDateCreated(); ?>"><?= $account->getDateCreated(); ?></time>
+                <strong>Modified:</strong> <time class="timeago" datetime="<?= $account->getDateModified(); ?>"><?= $account->getDateModified(); ?></time>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('button[name="newPwdButton"]').click(function () {
+        $('input[name="data[password]"]').val(generatePassword());
+    });
+    
+    $('input[name="data[url]"]').wrapAll('<div class="input-group"></div>')
+                                .after('<span class="input-group-btn"><a class="btn btn-default" title="Open in new window" href="<?php echo $this->escapeJs($openUrl); ?>" target="_blank"><span class="glyphicon glyphicon-new-window"></span></a>');
+</script>

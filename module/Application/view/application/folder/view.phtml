@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-4">
+        <?=
+        $this->partial('/application/folder/partials/folders.phtml', array(
+            'folderId' => $folderId,
+            'folders'  => $folders,
+        ));
+        ?>
+    </div>
+    <div class="col-md-8">
+        <?=
+        $this->partial('/application/folder/partials/accounts.phtml', array(
+            'folderId' => $folderId,
+            'accounts' => $accounts,
+        ));
+        ?>
+    </div>
+</div>

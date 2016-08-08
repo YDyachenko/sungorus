@@ -1,0 +1,33 @@
+<div class="panel panel-default panel-shadow">
+    <div class="panel-heading">
+        <?php if ($folderId): ?>
+            <div class="pull-right">
+                <a href="<?= $this->url('folder/addAccount', array('folderId' => $folderId)) ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
+            </div>
+        <? endif; ?>
+        <h3 class="panel-title">Accounts</h3>
+    </div>
+    <div class="list-group accounts-list">
+        <?php if (!$accounts->count()): ?>
+        <p class="list-group-item list-group-item-warning">Empty folder</p>
+        <? endif ?>
+        <?php
+        foreach ($accounts as $account):
+            $params     = array(
+                'folderId'  => $account->getFolderId(),
+                'accountId' => $account->getId()
+            );
+            $edit_url   = $this->url('folder/account', $params);
+            $delete_url = $this->url('folder/account/delete', $params);
+            $favicon_url = $this->url('folder/account/favicon', $params);
+            ?>
+            <a href="<?= $edit_url ?>" class="list-group-item">
+                <img class="favicon" src="<?= $favicon_url ?>">
+                <p class="list-group-item-text actions">
+                    <span onclick="return deleteAccount('<?= $this->escapeJs($delete_url) ?>', '<?= $this->escapeJs($account->getName()) ?>');" class="link" title="Delete"><span class="glyphicon glyphicon-remove"></span></span>
+                </p>
+                <?= $this->escapeHtml($account->getName()) ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>

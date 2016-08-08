@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-md-4">
+        <?=
+        $this->partial('/application/folder/partials/folders.phtml', array(
+            'folderId' => $folderId,
+            'folders'  => $folders,
+        ));
+        ?>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-default panel-shadow">
+            <div class="panel-heading">
+                <h3 class="panel-title">New account</h3>
+            </div>
+            <div class="panel-body">
+                <?php
+                $newPwdButton = new \Zend\Form\Element\Button(
+                    'newPwdButton', array(
+                        'label'         => '<span class="glyphicon glyphicon-refresh"></span>',
+                        'label_options' => array(
+                            'disable_html_escape' => true
+                        ),
+                    )
+                );
+                
+                $form->get('data')->get('password')->setOption('add-on-append', $newPwdButton);
+                $form->get('submit')->setAttribute('class', 'btn btn-primary');
+                echo $this->form($form);
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('button[name="newPwdButton"]').click(function() {
+        $('input[name="data[password]"]').val(generatePassword());
+    })
+</script>

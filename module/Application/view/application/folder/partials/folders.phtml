@@ -1,0 +1,24 @@
+<div class="panel panel-default panel-shadow">
+    <div class="panel-heading">
+        <div class="pull-right">
+            <a href="<?= $this->url('addFolder') ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
+        </div>
+        <h3 class="panel-title" data-toggle="collapse" data-target="#folders-list-group">Folders</h3>
+    </div>
+    <div class="list-group collapse in" id="folders-list-group">
+        <?php
+        foreach ($folders as $folder):
+            $viewUrl   = $this->url('folder', array('folderId' => $folder->getId()));
+            $editUrl   = $this->url('folder/edit', array('folderId' => $folder->getId()));
+            $deleteUrl = $this->url('folder/delete', array('folderId' => $folder->getId()));
+            ?>
+            <a href="<?= $viewUrl ?>" class="list-group-item <? if ($folderId == $folder->getId()) echo 'active'; ?>">
+                <p class="list-group-item-text actions">
+                    <span onclick="location.href = '<?= $editUrl ?>'; return false;" class="link" title="Edit"><span class="glyphicon glyphicon-edit"></span></span>
+                    <span onclick="return deleteFolder('<?= $this->escapeJs($deleteUrl) ?>', '<?= $this->escapeJs($folder->getName()) ?>');" class="link" title="Delete"><span class="glyphicon glyphicon-remove"></span></span>
+                </p>
+                <?= $this->escapeHtml($folder->getName()) ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</div>

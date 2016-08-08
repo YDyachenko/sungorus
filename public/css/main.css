@@ -1,0 +1,53 @@
+body {
+    padding-top: 75px;
+    padding-bottom: 40px;
+    background: url('/img/bg.png');  /* http://subtlepatterns.com/noisy-grid/ */
+}
+
+.navbar-default {
+    background-color: white;
+}
+
+.box {
+    background-color: white;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+}
+
+.list-group-item .actions {
+    visibility: hidden;
+    float: right;
+}
+
+.list-group-item:hover .actions {
+    visibility: visible;
+}
+
+.list-group-item .actions .link:hover {
+    color: #428BCA;
+}
+
+.list-group-item.active .actions .link {
+    color: #DDDDDD;
+}
+
+.list-group-item.active .actions .link:hover {
+    color: white;
+}
+
+.panel form>div.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.panel-shadow {
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.2);
+}
+
+.panel-footer.dates {
+    color: #999;
+    font-size: 80%;
+}
+
+.accounts-list .favicon {
+    margin-right: 5px;
+}
