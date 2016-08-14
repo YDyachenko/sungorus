@@ -42,7 +42,7 @@ return [
             'secure'   => true,
         ],
         'registration'   => [
-            'enabled' => false,
+            'enabled' => true,
         ],
         'authentication' => [
             'maxfailures' => 5,
