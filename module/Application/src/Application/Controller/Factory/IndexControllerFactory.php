@@ -11,12 +11,12 @@ class IndexControllerFactory implements FactoryInterface
 
     public function createService(ServiceLocatorInterface $controllers)
     {
-        $services     = $controllers->getServiceLocator();
-        $folderModel  = $services->get('FolderModel');
-        $accountModel = $services->get('AccountModel');
-        $authLogTable = $services->get('AuthLogSuccessTable');
+        $services       = $controllers->getServiceLocator();
+        $folderModel    = $services->get('FolderModel');
+        $accountModel   = $services->get('AccountModel');
+        $authLogService = $services->get('AuthLogService');
 
-        return new IndexController($folderModel, $accountModel, $authLogTable);
+        return new IndexController($folderModel, $accountModel, $authLogService);
     }
 
 }

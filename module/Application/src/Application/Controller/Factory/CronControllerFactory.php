@@ -11,12 +11,12 @@ class CronControllerFactory implements FactoryInterface
 
     public function createService(ServiceLocatorInterface $controllers)
     {
-        $services  = $controllers->getServiceLocator();
-        $config    = $services->get('config');
-        $keysTable = $services->get('EncryptionKeysTable');
-        $logTable  = $services->get('AuthLogFailureTable');
+        $services       = $controllers->getServiceLocator();
+        $config         = $services->get('config');
+        $keysTable      = $services->get('EncryptionKeysTable');
+        $authLogService = $services->get('AuthLogService');
 
-        return new CronController($config, $logTable, $keysTable);
+        return new CronController($config, $authLogService, $keysTable);
     }
 
 }

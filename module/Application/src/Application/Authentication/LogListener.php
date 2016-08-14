@@ -2,16 +2,12 @@
 
 namespace Application\Authentication;
 
-use Traversable;
-use Zend\Stdlib\ArrayUtils;
+use Application\Service\AuthLogService;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventInterface;
 use Zend\Http\Request;
-use Zend\Db\TableGateway\TableGatewayInterface;
-use Zend\Db\Sql\Expression;
 use Zend\Http\PhpEnvironment\RemoteAddress;
-use Application\Exception\InvalidArgumentException;
 
 class LogListener implements ListenerAggregateInterface
 {
@@ -24,35 +20,19 @@ class LogListener implements ListenerAggregateInterface
     protected $request;
 
     /**
-     * @var TableGatewayInterface
-     */
-    protected $successTable;
-
-    /**
-     * @var TableGatewayInterface
-     */
-    protected $failureTable;
-
-    /**
      * @var RemoteAddress
      */
     protected $remoteAddr;
 
     /**
-     * @var array 
+     * @var AuthLogService
      */
-    protected $options = array(
-        'maxfailures' => 5,
-        'blocktime'   => 86400,
-    );
+    protected $authLogService;
 
-    public function __construct(Request $request, TableGatewayInterface $successTable, TableGatewayInterface $failureTable, $options = array())
+    public function __construct(AuthLogService $authLogService, Request $request)
     {
-        $this->request      = $request;
-        $this->successTable = $successTable;
-        $this->failureTable = $failureTable;
-        
-        $this->setOptions($options);
+        $this->authLogService = $authLogService;
+        $this->request        = $request;
     }
 
     /**
@@ -60,9 +40,9 @@ class LogListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(AuthenticationService::EVENT_SUCCESS, array($this, 'onSuccess'));
-        $this->listeners[] = $events->attach(AuthenticationService::EVENT_FAILURE, array($this, 'onFailure'));
-        $this->listeners[] = $events->attach(AuthenticationService::EVENT_DISPATCH, array($this, 'checkIpBlocked'));
+        $this->listeners[] = $events->attach(AuthenticationService::EVENT_SUCCESS, [$this, 'onSuccess']);
+        $this->listeners[] = $events->attach(AuthenticationService::EVENT_FAILURE, [$this, 'onFailure']);
+        $this->listeners[] = $events->attach(AuthenticationService::EVENT_DISPATCH, [$this, 'checkIpBlocked']);
     }
 
     /**
@@ -80,52 +60,26 @@ class LogListener implements ListenerAggregateInterface
     public function onSuccess(EventInterface $event)
     {
         $userAgent = $this->request->getHeader('User-Agent')->getFieldValue();
+        $user      = $event->getParam('user');
+        $ip        = $this->getIpAddress();
 
-        $set = array(
-            'user_id'    => $event->getParam('user_id'),
-            'ip'         => $this->ip2long($this->getIpAddress()),
-            'user_agent' => substr($userAgent, 0, 255)
-        );
-
-        $this->successTable->insert($set);
+        $this->authLogService->logSuccess($user, $ip, $userAgent);
     }
 
     public function onFailure(EventInterface $event)
     {
-        $ip = $this->ip2long($this->getIpAddress());
-
-        $rowset = $this->failureTable->select(array('ip' => $ip));
-
-        if ($rowset->count()) {
-            $this->failureTable->update(array(
-                'count'    => new Expression('count + 1'),
-                'datetime' => new Expression('now()')
-            ), array('ip' => $ip));
-        } else {
-            $this->failureTable->insert(array(
-                'ip'       => $ip,
-                'count'    => 1,
-                'datetime' => new Expression('now()')
-            ));
-        }
+        $this->authLogService->logFailure($this->getIpAddress());
     }
 
     public function checkIpBlocked(EventInterface $event)
     {
-        $ip    = $this->ip2long($this->getIpAddress());
-        $where = array(
-            'ip'                                     => $ip,
-            'count >= ?'                             => $this->options['maxfailures'],
-            '`datetime` > now() - INTERVAL ? SECOND' => $this->options['blocktime']
-        );
+        $ip = $this->getIpAddress();
 
-        $rowset = $this->failureTable->select($where);
-
-        if ($rowset->count()) {
+        if ($this->authLogService->isIpBlocked($ip)) {
             $event->stopPropagation(true);
-            return array(
+            return [
                 'message' => 'Your IP address has been blocked'
-            );
+            ];
         }
     }
 
@@ -136,46 +90,6 @@ class LogListener implements ListenerAggregateInterface
         }
 
         return $this->remoteAddr->getIpAddress();
-    }
-
-    protected function ip2long($ip)
-    {
-        return sprintf('%u', ip2long($ip));
-    }
-    
-    /**
-     * Set options
-     * @param array|Traversable $options
-     * @throws InvalidArgumentException
-     */
-    public function setOptions($options) {
-        if ($options instanceof Traversable) {
-            $options = ArrayUtils::iteratorToArray($options);
-        } elseif (!is_array($options)) {
-            throw new InvalidArgumentException(
-                'The options parameter must be an array or a Traversable'
-            );
-        }
-        
-        foreach ($options as $name => $value) {
-            if (isset($this->options[$name])) {
-                $this->options[$name] = $value;
-            }
-        }
-    }
-    
-    /**
-     * Return the specified option
-     * @param string $option
-     * @return NULL|mixed
-     */
-    public function getOption($option)
-    {
-        if (!isset($this->options[$option])) {
-            return null;
-        }
-
-        return $this->options[$option];
     }
 
 }

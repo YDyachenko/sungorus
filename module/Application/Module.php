@@ -184,17 +184,10 @@ class Module implements
                     return \Zend\Crypt\BlockCipher::factory('mcrypt');
                 },
                 'Authentication\LogListener' => function (ServiceLocatorInterface $sm) {
-                    $successTable = $sm->get('AuthLogSuccessTable');
-                    $failureTable = $sm->get('AuthLogFailureTable');
-                    $request      = $sm->get('Request');
+                    $request        = $sm->get('Request');
+                    $authLogService = $sm->get('AuthLogService');
 
-                    $config  = $sm->get('Config');
-                    $options = [];
-                    if (isset($config['application']['authentication']['logListener'])) {
-                        $options = $config['application']['authentication']['logListener'];
-                    }
-
-                    return new Authentication\LogListener($request, $successTable, $failureTable, $options);
+                    return new Authentication\LogListener($authLogService, $request);
                 },
                 'ExportService' => function (ServiceLocatorInterface $sm) {
                     $folderModel  = $sm->get('FolderModel');
@@ -207,6 +200,13 @@ class Module implements
                     $table       = $sm->get('EncryptionKeysTable');
                     
                     return new Service\UserKeyService($table, $blockCipher);
+                },
+                'AuthLogService' => function (ServiceLocatorInterface $sm) {
+                    $config       = $sm->get('Config');
+                    $successTable = $sm->get('AuthLogSuccessTable');
+                    $failureTable = $sm->get('AuthLogFailureTable');
+                    
+                    return new Service\AuthLogService($config, $successTable, $failureTable);
                 },
                 'SignupForm' => function (ServiceLocatorInterface $sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');

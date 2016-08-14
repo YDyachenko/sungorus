@@ -59,10 +59,7 @@ class AuthenticationService extends ZendAuthService implements EventManagerAware
         if ($result->isValid()) {
             SessionContainer::getDefaultManager()->regenerateId();
             $this->getStorage()->write($result->getIdentity());
-            $row    = $adapter->getResultRowObject(array('id'));
-            $params = array(
-                'user_id' => $row->id,
-            );
+            $params = ['user' => $this->getIdentity()];
             $this->eventManager->trigger(self::EVENT_SUCCESS, $this, $params);
         } else {
             $this->eventManager->trigger(self::EVENT_FAILURE, $this);

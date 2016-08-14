@@ -11,27 +11,27 @@ class CronController extends AbstractActionController
 
     /**
      *
-     * @var \Zend\Db\TableGateway\TableGatewayInterface
+     * @var \Application\Service\AuthLogService
      */
-    protected $logTable;
-    
+    protected $authLogService;
+
     /**
      *
      * @var \Zend\Db\TableGateway\TableGatewayInterface
      */
     protected $keysTable;
-    
+
     /**
      *
      * @var \Zend\Config\Config
      */
     protected $config;
 
-    public function __construct($config, $logTable, $keysTable)
+    public function __construct($config, $authLogService, $keysTable)
     {
-        $this->logTable  = $logTable;
-        $this->keysTable = $keysTable;
-        $this->config    = $config;
+        $this->authLogService = $authLogService;
+        $this->keysTable      = $keysTable;
+        $this->config         = $config;
     }
 
     public function setEventManager(EventManagerInterface $events)
@@ -59,11 +59,7 @@ class CronController extends AbstractActionController
 
     public function clearLogFailureTableAction()
     {
-        $blocktime = $this->config['application']['authentication']['logListener']['blocktime'];
-
-        $rows = $this->logTable->delete(array(
-            '`datetime` < NOW() - INTERVAL ? SECOND' => $blocktime
-        ));
+        $rows = $this->authLogService->deleteOldFailures();
 
         return "Removed $rows row(s)\n";
     }

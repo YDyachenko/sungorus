@@ -45,10 +45,8 @@ return [
             'enabled' => false,
         ],
         'authentication' => [
-            'logListener' => [
-                'maxfailures' => 5,
-                'blocktime'   => 60 * 60 * 24,
-            ]
+            'maxfailures' => 5,
+            'blocktime'   => 60 * 60 * 24,
         ],
     ],
 ];

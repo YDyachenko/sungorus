@@ -22,15 +22,15 @@ class IndexController extends AbstractActionController
 
     /**
      *
-     * @var \Zend\Db\TableGateway\TableGatewayInterface
+     * @var \Application\Service\AuthLogService
      */
-    protected $authLogTable;
+    protected $authLogService;
 
-    public function __construct($folderModel, $accountModel, $authLogTable)
+    public function __construct($folderModel, $accountModel, $authLogService)
     {
-        $this->folderModel  = $folderModel;
-        $this->accountModel = $accountModel;
-        $this->authLogTable = $authLogTable;
+        $this->folderModel    = $folderModel;
+        $this->accountModel   = $accountModel;
+        $this->authLogService = $authLogService;
     }
 
     /**
@@ -51,17 +51,10 @@ class IndexController extends AbstractActionController
     {
         $user = $this->identity();
 
-        $lastAuth = $this->authLogTable->select(function ($select) use ($user) {
-                $select->where(['user_id' => $user->getId()])
-                    ->order('datetime DESC')
-                    ->limit(1)
-                    ->offset(1);
-            })->current();
-
         return [
             'folders'  => $this->folderModel->fetchByUser($user)->buffer(),
             'accounts' => $this->accountModel->fetchUserFavorites($user),
-            'lastAuth' => $lastAuth
+            'lastAuth' => $this->authLogService->getLastSuccess($user)
         ];
     }
 
