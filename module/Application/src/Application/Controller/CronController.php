@@ -17,21 +17,14 @@ class CronController extends AbstractActionController
 
     /**
      *
-     * @var \Zend\Db\TableGateway\TableGatewayInterface
+     * @var \Application\Service\UserKeyService
      */
-    protected $keysTable;
+    protected $keysService;
 
-    /**
-     *
-     * @var \Zend\Config\Config
-     */
-    protected $config;
-
-    public function __construct($config, $authLogService, $keysTable)
+    public function __construct($authLogService, $keysService)
     {
         $this->authLogService = $authLogService;
-        $this->keysTable      = $keysTable;
-        $this->config         = $config;
+        $this->keysService    = $keysService;
     }
 
     public function setEventManager(EventManagerInterface $events)
@@ -50,9 +43,7 @@ class CronController extends AbstractActionController
 
     public function clearKeysTableAction()
     {
-        $rows = $this->keysTable->delete([
-            '`date` < NOW() - INTERVAL 2 WEEK'
-        ]);
+        $rows = $this->keysService->deleteExpiredKeys();
 
         return "Removed $rows row(s)\n";
     }

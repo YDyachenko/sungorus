@@ -81,5 +81,15 @@ class UserKeyService
 
         return $userKey;
     }
+    
+    /**
+     * Delete expired user keys
+     * @return int
+     */
+    public function deleteExpiredKeys() {
+        return $this->keysTable->delete([
+            '`date` < NOW() - INTERVAL 2 WEEK'
+        ]);
+    }
 
 }
