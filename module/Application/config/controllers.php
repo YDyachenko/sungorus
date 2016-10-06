@@ -16,6 +16,7 @@ return [
             Controller\ExportController::class       => Factory\ExportControllerFactory::class,
             Controller\FolderController::class       => Factory\FolderControllerFactory::class,
             Controller\RegistrationController::class => Factory\RegistrationControllerFactory::class,
+            Controller\SearchController::class       => Factory\SearchControllerFactory::class,
         ]
     ],
     'controller_plugins' => [

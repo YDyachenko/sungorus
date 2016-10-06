@@ -102,6 +102,23 @@ class AccountModel
         });
         return $rowset;
     }
+    
+    /**
+     * Search accounts
+     * @param string $name account name
+     * @param UserEntity $user
+     * @return AccountEntity[]
+     */
+    public function searchByName($name, UserEntity $user)
+    {
+        $rowset = $this->accountsTable->select(function (Select $select) use ($name, $user) {
+            $select->where([
+                'user_id' => $user->getId(),
+                'name LIKE ?' => '%' . str_replace(['_', '%'], ['\_', '\%'], $name) . '%'
+                ])->order('name ASC');
+        });
+        return $rowset;
+    }
 
     /**
      * Fetch account data

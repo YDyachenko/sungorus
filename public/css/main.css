@@ -8,6 +8,34 @@ body {
     background-color: white;
 }
 
+.search-input-group .input-group-addon {
+    background: white !important; 
+}
+.search-input-group .form-control {
+    border-left: 0; 
+    box-shadow: 0 0 0; 
+    border-color: #ccc;
+    padding-left: 0;
+}
+
+.list-group-search-item .form-control {
+    border-radius: 0;
+    border: 0;
+    padding: 0;
+    box-shadow: 0 0 0;
+    height: 20px;
+}
+
+.list-group-search-item .input-group-addon {
+    border-radius: 0;
+    border: 0;
+    padding: 0 12px 0 0;
+}
+
+.list-group-search-item {
+    /*padding: 0;*/
+}
+
 .box {
     background-color: white;
     border: 1px solid #DDDDDD;

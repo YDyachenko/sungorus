@@ -1,0 +1,55 @@
+<?php
+$folderNames = array();
+foreach ($folders as $folder) {
+    $folderNames[$folder->getId()] = $folder->getName();
+}
+?>
+<div class="row">
+    <div class="col-md-4">
+        <?=
+        $this->partial('/application/folder/partials/folders.phtml', array(
+            'folderId' => 0,
+            'folders'  => $folders,
+        ));
+        ?>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-default panel-shadow">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search results</h3>
+            </div>
+            <div class="list-group accounts-list">
+                <div class="list-group-item list-group-search-item">
+                    <form role="search" action="<?= $this->url('search') ?>">
+                        <div class="form-group">
+                            <div class="input-group search-input-group">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </span>
+                                <input type="text" name="name" class="form-control"  placeholder="Search account" autofocus="" value="<?= $this->escapeHtmlAttr($name) ?>">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <?php if (!count($accounts)): ?>
+                    <p class="list-group-item list-group-item-warning">Your search returned no matches</p>
+                <? endif ?>
+                <?php
+                foreach ($accounts as $account):
+                    $params = array(
+                        'folderId'  => $account->getFolderId(),
+                        'accountId' => $account->getId()
+                    );
+                ?>
+                    <a href="<?= $this->url('folder/account', $params) ?>" class="list-group-item">
+                        <img class="favicon" src="<?= $this->url('folder/account/favicon', $params) ?>">
+                        <?= $this->escapeHtml($account->getName()) ?>
+                        <span class="badge" title="Folder">
+                            <?= $this->escapeHtml($folderNames[$account->getFolderId()]) ?>
+                        </span>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>

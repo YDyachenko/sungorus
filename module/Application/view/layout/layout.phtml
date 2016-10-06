@@ -35,6 +35,16 @@
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="pull-right">
+                    <form class="navbar-form navbar-left" role="search" action="<?= $this->url('search') ?>">
+                        <div class="form-group">
+                            <div class="input-group search-input-group">
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                </span>
+                                <input type="text" name="name" class="form-control"  placeholder="Search account" >
+                            </div>
+                        </div>
+                    </form>
                     <ul class="nav navbar-nav">
                         <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-th"></span></a>

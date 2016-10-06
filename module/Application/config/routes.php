@@ -7,6 +7,7 @@ use Application\Controller\ExportController;
 use Application\Controller\FolderController;
 use Application\Controller\IndexController;
 use Application\Controller\RegistrationController;
+use Application\Controller\SearchController;
 use Zend\Mvc\Router\Http\Literal;
 use Zend\Mvc\Router\Http\Segment;
 
@@ -83,6 +84,16 @@ return [
                     'defaults' => [
                         'controller' => AuthController::class,
                         'action'     => 'encryptionKey',
+                    ],
+                ],
+            ],
+            'search'         => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/search',
+                    'defaults' => [
+                        'controller' => SearchController::class,
+                        'action'     => 'index',
                     ],
                 ],
             ],
