@@ -1,22 +1,11 @@
 <?php
 
 return [
-    'db'             => [
+    'db'           => [
         'profiler' => true,
     ],
-    'view_manager'   => [
+    'view_manager' => [
         'display_exceptions'       => true,
         'display_not_found_reason' => false,
-    ],
-    'session_config' => [
-        'cookie_secure' => false,
-    ],
-    'application'    => [
-        'enc_key_cookie' => [
-            'secure' => false,
-        ],
-        'registration'   => [
-            'enabled' => true,
-        ],
     ],
 ];
