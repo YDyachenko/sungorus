@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Application\Authentication\AuthenticationService;
+use Application\Authentication\AuthEvent;
 use Application\Form;
 use Application\Exception\ForbiddenException;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -57,8 +58,9 @@ class AuthController extends AbstractActionController
         $error   = false;
         $message = '';
         $form    = new Form\LoginForm();
+        $events  = $this->getEventManager(); 
 
-        $results = $this->authService->getEventManager()->trigger(AuthenticationService::EVENT_DISPATCH);
+        $results = $events->trigger(AuthEvent::EVENT_AUTHENTICATION);
         if ($results->stopped()) {
             $result  = $results->last();
             $message = $result['message'];
@@ -80,9 +82,18 @@ class AuthController extends AbstractActionController
                             ->setCredential($data['credential']);
 
                 $result = $this->authService->authenticate();
+                
+                $event = new AuthEvent();
+                $event->setTarget($this);
+                $event->setRequest($request);
+                
                 if ($result->isValid()) {
+                    $event->setName(AuthEvent::EVENT_AUTHENTICATION_SUCCESS);
+                    $events->trigger($event);
                     return $this->redirect()->toRoute('home');
                 } else {
+                    $event->setName(AuthEvent::EVENT_AUTHENTICATION_FAILURE);
+                    $events->trigger($event);
                     $error = true;
                 }
             }

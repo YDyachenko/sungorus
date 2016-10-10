@@ -2,13 +2,14 @@
 
 namespace Application;
 
+use Application\Controller;
 use Application\Model;
-use Application\Authentication\AuthenticationService;
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Adapter\DbTable\CallbackCheckAdapter as AuthAdapter;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Authentication\Adapter\DbTable\CallbackCheckAdapter as AuthAdapter;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Http\Request as HttpRequest;
@@ -39,8 +40,12 @@ class Module implements
             $em->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -100);
 
             $sm = $e->getApplication()->getServiceManager();
-            $logListener = $sm->get('Authentication\LogListener');
-            $sm->get('AuthService')->getEventManager()->attachAggregate($logListener);
+
+            $sharedManager = $em->getSharedManager();
+            $sharedManager->attach(Controller\AuthController::class, MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
+                $controller = $e->getTarget();
+                $controller->getEventManager()->attachAggregate($sm->get('Authentication\AuthListener'));
+            }, 2);
 
             $sessionManager = $sm->get('SessionManager');
             try {
@@ -183,11 +188,10 @@ class Module implements
                 'BlockCipher' => function () {
                     return \Zend\Crypt\BlockCipher::factory('mcrypt');
                 },
-                'Authentication\LogListener' => function (ServiceLocatorInterface $sm) {
-                    $request        = $sm->get('Request');
+                'Authentication\AuthListener' => function (ServiceLocatorInterface $sm) {
                     $authLogService = $sm->get('AuthLogService');
 
-                    return new Authentication\LogListener($authLogService, $request);
+                    return new Authentication\AuthListener($authLogService);
                 },
                 'ExportService' => function (ServiceLocatorInterface $sm) {
                     $folderModel  = $sm->get('FolderModel');

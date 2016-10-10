@@ -9,15 +9,10 @@ use Zend\EventManager\EventInterface;
 use Zend\Http\Request;
 use Zend\Http\PhpEnvironment\RemoteAddress;
 
-class LogListener implements ListenerAggregateInterface
+class AuthListener implements ListenerAggregateInterface
 {
 
     protected $listeners = array();
-
-    /**
-     * @var Request
-     */
-    protected $request;
 
     /**
      * @var RemoteAddress
@@ -29,10 +24,9 @@ class LogListener implements ListenerAggregateInterface
      */
     protected $authLogService;
 
-    public function __construct(AuthLogService $authLogService, Request $request)
+    public function __construct(AuthLogService $authLogService)
     {
         $this->authLogService = $authLogService;
-        $this->request        = $request;
     }
 
     /**
@@ -40,9 +34,9 @@ class LogListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(AuthenticationService::EVENT_SUCCESS, [$this, 'onSuccess']);
-        $this->listeners[] = $events->attach(AuthenticationService::EVENT_FAILURE, [$this, 'onFailure']);
-        $this->listeners[] = $events->attach(AuthenticationService::EVENT_DISPATCH, [$this, 'checkIpBlocked']);
+        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION, [$this, 'checkIpBlocked']);
+        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION_SUCCESS, [$this, 'onSuccess']);
+        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION_FAILURE, [$this, 'onFailure']);
     }
 
     /**
@@ -57,16 +51,17 @@ class LogListener implements ListenerAggregateInterface
         }
     }
 
-    public function onSuccess(EventInterface $event)
+    public function onSuccess(AuthEvent $event)
     {
-        $userAgent = $this->request->getHeader('User-Agent')->getFieldValue();
-        $user      = $event->getParam('user');
+        $request   = $event->getRequest();
+        $userAgent = $request->getHeader('User-Agent')->getFieldValue();
+        $user      = $event->getTarget()->identity();
         $ip        = $this->getIpAddress();
 
         $this->authLogService->logSuccess($user, $ip, $userAgent);
     }
 
-    public function onFailure(EventInterface $event)
+    public function onFailure(AuthEvent $event)
     {
         $this->authLogService->logFailure($this->getIpAddress());
     }
