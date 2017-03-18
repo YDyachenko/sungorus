@@ -3,21 +3,6 @@
 use Application\Controller\CronController;
 
 return [
-    'service_manager' => [
-        'aliases'            => [
-            'Zend\Authentication\AuthenticationService' => 'AuthService'
-        ],
-        'abstract_factories' => [
-            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Application\Service\TableGatewayAbstractFactory',
-        ],
-        'invokables'         => [
-            'FaviconService' => 'Application\Service\FaviconService',
-        ],
-        'shared'             => [
-            'BlockCipher' => false
-        ],
-    ],
     'view_manager'    => [
         'display_not_found_reason' => false,
         'display_exceptions'       => false,
