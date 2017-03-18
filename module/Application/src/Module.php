@@ -104,14 +104,15 @@ class Module implements
     {
         $config = [];
  
-        $configPaths = [
-            __DIR__ . '/config/module.config.php',
-            __DIR__ . '/config/routes.php',
-            __DIR__ . '/config/controllers.php',
-            __DIR__ . '/config/tablegateways.php',
+        $configs = [
+            'module.config.php',
+            'routes.php',
+            'controllers.php',
+            'tablegateways.php',
         ];
 
-        foreach ($configPaths as $path) {
+        foreach ($configs as $file) {
+            $path = __DIR__ . '/../config/' . $file;
             $config = \Zend\Stdlib\ArrayUtils::merge($config, include $path);
         }
 

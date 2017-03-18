@@ -32,5 +32,10 @@
         "neilime/zf2-twb-bundle": "2.*@stable",
         "ydyachenko/db-queries-toolbar": "^0.1",
         "twbs/bootstrap": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Application\\": "module/Application/src/"
+        }
     }
 }
