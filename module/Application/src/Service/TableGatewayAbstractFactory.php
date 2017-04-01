@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -33,7 +34,7 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $dbAdapter   = $serviceLocator->get('Zend\Db\Adapter\Adapter');
+        $dbAdapter   = $serviceLocator->get(Adapter::class);
         $config      = $serviceLocator->get('config');
         $gatewayName = $this->getConfigKey($requestedName);
         $gwConfig    = $config['tablegateways'][$gatewayName];

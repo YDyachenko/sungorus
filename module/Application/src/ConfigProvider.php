@@ -2,18 +2,25 @@
 
 namespace Application;
 
+use Application\Authentication\Service\AuthenticationServiceFactory;
+use Application\Authentication\Service\StorageFactory as AuthStorageFactory;
 use Application\Model;
+use Application\Service\FaviconService;
+use Application\Service\TableGatewayAbstractFactory;
 use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable\CallbackCheckAdapter as AuthAdapter;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Authentication\AuthenticationServiceInterface;
+use Zend\Authentication\Storage\StorageInterface as AuthStorage;
+use Zend\Db\Adapter\Adapter as DbAdapter;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ConfigProvider
 {
 
     /**
-     * Retrieve configuration for zend-session.
+     * Retrieve configuration for Application.
      *
      * @return array
      */
@@ -25,7 +32,7 @@ class ConfigProvider
     }
 
     /**
-     * Retrieve dependency config for zend-session.
+     * Retrieve dependency config for Application.
      *
      * @return array
      */
@@ -33,48 +40,34 @@ class ConfigProvider
     {
         return [
             'aliases'            => [
-                'Zend\Authentication\AuthenticationService' => 'AuthService'
+                'AuthService'                => AuthenticationServiceInterface::class,
+                AuthenticationService::class => AuthenticationServiceInterface::class,
             ],
             'abstract_factories' => [
-                'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-                'Application\Service\TableGatewayAbstractFactory',
+                StorageCacheAbstractServiceFactory::class,
+                TableGatewayAbstractFactory::class,
             ],
             'invokables'         => [
-                'FaviconService' => 'Application\Service\FaviconService',
+                FaviconService::class => FaviconService::class,
             ],
             'shared'             => [
                 'BlockCipher' => false
             ],
             'factories'          => [
-                'AuthStorage' => function (ServiceLocatorInterface $sm) {
-                    $model = $sm->get('UserModel');
-
-                    return new Authentication\Storage\SessionProxy($model);
-                },
-                'AuthService'        => function (ServiceLocatorInterface $sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                    $callback  = function ($hash, $password) {
-                            $bcrypt = new \Zend\Crypt\Password\Bcrypt();
-                            return $bcrypt->verify($password, $hash);
-                        };
-
-                    $authAdapter = new AuthAdapter($dbAdapter, 'users', 'email', 'password', $callback);
-                    $authService = new AuthenticationService($sm->get('AuthStorage'), $authAdapter);
-
-                    return $authService;
-                },
-                'UserModel' => function (ServiceLocatorInterface $sm) {
+                AuthenticationServiceInterface::class => AuthenticationServiceFactory::class,
+                AuthStorage::class                    => AuthStorageFactory::class,
+                'UserModel'                           => function (ServiceLocatorInterface $sm) {
                     $table = $sm->get('UsersTable');
 
                     return new Model\UserModel($table);
                 },
-                'FolderModel' => function (ServiceLocatorInterface $sm) {
+                'FolderModel'        => function (ServiceLocatorInterface $sm) {
                     $foldersTable = $sm->get('FoldersTable');
 
                     return new Model\FolderModel($foldersTable);
                 },
                 'AccountsDataTable' => function (ServiceLocatorInterface $sm) {
-                    $dbAdapter   = $sm->get('Zend\Db\Adapter\Adapter');
+                    $dbAdapter   = $sm->get(DbAdapter::class);
                     $blockCipher = $sm->get('BlockCipher');
 
                     $hydrator           = new Hydrator\AccountDataDecoder($blockCipher);
@@ -118,7 +111,7 @@ class ConfigProvider
                     return new Service\AuthLogService($config, $successTable, $failureTable);
                 },
                 'SignupForm' => function (ServiceLocatorInterface $sm) {
-                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $dbAdapter = $sm->get(DbAdapter::class);
                     return new Form\SignupForm($dbAdapter);
                 }
             ],

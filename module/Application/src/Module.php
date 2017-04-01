@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Controller;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\Mvc\Router\RouteMatch;
