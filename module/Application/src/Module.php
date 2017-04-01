@@ -66,7 +66,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
         $sm = $e->getApplication()->getServiceManager();
 
-        if ($sm->get('AuthService')->hasIdentity()) {
+        if ($sm->get(AuthenticationServiceInterface::class)->hasIdentity()) {
             return;
         }
 

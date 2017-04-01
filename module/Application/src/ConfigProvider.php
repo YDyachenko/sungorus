@@ -40,7 +40,6 @@ class ConfigProvider
     {
         return [
             'aliases'            => [
-                'AuthService'                => AuthenticationServiceInterface::class,
                 AuthenticationService::class => AuthenticationServiceInterface::class,
             ],
             'abstract_factories' => [
