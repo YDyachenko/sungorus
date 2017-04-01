@@ -1,5 +1,9 @@
 <?php
 
+use Zend\Session\Storage\SessionArrayStorage;
+use Zend\Session\Validator\RemoteAddr;
+use Zend\Session\Validator\HttpUserAgent;
+
 /**
  * Global Configuration Override
  *
@@ -31,9 +35,12 @@ return [
     'session_manager' => [
         'enable_default_container_manager' => true,
         'validators'                       => [
-            'Zend\Session\Validator\HttpUserAgent',
-            'Zend\Session\Validator\RemoteAddr'
+            RemoteAddr::class,
+            HttpUserAgent::class,
         ]
+    ],
+    'session_storage' => [
+        'type' => SessionArrayStorage::class
     ],
     'application'     => [
         'enc_key_cookie' => [

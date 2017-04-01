@@ -3,6 +3,7 @@
 return [
     // This should be an array of module namespaces used in the application.
     'modules' => [
+        'Zend\Session',
         'Application',
         'TwbBundle',
         'ZF\DevelopmentMode'

@@ -11,6 +11,7 @@ use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\Session\SessionManager;
 
 class Module implements BootstrapListenerInterface, ConfigProviderInterface, ConsoleUsageProviderInterface
 {
@@ -32,8 +33,8 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 $controller = $e->getTarget();
                 $controller->getEventManager()->attachAggregate($sm->get('Authentication\AuthListener'));
             }, 2);
-
-            $sessionManager = $sm->get('SessionManager');
+            
+            $sessionManager = $sm->get(SessionManager::class);
             try {
                 $sessionManager->start();
             } catch (\Exception $ex) {

@@ -46,9 +46,7 @@ class ConfigProvider
                 'BlockCipher' => false
             ],
             'factories'          => [
-                'SessionManager'                      => 'Zend\Session\Service\SessionManagerFactory',
-                'Zend\Session\Config\ConfigInterface' => 'Zend\Session\Service\SessionConfigFactory',
-                'AuthStorage'                         => function (ServiceLocatorInterface $sm) {
+                'AuthStorage' => function (ServiceLocatorInterface $sm) {
                     $model = $sm->get('UserModel');
 
                     return new Authentication\Storage\SessionProxy($model);
