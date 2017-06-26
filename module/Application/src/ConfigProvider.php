@@ -5,6 +5,7 @@ namespace Application;
 use Application\Authentication\Service\AuthenticationServiceFactory;
 use Application\Authentication\Service\StorageFactory as AuthStorageFactory;
 use Application\Model;
+use Application\Model\Factory as ModelFactory;
 use Application\Service\FaviconService;
 use Application\Service\TableGatewayAbstractFactory;
 use Zend\Authentication\AuthenticationService;
@@ -39,48 +40,35 @@ class ConfigProvider
     public function getDependencyConfig()
     {
         return [
-            'aliases'            => [
+            'aliases' => [
                 AuthenticationService::class => AuthenticationServiceInterface::class,
             ],
             'abstract_factories' => [
                 StorageCacheAbstractServiceFactory::class,
                 TableGatewayAbstractFactory::class,
             ],
-            'invokables'         => [
+            'invokables' => [
                 FaviconService::class => FaviconService::class,
             ],
-            'shared'             => [
+            'shared' => [
                 'BlockCipher' => false
             ],
-            'factories'          => [
+            'factories' => [
                 AuthenticationServiceInterface::class => AuthenticationServiceFactory::class,
-                AuthStorage::class                    => AuthStorageFactory::class,
-                'UserModel'                           => function (ServiceLocatorInterface $sm) {
-                    $table = $sm->get('UsersTable');
-
-                    return new Model\UserModel($table);
-                },
-                'FolderModel'        => function (ServiceLocatorInterface $sm) {
-                    $foldersTable = $sm->get('FoldersTable');
-
-                    return new Model\FolderModel($foldersTable);
-                },
+                AuthStorage::class => AuthStorageFactory::class,
+                'UserModel' => ModelFactory\UserModelFactory::class,
+                'FolderModel' => ModelFactory\FolderModelFactory::class,
+                'AccountModel' => ModelFactory\AccountModelFactory::class,
                 'AccountsDataTable' => function (ServiceLocatorInterface $sm) {
                     $dbAdapter   = $sm->get(DbAdapter::class);
                     $blockCipher = $sm->get('BlockCipher');
 
                     $hydrator           = new Hydrator\AccountDataDecoder($blockCipher);
                     $resultSetPrototype = new HydratingResultSet(
-                        $hydrator, new Model\AccountDataEntity()
+                            $hydrator, new Model\AccountDataEntity()
                     );
 
                     return new TableGateway('accounts_data', $dbAdapter, null, $resultSetPrototype);
-                },
-                'AccountModel' => function (ServiceLocatorInterface $sm) {
-                    $accountsTable = $sm->get('AccountsTable');
-                    $dataTable     = $sm->get('AccountsDataTable');
-
-                    return new Model\AccountModel($accountsTable, $dataTable);
                 },
                 'BlockCipher' => function () {
                     return \Zend\Crypt\BlockCipher::factory('mcrypt');
