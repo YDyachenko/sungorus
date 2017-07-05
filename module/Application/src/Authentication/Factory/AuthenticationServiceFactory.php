@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Authentication\Service;
+namespace Application\Authentication\Factory;
 
 use Psr\Container\ContainerInterface;
 use Zend\Authentication\Adapter\DbTable\CallbackCheckAdapter;

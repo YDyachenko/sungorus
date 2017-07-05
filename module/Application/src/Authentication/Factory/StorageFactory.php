@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Authentication\Service;
+namespace Application\Authentication\Factory;
 
 use Application\Authentication\Storage\SessionProxy;
 use Psr\Container\ContainerInterface;

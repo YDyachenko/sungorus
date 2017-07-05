@@ -2,8 +2,7 @@
 
 namespace Application;
 
-use Application\Authentication\Service\AuthenticationServiceFactory;
-use Application\Authentication\Service\StorageFactory as AuthStorageFactory;
+use Application\Authentication;
 use Application\Model;
 use Application\Model\Factory as ModelFactory;
 use Application\Service\FaviconService;
@@ -54,8 +53,8 @@ class ConfigProvider
                 'BlockCipher' => false
             ],
             'factories' => [
-                AuthenticationServiceInterface::class => AuthenticationServiceFactory::class,
-                AuthStorage::class => AuthStorageFactory::class,
+                AuthenticationServiceInterface::class => Authentication\Factory\AuthenticationServiceFactory::class,
+                AuthStorage::class => Authentication\Factory\StorageFactory::class,
                 'UserModel' => ModelFactory\UserModelFactory::class,
                 'FolderModel' => ModelFactory\FolderModelFactory::class,
                 'AccountModel' => ModelFactory\AccountModelFactory::class,
@@ -73,30 +72,10 @@ class ConfigProvider
                 'BlockCipher' => function () {
                     return \Zend\Crypt\BlockCipher::factory('mcrypt');
                 },
-                'Authentication\AuthListener' => function (ServiceLocatorInterface $sm) {
-                    $authLogService = $sm->get('AuthLogService');
-
-                    return new Authentication\AuthListener($authLogService);
-                },
-                'ExportService' => function (ServiceLocatorInterface $sm) {
-                    $folderModel  = $sm->get('FolderModel');
-                    $accountModel = $sm->get('AccountModel');
-
-                    return new Service\ExportService($folderModel, $accountModel);
-                },
-                'UserKeyService' => function (ServiceLocatorInterface $sm) {
-                    $blockCipher = $sm->get('BlockCipher');
-                    $table       = $sm->get('EncryptionKeysTable');
-
-                    return new Service\UserKeyService($table, $blockCipher);
-                },
-                'AuthLogService' => function (ServiceLocatorInterface $sm) {
-                    $config       = $sm->get('Config');
-                    $successTable = $sm->get('AuthLogSuccessTable');
-                    $failureTable = $sm->get('AuthLogFailureTable');
-
-                    return new Service\AuthLogService($config, $successTable, $failureTable);
-                },
+                'Authentication\AuthListener' => Authentication\Factory\AuthListenerFactory::class,
+                'ExportService' => Service\Factory\ExportServiceFactory::class,
+                'UserKeyService' => Service\Factory\UserKeyServiceFactory::class,
+                'AuthLogService' => Service\Factory\AuthLogServiceFactory::class,
                 'SignupForm' => function (ServiceLocatorInterface $sm) {
                     $dbAdapter = $sm->get(DbAdapter::class);
                     return new Form\SignupForm($dbAdapter);
