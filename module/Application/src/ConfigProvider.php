@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Authentication;
+use Application\Form;
 use Application\Model;
 use Application\Model\Factory as ModelFactory;
 use Application\Service\FaviconService;
@@ -76,10 +77,7 @@ class ConfigProvider
                 'ExportService' => Service\Factory\ExportServiceFactory::class,
                 'UserKeyService' => Service\Factory\UserKeyServiceFactory::class,
                 'AuthLogService' => Service\Factory\AuthLogServiceFactory::class,
-                'SignupForm' => function (ServiceLocatorInterface $sm) {
-                    $dbAdapter = $sm->get(DbAdapter::class);
-                    return new Form\SignupForm($dbAdapter);
-                }
+                'SignupForm' => Form\Factory\SignupFormFactory::class,
             ],
         ];
     }
