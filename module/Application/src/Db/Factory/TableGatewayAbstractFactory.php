@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service;
+namespace Application\Db\Factory;
 
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\TableGateway;
