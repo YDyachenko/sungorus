@@ -12,9 +12,10 @@ use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Session\SessionManager;
 
-class Module implements BootstrapListenerInterface, ConfigProviderInterface, ConsoleUsageProviderInterface
+class Module implements BootstrapListenerInterface, ConfigProviderInterface, ConsoleUsageProviderInterface, ServiceProviderInterface
 {
 
     /**
@@ -34,7 +35,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 $controller = $e->getTarget();
                 $controller->getEventManager()->attachAggregate($sm->get('Authentication\AuthListener'));
             }, 2);
-            
+
             $sessionManager = $sm->get(SessionManager::class);
             try {
                 $sessionManager->start();
@@ -91,7 +92,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     public function getConfig()
     {
         $provider = new ConfigProvider();
-        $config = [
+        $config   = [
             'service_manager' => $provider->getDependencyConfig()
         ];
 
@@ -113,10 +114,23 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     /**
      * {@inheritdoc}
      */
+    public function getServiceConfig()
+    {
+        return [
+            'factories' => [
+                'BlockCipher' => function () {
+                    return \Zend\Crypt\BlockCipher::factory('mcrypt');
+                },
+        ]];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getConsoleUsage(Console $console)
     {
         return [
-            'cron clearKeysTable'       => '[CRONJOB] Remove out-of-date encryption keys from DB',
+            'cron clearKeysTable' => '[CRONJOB] Remove out-of-date encryption keys from DB',
             'cron clearLogFailureTable' => '[CRONJOB] Remove out-of-date entries from authentication failure log'
         ];
     }

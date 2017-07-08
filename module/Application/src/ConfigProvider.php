@@ -55,9 +55,6 @@ class ConfigProvider
                 'FolderModel' => Model\Factory\FolderModelFactory::class,
                 'AccountModel' => Model\Factory\AccountModelFactory::class,
                 'AccountsDataTable' => Db\Factory\AccountsDataTableFactory::class,
-                'BlockCipher' => function () {
-                    return \Zend\Crypt\BlockCipher::factory('mcrypt');
-                },
                 'Authentication\AuthListener' => Authentication\Factory\AuthListenerFactory::class,
                 'ExportService' => Service\Factory\ExportServiceFactory::class,
                 'UserKeyService' => Service\Factory\UserKeyServiceFactory::class,
