@@ -26,23 +26,25 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
         $em = $e->getApplication()->getEventManager();
 
         if ($e->getRequest() instanceof HttpRequest) {
-            $em->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -100);
-
             $sm = $e->getApplication()->getServiceManager();
+            
+            $em->attach(MvcEvent::EVENT_ROUTE, function ($e) use ($sm) {
+                $sessionManager = $sm->get(SessionManager::class);
+                try {
+                    $sessionManager->start();
+                } catch (\Zend\Session\Exception\RuntimeException $ex) {
+                    $sessionManager->destroy();
+                    $e->stopPropagation();
+                    return $this->redirectToLoginPage($e);
+                }
+            }, 1000);
+            $em->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -100);
 
             $sharedManager = $em->getSharedManager();
             $sharedManager->attach(Controller\AuthController::class, MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
                 $controller = $e->getTarget();
                 $controller->getEventManager()->attachAggregate($sm->get('Authentication\AuthListener'));
             }, 2);
-
-            $sessionManager = $sm->get(SessionManager::class);
-            try {
-                $sessionManager->start();
-            } catch (\Exception $ex) {
-                $sessionManager->destroy();
-                return $this->redirectToLoginPage($e);
-            }
         }
     }
 
@@ -130,7 +132,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     public function getConsoleUsage(Console $console)
     {
         return [
-            'cron clearKeysTable' => '[CRONJOB] Remove out-of-date encryption keys from DB',
+            'cron clearKeysTable'       => '[CRONJOB] Remove out-of-date encryption keys from DB',
             'cron clearLogFailureTable' => '[CRONJOB] Remove out-of-date entries from authentication failure log'
         ];
     }
