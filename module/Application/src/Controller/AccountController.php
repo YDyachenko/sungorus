@@ -10,7 +10,6 @@ use Application\Exception\AccountNotFoundException;
 use Application\Exception\FolderNotFoundException;
 use Zend\Form\Element\Csrf;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -38,16 +37,6 @@ class AccountController extends AbstractActionController
         $this->folderModel  = $folderModel;
         $this->accountModel = $accountModel;
         $this->iconService  = $iconService;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attachDefaultListeners()
-    {
-        parent::attachDefaultListeners();
-        $events = $this->getEventManager();
-        $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'checkUserEncryptionKey'], 100);
     }
 
     /**

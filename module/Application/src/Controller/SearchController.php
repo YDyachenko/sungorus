@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
 
 class SearchController extends AbstractActionController
 {
@@ -24,16 +23,6 @@ class SearchController extends AbstractActionController
     {
         $this->folderModel  = $folderModel;
         $this->accountModel = $accountModel;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attachDefaultListeners()
-    {
-        parent::attachDefaultListeners();
-        $events = $this->getEventManager();
-        $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'checkUserEncryptionKey'], 100);
     }
 
     /**

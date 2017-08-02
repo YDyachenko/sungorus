@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Controller;
+use Application\Listener;
 use Application\Authentication;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\MvcEvent;
@@ -40,12 +41,13 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 }
             }, 1000);
             $em->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -100);
+            $em->attachAggregate($sm->get(Listener\EncryptionKeyListener::class));
 
             $sharedManager = $em->getSharedManager();
             $sharedManager->attach(Controller\AuthController::class, MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
                 $controller = $e->getTarget();
                 $listener   = $sm->get(Authentication\AuthListener::class);
-                
+
                 $controller->getEventManager()->attachAggregate($listener);
             }, 2);
         }

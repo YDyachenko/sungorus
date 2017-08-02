@@ -8,7 +8,6 @@ use Application\Exception\FolderNotFoundException;
 use Application\Exception\ForbiddenException;
 use Zend\Form\Element\Csrf;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
@@ -27,16 +26,6 @@ class FolderController extends AbstractActionController
     {
         $this->folderModel  = $folderModel;
         $this->accountModel = $accountModel;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attachDefaultListeners()
-    {
-        parent::attachDefaultListeners();
-        $events = $this->getEventManager();
-        $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'checkUserEncryptionKey'], 100);
     }
 
     /**

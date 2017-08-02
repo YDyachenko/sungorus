@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
 
 class IndexController extends AbstractActionController
 {
@@ -31,16 +30,6 @@ class IndexController extends AbstractActionController
         $this->folderModel    = $folderModel;
         $this->accountModel   = $accountModel;
         $this->authLogService = $authLogService;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attachDefaultListeners()
-    {
-        parent::attachDefaultListeners();
-        $events = $this->getEventManager();
-        $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'checkUserEncryptionKey'], 100);
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
 
 class ExportController extends AbstractActionController
 {
@@ -17,16 +16,6 @@ class ExportController extends AbstractActionController
     public function __construct($exportService)
     {
         $this->exportService = $exportService;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attachDefaultListeners()
-    {
-        parent::attachDefaultListeners();
-        $events = $this->getEventManager();
-        $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'checkUserEncryptionKey'], 100);
     }
 
     /**
