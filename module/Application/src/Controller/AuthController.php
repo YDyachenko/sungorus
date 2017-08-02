@@ -2,12 +2,12 @@
 
 namespace Application\Controller;
 
-use Application\Authentication\AuthenticationService;
 use Application\Authentication\AuthEvent;
+use Application\Model\UserModel;
+use Application\Service\UserKeyService;
 use Application\Form;
-use Application\Exception\ForbiddenException;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Http\Header\SetCookie;
 use Zend\Session\Container as SessionContainer;
 
 class AuthController extends AbstractActionController
@@ -15,29 +15,29 @@ class AuthController extends AbstractActionController
 
     /**
      *
-     * @var \Zend\Config\Config
+     * @var array
      */
     protected $config;
 
     /**
      *
-     * @var AuthenticationService
+     * @var AuthenticationServiceInterface
      */
     protected $authService;
 
     /**
      *
-     * @var \Application\Service\UserKeyService
+     * @var UserKeyService
      */
     protected $keyService;
 
     /**
      *
-     * @var \Application\Model\UserModel
+     * @var UserModel
      */
     protected $userModel;
 
-    public function __construct($config, $authService, $keyService, $userModel)
+    public function __construct(array $config, AuthenticationServiceInterface $authService, UserKeyService $keyService, UserModel $userModel)
     {
         $this->config      = $config;
         $this->authService = $authService;
@@ -58,7 +58,7 @@ class AuthController extends AbstractActionController
         $error   = false;
         $message = '';
         $form    = new Form\LoginForm();
-        $events  = $this->getEventManager(); 
+        $events  = $this->getEventManager();
 
         $results = $events->trigger(AuthEvent::EVENT_AUTHENTICATION);
         if ($results->stopped()) {
@@ -68,7 +68,7 @@ class AuthController extends AbstractActionController
             $form->get('submit')->setAttribute('disabled', 'disabled');
         }
 
-        
+
         $request = $this->getRequest();
 
         if (!$error && $request->isPost()) {
@@ -79,14 +79,14 @@ class AuthController extends AbstractActionController
                 $data        = $form->getData();
 
                 $authAdapter->setIdentity($data['identity'])
-                            ->setCredential($data['credential']);
+                        ->setCredential($data['credential']);
 
                 $result = $this->authService->authenticate();
-                
+
                 $event = new AuthEvent();
                 $event->setTarget($this);
                 $event->setRequest($request);
-                
+
                 if ($result->isValid()) {
                     $event->setName(AuthEvent::EVENT_AUTHENTICATION_SUCCESS);
                     $events->trigger($event);
@@ -116,7 +116,7 @@ class AuthController extends AbstractActionController
     public function logoutAction()
     {
         $this->authService->clearIdentity();
-        
+
         return $this->redirect()->toRoute('login');
     }
 
@@ -167,7 +167,7 @@ class AuthController extends AbstractActionController
 
         return $this->redirect()->toRoute('home');
     }
-    
+
     /**
      * Change password form
      * @return array
@@ -182,7 +182,7 @@ class AuthController extends AbstractActionController
             $user = $this->identity();
 
             $form->setData($request->getPost())
-                 ->setPasswordHash($user->getPassword());
+                    ->setPasswordHash($user->getPassword());
 
             if ($form->isValid()) {
                 $bcrypt  = new \Zend\Crypt\Password\Bcrypt();
