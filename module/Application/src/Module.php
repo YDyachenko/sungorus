@@ -3,6 +3,7 @@
 namespace Application;
 
 use Application\Controller;
+use Application\Authentication;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
@@ -27,7 +28,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
 
         if ($e->getRequest() instanceof HttpRequest) {
             $sm = $e->getApplication()->getServiceManager();
-            
+
             $em->attach(MvcEvent::EVENT_ROUTE, function ($e) use ($sm) {
                 $sessionManager = $sm->get(SessionManager::class);
                 try {
@@ -43,7 +44,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
             $sharedManager = $em->getSharedManager();
             $sharedManager->attach(Controller\AuthController::class, MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
                 $controller = $e->getTarget();
-                $controller->getEventManager()->attachAggregate($sm->get('Authentication\AuthListener'));
+                $listener   = $sm->get(Authentication\AuthListener::class);
+                
+                $controller->getEventManager()->attachAggregate($listener);
             }, 2);
         }
     }

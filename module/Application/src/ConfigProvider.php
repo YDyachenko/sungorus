@@ -55,7 +55,7 @@ class ConfigProvider
                 'FolderModel' => Model\Factory\FolderModelFactory::class,
                 'AccountModel' => Model\Factory\AccountModelFactory::class,
                 'AccountsDataTable' => Db\Factory\AccountsDataTableFactory::class,
-                'Authentication\AuthListener' => Authentication\Factory\AuthListenerFactory::class,
+                Authentication\AuthListener::class => Authentication\Factory\AuthListenerFactory::class,
                 'ExportService' => Service\Factory\ExportServiceFactory::class,
                 'UserKeyService' => Service\Factory\UserKeyServiceFactory::class,
                 'AuthLogService' => Service\Factory\AuthLogServiceFactory::class,
