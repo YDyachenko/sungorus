@@ -15,7 +15,7 @@ class EncryptionKeyListener implements ListenerAggregateInterface
 {
 
     protected $listeners  = [];
-    protected $cookie_name;
+    protected $cookieName = 'encKey';
     protected $authService;
     protected $keyService;
     protected $accountModel;
@@ -23,12 +23,17 @@ class EncryptionKeyListener implements ListenerAggregateInterface
         'login', 'logout', 'signup', 'encryptionKey'
     ];
 
-    public function __construct(AuthenticationServiceInterface $authService, UserKeyService $keyService, AccountModel $accountModel, $cookie)
+    public function __construct(AuthenticationServiceInterface $authService, UserKeyService $keyService, AccountModel $accountModel)
     {
         $this->authService  = $authService;
         $this->keyService   = $keyService;
         $this->accountModel = $accountModel;
-        $this->cookie_name  = $cookie;
+    }
+    
+    public function setCookieName($name) {
+        $this->cookieName = $name;
+        
+        return $this;
     }
 
     /**
@@ -61,12 +66,12 @@ class EncryptionKeyListener implements ListenerAggregateInterface
         $cookies = $event->getRequest()->getCookie();
 
         try {
-            if (!isset($cookies[$this->cookie_name])) {
+            if (!isset($cookies[$this->cookieName])) {
                 throw new InvalidUserKeyException('Cookie not found');
             }
 
             $user = $this->authService->getIdentity();
-            $key  = $this->keyService->getUserKey($cookies[$this->cookie_name], $user);
+            $key  = $this->keyService->getUserKey($cookies[$this->cookieName], $user);
 
             $this->accountModel->setCryptKey($key);
         } catch (InvalidUserKeyException $e) {

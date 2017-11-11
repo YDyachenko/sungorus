@@ -24,9 +24,11 @@ class EncryptionKeyListenerFactory implements FactoryInterface
         $accountModel = $container->get(AccountModel::class);
         $authService  = $container->get(AuthenticationServiceInterface::class);
         $config       = $container->get('config');
-        $cookie       = $config['application']['enc_key_cookie']['name'];
 
-        return new EncryptionKeyListener($authService, $keyService, $accountModel, $cookie);
+        $listener = new EncryptionKeyListener($authService, $keyService, $accountModel);
+        $listener->setCookieName($config['application']['enc_key_cookie']['name']);
+
+        return $listener;
     }
 
     /**
