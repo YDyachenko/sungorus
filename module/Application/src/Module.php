@@ -11,6 +11,7 @@ use Zend\EventManager\EventInterface;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Http\Request as HttpRequest;
 use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\Crypt\BlockCipher;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
@@ -125,7 +126,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     {
         return [
             'factories' => [
-                'BlockCipher' => function () {
+                BlockCipher::class => function () {
                     return \Zend\Crypt\BlockCipher::factory('mcrypt');
                 },
         ]];

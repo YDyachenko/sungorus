@@ -3,6 +3,7 @@
 namespace Application\Authentication\Factory;
 
 use Application\Authentication\Storage\SessionProxy;
+use Application\Model\UserModel;
 use Psr\Container\ContainerInterface;
 use Zend\Authentication\Storage\StorageInterface;
 use Zend\ServiceManager\FactoryInterface;
@@ -13,7 +14,7 @@ class StorageFactory implements FactoryInterface
 
     public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
-        $model = $container->get('UserModel');
+        $model = $container->get(UserModel::class);
 
         return new SessionProxy($model);
     }

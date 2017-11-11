@@ -12,6 +12,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Authentication\Storage\StorageInterface as AuthStorage;
 use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
+use Zend\Crypt\BlockCipher;
 
 class ConfigProvider
 {
@@ -47,20 +48,20 @@ class ConfigProvider
                 FaviconService::class => FaviconService::class,
             ],
             'shared'             => [
-                'BlockCipher' => false
+                BlockCipher::class => false
             ],
             'factories'          => [
                 AuthenticationServiceInterface::class => Authentication\Factory\AuthenticationServiceFactory::class,
                 AuthStorage::class                    => Authentication\Factory\StorageFactory::class,
-                'UserModel'                           => Model\Factory\UserModelFactory::class,
-                'FolderModel'                         => Model\Factory\FolderModelFactory::class,
-                'AccountModel'                        => Model\Factory\AccountModelFactory::class,
+                Model\UserModel::class                => Model\Factory\UserModelFactory::class,
+                Model\FolderModel::class              => Model\Factory\FolderModelFactory::class,
+                Model\AccountModel::class             => Model\Factory\AccountModelFactory::class,
                 'AccountsDataTable'                   => Db\Factory\AccountsDataTableFactory::class,
                 Authentication\AuthListener::class    => Authentication\Factory\AuthListenerFactory::class,
-                'ExportService'                       => Service\Factory\ExportServiceFactory::class,
-                'UserKeyService'                      => Service\Factory\UserKeyServiceFactory::class,
-                'AuthLogService'                      => Service\Factory\AuthLogServiceFactory::class,
-                'SignupForm'                          => Form\Factory\SignupFormFactory::class,
+                Service\ExportService::class          => Service\Factory\ExportServiceFactory::class,
+                Service\UserKeyService::class         => Service\Factory\UserKeyServiceFactory::class,
+                Service\AuthLogService::class         => Service\Factory\AuthLogServiceFactory::class,
+                Form\SignupForm::class                => Form\Factory\SignupFormFactory::class,
                 Listener\EncryptionKeyListener::class => Listener\Factory\EncryptionKeyListenerFactory::class,
             ],
         ];
