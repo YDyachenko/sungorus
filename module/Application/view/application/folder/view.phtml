@@ -8,11 +8,21 @@
         ?>
     </div>
     <div class="col-md-8">
-        <?=
-        $this->partial('/application/folder/partials/accounts.phtml', array(
-            'folderId' => $folderId,
-            'accounts' => $accounts,
-        ));
-        ?>
+        <div class="panel panel-default panel-shadow">
+            <div class="panel-heading">
+                <?php if ($folderId): ?>
+                    <div class="pull-right">
+                        <a href="<?= $this->url('folder/addAccount', array('folderId' => $folderId)) ?>"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                    </div>
+                <? endif; ?>
+                <h3 class="panel-title">Accounts</h3>
+            </div>
+            <?=
+            $this->partial('/application/folder/partials/accounts.phtml', array(
+                'folderId' => $folderId,
+                'accounts' => $accounts,
+            ));
+            ?>
+        </div>
     </div>
 </div>

@@ -62,7 +62,7 @@ class AccountModel
     {
         $rowset = $this->accountsTable->select(function (Select $select) use ($user) {
             $select->where(['user_id' => $user->getId()])
-                   ->order('name ASC');
+                   ->order(['favorite DESC', 'name ASC']);
         });
         return $rowset;
     }
@@ -98,7 +98,7 @@ class AccountModel
                 'user_id'   => $folder->getUserId(),
             ];
             $select->where($where)
-                   ->order('name ASC');
+                   ->order(['favorite DESC', 'name ASC']);
         });
         return $rowset;
     }
@@ -115,7 +115,8 @@ class AccountModel
             $select->where([
                 'user_id' => $user->getId(),
                 'name LIKE ?' => '%' . str_replace(['_', '%'], ['\_', '\%'], $name) . '%'
-                ])->order('name ASC');
+                ])
+                ->order(['favorite DESC', 'name ASC']);
         });
         return $rowset;
     }

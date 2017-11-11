@@ -16,41 +16,26 @@ foreach ($folders as $folder) {
     <div class="col-md-8">
         <div class="panel panel-default panel-shadow">
             <div class="panel-heading">
-                <h3 class="panel-title">Favorite Accounts</h3>
+                <h3 class="panel-title">Favorites</h3>
             </div>
-            <div class="list-group accounts-list">
-                <?php if (!$accounts->count()): ?>
-                    <p class="list-group-item list-group-item-warning">You don't have favorite accounts</p>
-                <? endif ?>
-                <?php
-                foreach ($accounts as $account):
-                    $params = array(
-                        'folderId'  => $account->getFolderId(),
-                        'accountId' => $account->getId()
-                    );
-                ?>
-                    <a href="<?= $this->url('folder/account', $params) ?>" class="list-group-item">
-                        <img class="favicon" src="<?= $this->url('folder/account/favicon', $params) ?>">
-                        <?= $this->escapeHtml($account->getName()) ?>
-                        <span class="badge" title="Folder">
-                            <?= $this->escapeHtml($folderNames[$account->getFolderId()]) ?>
-                        </span>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+            <?=
+            $this->partial('/application/folder/partials/accounts.phtml', [
+                'accounts' => $accounts,
+            ]);
+            ?>
         </div>
-        
+
         <?php if (!empty($lastAuth)): ?>
             <div class="alert alert-warning panel-shadow">
                 <strong>
                     Last successful login:
                 </strong>
-                    <time class="timeago" datetime="<?php echo $lastAuth->getDatetime(); ?>">
-                        <?php echo $lastAuth->getDatetime(); ?>
-                    </time> from <?php echo long2ip($lastAuth->getIp()); ?>
-                
-                </div>
+                <time class="timeago" datetime="<?php echo $lastAuth->getDatetime(); ?>">
+                    <?php echo $lastAuth->getDatetime(); ?>
+                </time> from <?php echo long2ip($lastAuth->getIp()); ?>
+
             </div>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
+</div>
 </div>
