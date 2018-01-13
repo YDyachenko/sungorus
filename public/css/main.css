@@ -8,6 +8,10 @@ body {
     background-color: white;
 }
 
+#top-navbar-collapse {
+    text-align: center;
+}
+
 .search-input-group .input-group-addon {
     background: white !important; 
 }
