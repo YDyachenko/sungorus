@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Authentication\AuthEvent;
-use Application\Model\UserModel;
+use Application\Repository\UserRepositoryInterface;
 use Application\Service\UserKeyService;
 use Application\Form;
 use Zend\Authentication\AuthenticationServiceInterface;
@@ -33,16 +33,16 @@ class AuthController extends AbstractActionController
 
     /**
      *
-     * @var UserModel
+     * @var UserRepositoryInterface
      */
-    protected $userModel;
+    protected $users;
 
-    public function __construct(array $config, AuthenticationServiceInterface $authService, UserKeyService $keyService, UserModel $userModel)
+    public function __construct(array $config, AuthenticationServiceInterface $authService, UserKeyService $keyService, UserRepositoryInterface $users)
     {
         $this->config      = $config;
         $this->authService = $authService;
         $this->keyService  = $keyService;
-        $this->userModel   = $userModel;
+        $this->users       = $users;
     }
 
     /**
@@ -78,8 +78,9 @@ class AuthController extends AbstractActionController
                 $authAdapter = $this->authService->getAdapter();
                 $data        = $form->getData();
 
-                $authAdapter->setIdentity($data['identity'])
-                        ->setCredential($data['credential']);
+                $authAdapter
+                    ->setIdentity($data['identity'])
+                    ->setCredential($data['credential']);
 
                 $result = $this->authService->authenticate();
 
@@ -181,8 +182,9 @@ class AuthController extends AbstractActionController
         if ($request->isPost()) {
             $user = $this->identity();
 
-            $form->setData($request->getPost())
-                    ->setPasswordHash($user->getPassword());
+            $form
+                ->setData($request->getPost())
+                ->setPasswordHash($user->getPassword());
 
             if ($form->isValid()) {
                 $bcrypt  = new \Zend\Crypt\Password\Bcrypt();
@@ -191,7 +193,7 @@ class AuthController extends AbstractActionController
                 $changed = true;
 
                 $user->setPassword($hash);
-                $this->userModel->saveUser($user);
+                $this->users->save($user);
             }
         }
 

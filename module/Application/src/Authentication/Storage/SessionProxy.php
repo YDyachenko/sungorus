@@ -3,7 +3,7 @@
 namespace Application\Authentication\Storage;
 
 use Application\Model\UserEntity;
-use Application\Model\UserModel;
+use Application\Repository\UserRepositoryInterface;
 use Zend\Authentication\Storage\Session as SessionStorage;
 use Zend\Authentication\Storage\StorageInterface;
 
@@ -21,13 +21,13 @@ class SessionProxy implements StorageInterface
     protected $resolvedIdentity;
 
     /**
-     * @var UserModel 
+     * @var UserRepositoryInterface 
      */
-    protected $model;
+    protected $users;
 
-    public function __construct(UserModel $model)
+    public function __construct(UserRepositoryInterface $users)
     {
-        $this->model = $model;
+        $this->users = $users;
     }
 
     /**
@@ -58,7 +58,7 @@ class SessionProxy implements StorageInterface
         if (null === $this->resolvedIdentity) {
             $identity = $this->getStorage()->read();
 
-            $this->resolvedIdentity = $this->model->fetchByIdentity($identity);
+            $this->resolvedIdentity = $this->users->FindByIdentity($identity);
         }
 
         return $this->resolvedIdentity;

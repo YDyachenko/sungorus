@@ -8,6 +8,10 @@ use Application\Model\AccountDataEntity;
 use Application\Exception\ForbiddenException;
 use Application\Exception\AccountNotFoundException;
 use Application\Exception\FolderNotFoundException;
+use Application\Repository\AccountRepositoryInterface;
+use Application\Repository\AccountDataRepositoryInterface;
+use Application\Repository\FolderRepositoryInterface;
+use Application\Service\FaviconService;
 use Zend\Form\Element\Csrf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -17,26 +21,32 @@ class AccountController extends AbstractActionController
 {
 
     /**
-     * @var \Application\Model\FolderModel
+     * @var FolderRepositoryInterface
      */
-    protected $folderModel;
+    protected $folders;
 
     /**
-     * @var \Application\Model\AccountModel
+     * @var AccountRepositoryInterface
      */
-    protected $accountModel;
+    protected $accounts;
+
+    /**
+     * @var AccountDataRepositoryInterface
+     */
+    protected $dataRepository;
 
     /**
      *
-     * @var \Application\Service\FaviconService
+     * @var FaviconService
      */
     protected $iconService;
 
-    public function __construct($folderModel, $accountModel, $iconService)
+    public function __construct(FolderRepositoryInterface $folders, AccountRepositoryInterface $accounts, AccountDataRepositoryInterface $data, FaviconService$iconService)
     {
-        $this->folderModel  = $folderModel;
-        $this->accountModel = $accountModel;
-        $this->iconService  = $iconService;
+        $this->folders        = $folders;
+        $this->accounts       = $accounts;
+        $this->dataRepository = $data;
+        $this->iconService    = $iconService;
     }
 
     /**
@@ -49,21 +59,22 @@ class AccountController extends AbstractActionController
         $user = $this->identity();
 
         try {
-            $folder = $this->folderModel->fetchById($this->params('folderId'));
+            $folder = $this->folders->findById((int) $this->params('folderId'));
         } catch (FolderNotFoundException $e) {
             return $this->notFoundAction();
         }
 
-        $folders = $this->folderModel->fetchByUser($user)->buffer();
+        $folders = $this->folders->findByUser($user)->buffer();
 
         if ($folder->getUserId() != $user->getId())
             throw new ForbiddenException("Folder of another user");
 
-        $form = new AccountForm();
-        $form->setFoldersOptions($folders)
-            ->setFolderId($folder->getId());
-
+        $form    = new AccountForm();
         $request = $this->getRequest();
+
+        $form
+            ->setFoldersOptions($folders)
+            ->setFolderId($folder->getId());
 
         if ($request->isPost()) {
             $form->setData($request->getPost());
@@ -79,20 +90,20 @@ class AccountController extends AbstractActionController
 
                 $account->exchangeArray($data);
                 $account->setUserId($user->getId());
-                $this->accountModel->saveAccount($account);
+                $this->accounts->save($account);
 
                 $accountData->setAccountId($account->getId());
-                $this->accountModel->insertAccountData($accountData);
+                $this->dataRepository->save($accountData);
 
-                return $this->redirect()->toRoute('folder', array('folderId' => $folder->getId()));
+                return $this->redirect()->toRoute('folder', ['folderId' => $folder->getId()]);
             }
         }
 
-        $viewModel = new ViewModel(array(
+        $viewModel = new ViewModel([
             'form'     => $form,
             'folders'  => $folders,
             'folderId' => $folder->getId(),
-        ));
+        ]);
 
         return $viewModel;
     }
@@ -107,7 +118,7 @@ class AccountController extends AbstractActionController
         $user = $this->identity();
 
         try {
-            $account = $this->accountModel->fetchById($this->params('accountId'));
+            $account = $this->accounts->findById($this->params('accountId'));
         } catch (AccountNotFoundException $e) {
             return $this->notFoundAction();
         }
@@ -118,8 +129,8 @@ class AccountController extends AbstractActionController
         if ($account->getFolderId() != $this->params('folderId'))
             return $this->notFoundAction();
 
-        $accountData = $this->accountModel->fetchAccountData($account);
-        $folders     = $this->folderModel->fetchByUser($user)->buffer();
+        $accountData = $this->dataRepository->findByAccount($account);
+        $folders     = $this->folders->findByUser($user)->buffer();
 
         $form = new AccountForm();
         $form->setFoldersOptions($folders);
@@ -136,10 +147,10 @@ class AccountController extends AbstractActionController
                 unset($data['data']);
 
                 $account->exchangeArray($data);
-                $this->accountModel->updateAccountData($accountData);
-                $this->accountModel->saveAccount($account);
+                $this->dataRepository->save($accountData);
+                $this->accounts->save($account);
 
-                return $this->redirect()->toRoute('folder', array('folderId' => $account->getFolderId()));
+                return $this->redirect()->toRoute('folder', ['folderId' => $account->getFolderId()]);
             }
         } else {
             $data         = $account->getArrayCopy();
@@ -163,10 +174,10 @@ class AccountController extends AbstractActionController
     public function deleteAction()
     {
         $user      = $this->identity();
-        $accountId = $this->params('accountId');
+        $accountId = (int) $this->params('accountId');
 
         try {
-            $account = $this->accountModel->fetchById($accountId);
+            $account = $this->accounts->findById($accountId);
         } catch (AccountNotFoundException $e) {
             return $this->notFoundAction();
         }
@@ -185,7 +196,7 @@ class AccountController extends AbstractActionController
             $success   = false;
 
             if ($validator->isValid($request->getPost('token'))) {
-                $this->accountModel->deleteAccount($account);
+                $this->accounts->delete($account);
                 $success = true;
             }
             return new JsonModel([
@@ -206,10 +217,10 @@ class AccountController extends AbstractActionController
     public function openUrlAction()
     {
         $user      = $this->identity();
-        $accountId = $this->params('accountId');
+        $accountId = (int) $this->params('accountId');
 
         try {
-            $account = $this->accountModel->fetchById($accountId);
+            $account = $this->accounts->findById($accountId);
         } catch (AccountNotFoundException $e) {
             return $this->notFoundAction();
         }
@@ -220,7 +231,7 @@ class AccountController extends AbstractActionController
         if ($account->getFolderId() != $this->params('folderId'))
             return $this->notFoundAction();
 
-        $data         = $this->accountModel->fetchAccountData($account)->getData();
+        $data         = $this->dataRepository->findByAccount($account)->getData();
         $url          = $data['url'];
         $validSchemes = ['http', 'https'];
 
@@ -237,10 +248,10 @@ class AccountController extends AbstractActionController
     public function faviconAction()
     {
         $user      = $this->identity();
-        $accountId = $this->params('accountId');
+        $accountId = (int) $this->params('accountId');
 
         try {
-            $account = $this->accountModel->fetchById($accountId);
+            $account = $this->accounts->findById($accountId);
         } catch (AccountNotFoundException $e) {
             return $this->notFoundAction();
         }
@@ -251,7 +262,7 @@ class AccountController extends AbstractActionController
         if ($account->getFolderId() != $this->params('folderId'))
             return $this->notFoundAction();
 
-        $accountData = $this->accountModel->fetchAccountData($account);
+        $accountData = $this->dataRepository->findByAccount($account);
 
         $filepath = $this->iconService->getFileFromAccount($accountData);
 
@@ -259,7 +270,8 @@ class AccountController extends AbstractActionController
         $response->setStream(fopen($filepath, 'r'));
 
         $headers = $response->getHeaders();
-        $headers->addHeaderLine('Content-Type', 'image/png')
+        $headers
+            ->addHeaderLine('Content-Type', 'image/png')
             ->addHeaderLine('Expires', '+ 7 day')
             ->addHeaderLine('Cache-Control', 'public, max-age=604800')
             ->addHeaderLine('Pragma', 'cache')

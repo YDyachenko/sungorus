@@ -3,7 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\AuthController;
-use Application\Model\UserModel;
+use Application\Repository\UserRepositoryInterface;
 use Application\Service\UserKeyService;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\ServiceManager\FactoryInterface;
@@ -18,9 +18,9 @@ class AuthControllerFactory implements FactoryInterface
         $config      = $services->get('config');
         $authService = $services->get(AuthenticationServiceInterface::class);
         $keyService  = $services->get(UserKeyService::class);
-        $userModel   = $services->get(UserModel::class);
+        $users       = $services->get(UserRepositoryInterface::class);
 
-        return new AuthController($config, $authService, $keyService, $userModel);
+        return new AuthController($config, $authService, $keyService, $users);
     }
 
 }

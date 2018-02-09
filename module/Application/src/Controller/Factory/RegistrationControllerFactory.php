@@ -3,7 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\RegistrationController;
-use Application\Model\UserModel;
+use Application\Repository\UserRepositoryInterface;
 use Application\Form\SignupForm;
 use Application\Service\UserKeyService;
 use Zend\Authentication\AuthenticationServiceInterface;
@@ -20,9 +20,9 @@ class RegistrationControllerFactory implements FactoryInterface
         $form        = $services->get(SignupForm::class);
         $authService = $services->get(AuthenticationServiceInterface::class);
         $keyService  = $services->get(UserKeyService::class);
-        $userModel   = $services->get(UserModel::class);
+        $users       = $services->get(UserRepositoryInterface::class);
 
-        return new RegistrationController($config, $form, $authService, $keyService, $userModel);
+        return new RegistrationController($config, $form, $authService, $keyService, $users);
     }
 
 }

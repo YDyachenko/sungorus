@@ -6,7 +6,7 @@ use Zend\Stdlib\Hydrator\AbstractHydrator;
 use Zend\Stdlib\Hydrator\HydratorOptionsInterface;
 use Zend\Crypt\BlockCipher;
 
-class AccountDataDecoder extends AbstractHydrator
+class AccountDataHydrator extends AbstractHydrator
 {
 
     /**

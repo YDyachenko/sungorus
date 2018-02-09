@@ -2,6 +2,8 @@
 
 namespace Application\Controller;
 
+use Application\Repository\AccountRepositoryInterface;
+use Application\Repository\FolderRepositoryInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class SearchController extends AbstractActionController
@@ -9,24 +11,24 @@ class SearchController extends AbstractActionController
 
     /**
      *
-     * @var \Application\Model\FolderModel
+     * @var FolderRepositoryInterface
      */
-    protected $folderModel;
+    protected $folders;
 
     /**
      *
-     * @var \Application\Model\AccountModel
+     * @var AccountRepositoryInterface
      */
-    protected $accountModel;
+    protected $accounts;
 
-    public function __construct($folderModel, $accountModel)
+    public function __construct(FolderRepositoryInterface $folders, AccountRepositoryInterface $accounts)
     {
-        $this->folderModel  = $folderModel;
-        $this->accountModel = $accountModel;
+        $this->folders  = $folders;
+        $this->accounts = $accounts;
     }
 
     /**
-     * Dashboard
+     * Search accounts
      * @return array
      */
     public function indexAction()
@@ -37,10 +39,10 @@ class SearchController extends AbstractActionController
         if (empty($name))
             $accounts = [];
         else
-            $accounts = $this->accountModel->searchByName($name, $user);
+            $accounts = $this->accounts->findByName($name, $user);
 
         return [
-            'folders'  => $this->folderModel->fetchByUser($user)->buffer(),
+            'folders'  => $this->folders->findByUser($user)->buffer(),
             'accounts' => $accounts,
             'name'     => $name,
         ];

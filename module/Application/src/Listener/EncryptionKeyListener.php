@@ -3,7 +3,7 @@
 namespace Application\Listener;
 
 use Application\Service\UserKeyService;
-use Application\Model\AccountModel;
+use Application\Hydrator\AccountDataHydrator;
 use Application\Exception\InvalidUserKeyException;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -14,25 +14,40 @@ use Zend\Session\Container;
 class EncryptionKeyListener implements ListenerAggregateInterface
 {
 
+    /**
+     *
+     * @var AuthenticationServiceInterface
+     */
+    protected $authService;
+
+    /**
+     *
+     * @var UserKeyService
+     */
+    protected $keyService;
+
+    /**
+     *
+     * @var AccountDataHydrator
+     */
+    protected $hydrator;
     protected $listeners  = [];
     protected $cookieName = 'encKey';
-    protected $authService;
-    protected $keyService;
-    protected $accountModel;
     protected $skipRoutes = [
         'login', 'logout', 'signup', 'encryptionKey'
     ];
 
-    public function __construct(AuthenticationServiceInterface $authService, UserKeyService $keyService, AccountModel $accountModel)
+    public function __construct(AuthenticationServiceInterface $authService, UserKeyService $keyService, AccountDataHydrator $hydrator)
     {
-        $this->authService  = $authService;
-        $this->keyService   = $keyService;
-        $this->accountModel = $accountModel;
+        $this->authService = $authService;
+        $this->keyService  = $keyService;
+        $this->hydrator    = $hydrator;
     }
-    
-    public function setCookieName($name) {
+
+    public function setCookieName($name)
+    {
         $this->cookieName = $name;
-        
+
         return $this;
     }
 
@@ -73,7 +88,7 @@ class EncryptionKeyListener implements ListenerAggregateInterface
             $user = $this->authService->getIdentity();
             $key  = $this->keyService->getUserKey($cookies[$this->cookieName], $user);
 
-            $this->accountModel->setCryptKey($key);
+            $this->hydrator->setCryptKey($key);
         } catch (InvalidUserKeyException $e) {
             $controller = $event->getTarget();
             $router     = $event->getRouter();

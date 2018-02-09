@@ -2,6 +2,9 @@
 
 namespace Application\Controller;
 
+use Application\Repository\AccountRepositoryInterface;
+use Application\Repository\FolderRepositoryInterface;
+use Application\Service\AuthLogService;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class IndexController extends AbstractActionController
@@ -9,26 +12,26 @@ class IndexController extends AbstractActionController
 
     /**
      *
-     * @var \Application\Model\FolderModel
+     * @var FolderRepository
      */
-    protected $folderModel;
+    protected $folders;
 
     /**
      *
-     * @var \Application\Model\AccountModel
+     * @var AccountRepositoryInterface
      */
-    protected $accountModel;
+    protected $accounts;
 
     /**
      *
-     * @var \Application\Service\AuthLogService
+     * @var AuthLogService
      */
     protected $authLogService;
 
-    public function __construct($folderModel, $accountModel, $authLogService)
+    public function __construct(FolderRepositoryInterface $folders, AccountRepositoryInterface $accounts, AuthLogService $authLogService)
     {
-        $this->folderModel    = $folderModel;
-        $this->accountModel   = $accountModel;
+        $this->folders        = $folders;
+        $this->accounts       = $accounts;
         $this->authLogService = $authLogService;
     }
 
@@ -41,8 +44,8 @@ class IndexController extends AbstractActionController
         $user = $this->identity();
 
         return [
-            'folders'  => $this->folderModel->fetchByUser($user)->buffer(),
-            'accounts' => $this->accountModel->fetchUserFavorites($user),
+            'folders'  => $this->folders->findByUser($user)->buffer(),
+            'accounts' => $this->accounts->findUserFavorites($user),
             'lastAuth' => $this->authLogService->getLastSuccess($user)
         ];
     }

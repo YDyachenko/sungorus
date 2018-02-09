@@ -4,28 +4,31 @@ namespace Application\Controller;
 
 use Application\Form;
 use Application\Model\FolderEntity;
+use Application\Repository\FolderRepositoryInterface;
+use Application\Repository\AccountRepositoryInterface;
 use Application\Exception\FolderNotFoundException;
 use Application\Exception\ForbiddenException;
 use Zend\Form\Element\Csrf;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
 class FolderController extends AbstractActionController
 {
 
     /**
-     * @var \Application\Model\FolderModel
+     * @var FolderRepositoryInterface
      */
-    protected $folderModel;
+    protected $repository;
 
-    /** @var \Application\Model\AccountModel */
-    protected $accountModel;
+    /**
+     * @var AccountRepositoryInterface
+     */
+    protected $accounts;
 
-    public function __construct($folderModel, $accountModel)
+    public function __construct(FolderRepositoryInterface $repository, AccountRepositoryInterface $accounts)
     {
-        $this->folderModel  = $folderModel;
-        $this->accountModel = $accountModel;
+        $this->repository = $repository;
+        $this->accounts   = $accounts;
     }
 
     /**
@@ -35,11 +38,11 @@ class FolderController extends AbstractActionController
      */
     public function viewAction()
     {
-        $user     = $this->identity();
-        $folderId = $this->params('folderId', 0);
+        $user = $this->identity();
+        $id   = (int) $this->params('folderId', 0);
 
         try {
-            $folder = $this->folderModel->fetchById($folderId);
+            $folder = $this->repository->findById($id);
         } catch (FolderNotFoundException $e) {
             return $this->notFoundAction();
         }
@@ -48,9 +51,9 @@ class FolderController extends AbstractActionController
             throw new ForbiddenException("Folder of another user");
 
         return [
-            'folders'  => $this->folderModel->fetchByUser($user),
-            'folderId' => $folderId,
-            'accounts' => $this->accountModel->fetchByFolder($folder),
+            'folders'  => $this->repository->findByUser($user),
+            'folderId' => $id,
+            'accounts' => $this->accounts->findByFolder($folder),
         ];
     }
 
@@ -71,7 +74,7 @@ class FolderController extends AbstractActionController
                 $folder->exchangeArray($form->getData());
                 $folder->setUserId($this->identity()->getId());
 
-                $this->folderModel->saveFolder($folder);
+                $this->repository->save($folder);
 
                 return $this->redirect()->toRoute('folder', ['folderId' => $folder->getId()]);
             }
@@ -89,11 +92,11 @@ class FolderController extends AbstractActionController
      */
     public function editAction()
     {
-        $user     = $this->identity();
-        $folderId = $this->params('folderId', 0);
+        $user = $this->identity();
+        $id   = (int) $this->params('folderId', 0);
 
         try {
-            $folder = $this->folderModel->fetchById($folderId);
+            $folder = $this->repository->findById($id);
         } catch (FolderNotFoundException $e) {
             return $this->notFoundAction();
         }
@@ -109,7 +112,7 @@ class FolderController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $this->folderModel->saveFolder($folder);
+                $this->repository->save($folder);
 
                 return $this->redirect()->toRoute('folder', ['folderId' => $folder->getId()]);
             }
@@ -127,11 +130,11 @@ class FolderController extends AbstractActionController
      */
     public function deleteAction()
     {
-        $user     = $this->identity();
-        $folderId = $this->params('folderId', 0);
+        $user = $this->identity();
+        $id   = (int) $this->params('folderId', 0);
 
         try {
-            $folder = $this->folderModel->fetchById($folderId);
+            $folder = $this->repository->findById($id);
         } catch (FolderNotFoundException $e) {
             return $this->notFoundAction();
         }
@@ -149,7 +152,7 @@ class FolderController extends AbstractActionController
             $return['success'] = false;
 
             if ($validator->isValid($request->getPost('token'))) {
-                $this->folderModel->deleteFolder($folder);
+                $this->repository->delete($folder);
 
                 $return['location'] = $this->url()->fromRoute('home');
                 $return['success']  = true;

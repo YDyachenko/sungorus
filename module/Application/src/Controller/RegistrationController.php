@@ -3,6 +3,10 @@
 namespace Application\Controller;
 
 use Application\Exception\ForbiddenException;
+use Application\Form\SignupForm;
+use Application\Repository\UserRepositoryInterface;
+use Application\Service\UserKeyService;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container as SessionContainer;
 
@@ -11,41 +15,41 @@ class RegistrationController extends AbstractActionController
 
     /**
      *
-     * @var \Zend\Config\Config
+     * @var array
      */
     protected $config;
 
     /**
      *
-     * @var \Application\Form\SignupForm
+     * @var SignupForm
      */
     protected $form;
 
     /**
      *
-     * @var \Application\Authentication\AuthenticationService
+     * @var AuthenticationServiceInterface
      */
     protected $authService;
 
     /**
      *
-     * @var \Application\Service\UserKeyService
+     * @var UserKeyService
      */
     protected $keyService;
 
     /**
      *
-     * @var \Application\Model\UserModel
+     * @var UserRepositoryInterface
      */
-    protected $userModel;
+    protected $users;
 
-    public function __construct($config, $form, $authService, $keyService, $userModel)
+    public function __construct(array $config, SignupForm $form, AuthenticationServiceInterface $authService, UserKeyService $keyService, UserRepositoryInterface $users)
     {
         $this->config      = $config;
         $this->form        = $form;
         $this->authService = $authService;
         $this->keyService  = $keyService;
-        $this->userModel   = $userModel;
+        $this->users       = $users;
     }
 
     /**
@@ -67,7 +71,7 @@ class RegistrationController extends AbstractActionController
             $this->form->setData($request->getPost());
             if ($this->form->isValid()) {
                 $data = $this->form->getData();
-                $user = $this->userModel->createUser($data);
+                $user = $this->users->createUser($data);
 
                 $cookieValue = $this->keyService->generateCookie($data['key'], $user);
                 $this->setEncryptionKeyCookie($cookieValue);
