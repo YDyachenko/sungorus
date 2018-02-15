@@ -8,7 +8,7 @@ use Application\Form;
 use Application\Hydrator;
 use Application\Listener;
 use Application\Repository;
-use Application\Service\FaviconService;
+use Application\Service;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Authentication\Storage\StorageInterface as AuthStorage;
@@ -46,12 +46,13 @@ class ConfigProvider
                 Db\Factory\TableGatewayAbstractFactory::class,
             ],
             'invokables'         => [
-                FaviconService::class => FaviconService::class,
+                Service\FaviconService::class => Service\FaviconService::class,
             ],
             'shared'             => [
                 BlockCipher::class => false
             ],
             'factories'          => [
+                Service\AccountDataCipher::class                 => Service\Factory\AccountDataCipherFactory::class,
                 AuthenticationServiceInterface::class            => Authentication\Factory\AuthenticationServiceFactory::class,
                 AuthStorage::class                               => Authentication\Factory\StorageFactory::class,
                 Hydrator\AccountDataHydrator::class              => Hydrator\Factory\AccountDataHydratorFactory::class,

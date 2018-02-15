@@ -28,8 +28,9 @@ class ExportController extends AbstractActionController
         $response = $this->getResponse();
         $headers  = $response->getHeaders();
 
-        $headers->addHeaderLine('Content-Disposition', 'attachment; filename="accounts.xml"')
-                ->addHeaderLine('Content-Type', 'text/xml');
+        $headers
+            ->addHeaderLine('Content-Disposition', 'attachment; filename="accounts.xml"')
+            ->addHeaderLine('Content-Type', 'text/xml');
 
         $response->setContent($result);
 

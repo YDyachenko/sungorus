@@ -2,37 +2,24 @@
 
 namespace Application\Hydrator;
 
+use Application\Service\AccountDataCipher;
 use Zend\Stdlib\Hydrator\AbstractHydrator;
-use Zend\Stdlib\Hydrator\HydratorOptionsInterface;
-use Zend\Crypt\BlockCipher;
 
 class AccountDataHydrator extends AbstractHydrator
 {
 
     /**
-     * @var BlockCipher 
+     * @var AccountDataCipher 
      */
-    protected $blockCipher;
+    protected $cipher;
 
     /**
-     * @param BlockCipher $blockCipher
+     * @param AccountDataCipher $cipher
      */
-    public function __construct(BlockCipher $blockCipher)
+    public function __construct(AccountDataCipher $cipher)
     {
         parent::__construct();
-        $blockCipher->setBinaryOutput(true);
-        $this->blockCipher = $blockCipher;
-    }
-
-    /**
-     * Set encryption key
-     * @param string $key
-     * @return AccountDataDecoder
-     */
-    public function setCryptKey($key)
-    {
-        $this->blockCipher->setKey($key);
-        return $this;
+        $this->cipher = $cipher;
     }
 
     /**
@@ -42,7 +29,7 @@ class AccountDataHydrator extends AbstractHydrator
     {
         $data         = $object->getArrayCopy();
         $jsonString   = json_encode($data['data']);
-        $data['data'] = $this->blockCipher->encrypt($jsonString);
+        $data['data'] = $this->cipher->encrypt($jsonString);
 
         return $data;
     }
@@ -52,7 +39,7 @@ class AccountDataHydrator extends AbstractHydrator
      */
     public function hydrate(array $data, $object)
     {
-        $jsonString   = $this->blockCipher->decrypt($data['data']);
+        $jsonString   = $this->cipher->decrypt($data['data']);
         $data['data'] = json_decode($jsonString, 1);
         $object->exchangeArray($data);
 

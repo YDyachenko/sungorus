@@ -2,9 +2,9 @@
 
 namespace Application\Listener;
 
-use Application\Service\UserKeyService;
-use Application\Hydrator\AccountDataHydrator;
 use Application\Exception\InvalidUserKeyException;
+use Application\Service\AccountDataCipher;
+use Application\Service\UserKeyService;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
@@ -28,20 +28,20 @@ class EncryptionKeyListener implements ListenerAggregateInterface
 
     /**
      *
-     * @var AccountDataHydrator
+     * @var AccountDataCipher
      */
-    protected $hydrator;
+    protected $cipher;
     protected $listeners  = [];
     protected $cookieName = 'encKey';
     protected $skipRoutes = [
         'login', 'logout', 'signup', 'encryptionKey'
     ];
 
-    public function __construct(AuthenticationServiceInterface $authService, UserKeyService $keyService, AccountDataHydrator $hydrator)
+    public function __construct(AuthenticationServiceInterface $authService, UserKeyService $keyService, AccountDataCipher $cipher)
     {
         $this->authService = $authService;
         $this->keyService  = $keyService;
-        $this->hydrator    = $hydrator;
+        $this->cipher      = $cipher;
     }
 
     public function setCookieName($name)
@@ -88,7 +88,7 @@ class EncryptionKeyListener implements ListenerAggregateInterface
             $user = $this->authService->getIdentity();
             $key  = $this->keyService->getUserKey($cookies[$this->cookieName], $user);
 
-            $this->hydrator->setCryptKey($key);
+            $this->cipher->setKey($key);
         } catch (InvalidUserKeyException $e) {
             $controller = $event->getTarget();
             $router     = $event->getRouter();

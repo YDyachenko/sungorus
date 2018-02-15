@@ -4,27 +4,32 @@ namespace Application\Service;
 
 use XMLWriter;
 use Application\Model\UserEntity;
-use Application\Model\FolderEntity;
+use Application\Service\AccountDataCipher;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\Sql\Sql;
+use Zend\Crypt\BlockCipher;
 
 class ExportService
 {
-    
+
     const ROOT_ELEMENT_NAME = 'sungorus';
 
     /**
-     * @var \Application\Model\FolderModel
+     *
+     * @var Sql 
      */
-    protected $folderModel;
+    protected $sql;
 
     /**
-     * @var \Application\Model\AccountModel
+     *
+     * @var AccountDataCipher
      */
-    protected $accountModel;
+    protected $cipher;
 
-    public function __construct($folderModel, $accountModel)
+    public function __construct(AdapterInterface $adapter, AccountDataCipher $cipher)
     {
-        $this->folderModel  = $folderModel;
-        $this->accountModel = $accountModel;
+        $this->sql    = new Sql($adapter);
+        $this->cipher = $cipher;
     }
 
     /**
@@ -41,44 +46,53 @@ class ExportService
 
         $writer->startDocument('1.0', 'UTF-8');
         $writer->startElement(self::ROOT_ELEMENT_NAME);
-        
-        $folders = $this->folderModel->fetchByUser($user);
-        
-        foreach ($folders as $folder) {
+
+        $select = $this->sql->select('folders');
+        $select->where(['user_id' => $user->getId()]);
+
+        $statement = $this->sql->prepareStatementForSqlObject($select);
+
+        foreach ($statement->execute() as $folder) {
             $writer->startElement('folder');
-            $writer->writeAttribute('name', $folder->getName());
-            
-            $this->writeAccounts($folder, $writer);
-            
+            $writer->writeAttribute('name', $folder['name']);
+
+            $this->writeAccounts($folder['id'], $writer);
+
             $writer->endElement();
         }
-        
+
         $writer->endElement();
         $writer->endDocument();
 
         return $writer->outputMemory();
     }
-    
+
     /**
      * Write into XMLWriter accounts in folder
      * @param FolderEntity $folder
      * @param XMLWriter $writer
      */
-    protected function writeAccounts(FolderEntity $folder, XMLWriter $writer)
+    protected function writeAccounts($folder_id, XMLWriter $writer)
     {
-        $result = $this->accountModel->exportAccountsByFolder($folder);
-        
-        foreach ($result['accounts'] as $account) {
+        $select = $this->sql->select('accounts');
+        $select
+            ->columns(['name', 'favorite'])
+            ->join('accounts_data', 'account_id = accounts.id', ['data'])
+            ->where(['folder_id' => $folder_id]);
+
+        $statement = $this->sql->prepareStatementForSqlObject($select);
+
+        foreach ($statement->execute() as $account) {
             $writer->startElement('account');
-            $writer->writeAttribute('name', $account->getName());
-            $writer->writeAttribute('favorite', $account->getFavorite());
-            
-            $data = $result['data'][$account->getId()];
-            
-            foreach ($data as $key => $value) {
+            $writer->writeAttribute('name', $account['name']);
+            $writer->writeAttribute('favorite', $account['favorite']);
+
+            $json = $this->cipher->decrypt($account['data']);
+
+            foreach (json_decode($json, true) as $key => $value) {
                 $writer->writeElement($key, $value);
             }
-            
+
             $writer->endElement();
         }
     }
