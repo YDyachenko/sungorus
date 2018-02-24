@@ -2,7 +2,6 @@
 
 use Application\Controller\AccountController;
 use Application\Controller\AuthController;
-use Application\Controller\CronController;
 use Application\Controller\ExportController;
 use Application\Controller\FolderController;
 use Application\Controller\IndexController;
