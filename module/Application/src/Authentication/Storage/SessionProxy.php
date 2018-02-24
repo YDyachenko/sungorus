@@ -2,7 +2,7 @@
 
 namespace Application\Authentication\Storage;
 
-use Application\Model\UserEntity;
+use Application\Model\User;
 use Application\Repository\UserRepositoryInterface;
 use Zend\Authentication\Storage\Session as SessionStorage;
 use Zend\Authentication\Storage\StorageInterface;
@@ -16,7 +16,7 @@ class SessionProxy implements StorageInterface
     protected $storage;
 
     /**
-     * @var UserEntity
+     * @var User
      */
     protected $resolvedIdentity;
 

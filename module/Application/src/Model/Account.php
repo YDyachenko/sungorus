@@ -4,7 +4,7 @@ namespace Application\Model;
 
 use Application\Exception\BadMethodCallException;
 
-class AccountEntity
+class Account
 {
 
     /**
@@ -54,7 +54,7 @@ class AccountEntity
 
     /**
      * Set id
-     * @return AccountEntity
+     * @return Account
      */
     function setId($id)
     {
@@ -73,7 +73,7 @@ class AccountEntity
 
     /**
      * Set user_id
-     * @return AccountEntity
+     * @return Account
      */
     function setUserId($userId)
     {
@@ -92,7 +92,7 @@ class AccountEntity
 
     /**
      * Set folder_id
-     * @return AccountEntity
+     * @return Account
      */
     function setFolderId($folderId)
     {
@@ -112,7 +112,7 @@ class AccountEntity
     /**
      * Set favorite flag
      * @param int $value
-     * @return AccountEntity
+     * @return Account
      */
     function setFavorite($value)
     {
@@ -132,7 +132,7 @@ class AccountEntity
     /**
      * Set name
      * @param string $name
-     * @return AccountEntity
+     * @return Account
      */
     function setName($name)
     {
@@ -152,7 +152,7 @@ class AccountEntity
     /**
      * Set date created
      * @param string $value
-     * @return AccountEntity
+     * @return Account
      * @throws BadMethodCallException
      */
     function setDateCreated($value)
@@ -177,7 +177,7 @@ class AccountEntity
     /**
      * Set date modified
      * @param string $value
-     * @return AccountEntity
+     * @return Account
      */
     function setDateModified($value)
     {
@@ -188,7 +188,7 @@ class AccountEntity
     /**
      * Load data from array
      * @param array $data
-     * @return AccountEntity
+     * @return Account
      */
     public function exchangeArray($data)
     {

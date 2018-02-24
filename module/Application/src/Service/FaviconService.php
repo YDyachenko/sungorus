@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Model\AccountDataEntity;
+use Application\Model\AccountData;
 
 class FaviconService
 {
@@ -11,7 +11,7 @@ class FaviconService
     const DEFAULT_NAME = 'default';
     const SERVICE_URL  = 'https://www.google.com/s2/favicons?domain=%s';
 
-    public function getFileFromAccount(AccountDataEntity $accountData)
+    public function getFileFromAccount(AccountData $accountData)
     {
         $data = $accountData->getData();
 

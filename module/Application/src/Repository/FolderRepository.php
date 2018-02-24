@@ -4,8 +4,8 @@ namespace Application\Repository;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\Sql\Select;
-use Application\Model\UserEntity;
-use Application\Model\FolderEntity;
+use Application\Model\User;
+use Application\Model\Folder;
 use Application\Exception\FolderNotFoundException;
 
 class FolderRepository implements FolderRepositoryInterface
@@ -44,7 +44,7 @@ class FolderRepository implements FolderRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByUser(UserEntity $user)
+    public function findByUser(User $user)
     {
         $rowset = $this->table->select(function (Select $select) use ($user) {
             $select
@@ -58,7 +58,7 @@ class FolderRepository implements FolderRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(FolderEntity $folder)
+    public function save(Folder $folder)
     {
         $data = $folder->getArrayCopy();
         
@@ -76,7 +76,7 @@ class FolderRepository implements FolderRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(FolderEntity $folder)
+    public function delete(Folder $folder)
     {
         $this->table->delete(['id' => $folder->getId()]);
         return $this;

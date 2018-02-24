@@ -2,7 +2,7 @@
 
 namespace Application\Repository;
 
-use Application\Model\UserEntity;
+use Application\Model\User;
 
 interface UserRepositoryInterface
 {
@@ -10,7 +10,7 @@ interface UserRepositoryInterface
     /**
      * Find user by id
      * @param int $id
-     * @return UserEntity
+     * @return User
      * @throws UserNotFoundException
      */
     public function findById($id);
@@ -18,7 +18,7 @@ interface UserRepositoryInterface
     /**
      * Find user by identity
      * @param string $identity
-     * @return UserEntity
+     * @return User
      * @throws UserNotFoundException
      */
     public function FindByIdentity($identity);
@@ -26,14 +26,14 @@ interface UserRepositoryInterface
     /**
      * Create new user
      * @param array $data
-     * @return UserEntity
+     * @return User
      */
     public function createUser(array $data);
 
     /**
      * Save user
-     * @param UserEntity $user
+     * @param User $user
      * @return UserRepositoryInterface
      */
-    public function save(UserEntity $user);
+    public function save(User $user);
 }

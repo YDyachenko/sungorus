@@ -3,7 +3,7 @@
 namespace Application\Repository;
 
 use Application\Exception\UserNotFoundException;
-use Application\Model\UserEntity;
+use Application\Model\User;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Crypt\Password\Bcrypt;
 
@@ -60,7 +60,7 @@ class UserRepository implements UserRepositoryInterface
     public function createUser(array $data)
     {
         $bcrypt = new Bcrypt();
-        $user   = new UserEntity();
+        $user   = new User();
         $user->exchangeArray([
             'email'    => $data['email'],
             'login'    => '', // not yet used
@@ -76,7 +76,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(UserEntity $user)
+    public function save(User $user)
     {
         $data = $user->getArrayCopy();
 

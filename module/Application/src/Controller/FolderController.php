@@ -3,7 +3,7 @@
 namespace Application\Controller;
 
 use Application\Form;
-use Application\Model\FolderEntity;
+use Application\Model\Folder;
 use Application\Repository\FolderRepositoryInterface;
 use Application\Repository\AccountRepositoryInterface;
 use Application\Exception\FolderNotFoundException;
@@ -70,7 +70,7 @@ class FolderController extends AbstractActionController
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
-                $folder = new FolderEntity();
+                $folder = new Folder();
                 $folder->exchangeArray($form->getData());
                 $folder->setUserId($this->identity()->getId());
 

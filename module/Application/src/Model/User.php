@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-class UserEntity
+class User
 {
 
     /**
@@ -43,7 +43,7 @@ class UserEntity
     /**
      * Set id
      * @param int $id
-     * @return UserEntity
+     * @return User
      */
     function setId($id)
     {
@@ -64,7 +64,7 @@ class UserEntity
     /**
      * Set login
      * @param string $login
-     * @return UserEntity
+     * @return User
      */
     function setLogin($login)
     {
@@ -84,7 +84,7 @@ class UserEntity
     /**
      * Set email
      * @param string $email
-     * @return UserEntity
+     * @return User
      */
     function setEmail($email)
     {
@@ -104,7 +104,7 @@ class UserEntity
     /**
      * Set password
      * @param string $password
-     * @return UserEntity
+     * @return User
      */
     function setPassword($password)
     {
@@ -124,7 +124,7 @@ class UserEntity
     /**
      * Set key_hash
      * @param string $value
-     * @return UserEntity
+     * @return User
      */
     function setKeyHash($value)
     {
@@ -144,7 +144,7 @@ class UserEntity
     /**
      * Set cookie_key
      * @param string $value
-     * @return UserEntity
+     * @return User
      */
     function setCookieKey($value)
     {
@@ -155,7 +155,7 @@ class UserEntity
     /**
      * Load data from array
      * @param array $data
-     * @return UserEntity
+     * @return User
      */
     public function exchangeArray($data)
     {

@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-class AccountDataEntity
+class AccountData
 {
 
     /**
@@ -27,7 +27,7 @@ class AccountDataEntity
     /**
      * Set account_id
      * @param int $id
-     * @return AccountDataEntity
+     * @return AccountData
      */
     function setAccountId($id)
     {
@@ -47,7 +47,7 @@ class AccountDataEntity
     /**
      * Set data
      * @param array $data
-     * @return AccountDataEntity
+     * @return AccountData
      */
     function setData(array $data)
     {
@@ -58,7 +58,7 @@ class AccountDataEntity
     /**
      * Load data from array
      * @param array $data
-     * @return AccountDataEntity
+     * @return AccountData
      */
     public function exchangeArray($data)
     {

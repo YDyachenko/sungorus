@@ -2,8 +2,8 @@
 
 namespace Application\Repository;
 
-use Application\Model\AccountEntity;
-use Application\Model\AccountDataEntity;
+use Application\Model\Account;
+use Application\Model\AccountData;
 use Zend\Hydrator\HydratorInterface;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
@@ -30,7 +30,7 @@ class AccountDataRepository implements AccountDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByAccount(AccountEntity $account)
+    public function findByAccount(Account $account)
     {
         $rowset = $this->table->select(['account_id' => $account->getId()]);
         $row    = $rowset->current();
@@ -41,7 +41,7 @@ class AccountDataRepository implements AccountDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(AccountDataEntity $data)
+    public function save(AccountData $data)
     {
         $this->table->delete(['account_id' => $data->getAccountId()]);
         $values = $this->hydrator->extract($data);

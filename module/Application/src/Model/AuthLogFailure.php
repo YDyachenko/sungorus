@@ -2,13 +2,8 @@
 
 namespace Application\Model;
 
-class AuthLogSuccessEntity
+class AuthLogFailure
 {
-
-    /**
-     * @var int
-     */
-    protected $user_id;
 
     /**
      * @var int
@@ -21,31 +16,9 @@ class AuthLogSuccessEntity
     protected $datetime;
     
     /**
-     * @var string
+     * @var int
      */
-    protected $user_agent;
-
-    
-    /**
-     * Get user_id
-     * @return int
-     */
-    function getUserId()
-    {
-        return $this->user_id;
-    }
-
-    /**
-     * Set user_id
-     * @param int $id
-     * @return AuthLogSuccessEntity
-     */
-    function setUserId($id)
-    {
-        $this->user_id = (int) $id;
-        
-        return $this;
-    }
+    protected $count;
 
     /**
      * Get ip
@@ -59,7 +32,7 @@ class AuthLogSuccessEntity
     /**
      * Set ip
      * @param int $ip
-     * @return AuthLogSuccessEntity
+     * @return AuthLogFailure
      */
     function setIp($ip)
     {
@@ -79,7 +52,7 @@ class AuthLogSuccessEntity
     /**
      * Set datetime
      * @param string $datetime
-     * @return AuthLogSuccessEntity
+     * @return AuthLogFailure
      */
     function setDatetime($datetime)
     {
@@ -89,44 +62,41 @@ class AuthLogSuccessEntity
 
     /**
      * Get user_agent
-     * @return string
+     * @return int
      */
-    function getUserAgent()
+    function getCount()
     {
-        return $this->user_agent;
+        return $this->count;
     }
 
     /**
-     * Set user_agent
-     * @param string $userAgent
-     * @return AuthLogSuccessEntity
+     * Set count
+     * @param string $value
+     * @return AuthLogFailure
      */
-    function setUserAgent($userAgent)
+    function setCount($value)
     {
-        $this->user_agent = $userAgent;
+        $this->count = $value;
         return $this;
     }
 
     /**
      * Load data from array
      * @param array $data
-     * @return AuthLogSuccessEntity
+     * @return AuthLogFailure
      */
     public function exchangeArray($data)
     {
         foreach ($data as $key => $value) {
             switch ($key) {
-                case 'user_id':
-                    $this->setUserId($value);
-                    break;
                 case 'ip':
                     $this->setIp($value);
                     break;
                 case 'datetime':
                     $this->setDatetime($value);
                     break;
-                case 'user_agent':
-                    $this->setUserAgent($value);
+                case 'count':
+                    $this->setCount($value);
                     break;
             }
         }

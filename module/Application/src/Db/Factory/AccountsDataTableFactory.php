@@ -3,7 +3,7 @@
 namespace Application\Db\Factory;
 
 use Application\Hydrator\AccountDataHydrator;
-use Application\Model\AccountDataEntity;
+use Application\Model\AccountData;
 use Psr\Container\ContainerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\HydratingResultSet;
@@ -19,7 +19,7 @@ class AccountsDataTableFactory implements FactoryInterface
         $dbAdapter = $container->get(Adapter::class);
         $hydrator  = $container->get(AccountDataHydrator::class);
 
-        $resultSetPrototype = new HydratingResultSet($hydrator, new AccountDataEntity());
+        $resultSetPrototype = new HydratingResultSet($hydrator, new AccountData());
 
         return new TableGateway('accounts_data', $dbAdapter, null, $resultSetPrototype);
     }

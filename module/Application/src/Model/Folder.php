@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-class FolderEntity
+class Folder
 {
 
     /**
@@ -32,7 +32,7 @@ class FolderEntity
     /**
      * Set id
      * @param int $id
-     * @return FolderEntity
+     * @return Folder
      */
     function setId($id)
     {
@@ -52,7 +52,7 @@ class FolderEntity
     /**
      * Set user_id
      * @param int $user_id
-     * @return FolderEntity
+     * @return Folder
      */
     function setUserId($user_id)
     {
@@ -72,7 +72,7 @@ class FolderEntity
     /**
      * Set name
      * @param string $name
-     * @return FolderEntity
+     * @return Folder
      */
     function setName($name)
     {
@@ -83,7 +83,7 @@ class FolderEntity
     /**
      * Load data from array
      * @param array $data
-     * @return FolderEntity
+     * @return Folder
      */
     public function exchangeArray($data)
     {

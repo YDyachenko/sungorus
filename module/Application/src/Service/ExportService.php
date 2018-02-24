@@ -3,7 +3,7 @@
 namespace Application\Service;
 
 use XMLWriter;
-use Application\Model\UserEntity;
+use Application\Model\User;
 use Application\Service\AccountDataCipher;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
@@ -34,10 +34,10 @@ class ExportService
 
     /**
      * Export user accounts in XML format
-     * @param UserEntity $user
+     * @param User $user
      * @return string XML
      */
-    public function process(UserEntity $user)
+    public function process(User $user)
     {
         $writer = new XMLWriter();
         $writer->openMemory();

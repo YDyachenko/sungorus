@@ -2,23 +2,23 @@
 
 namespace Application\Repository;
 
-use Application\Model\AccountEntity;
-use Application\Model\AccountDataEntity;
+use Application\Model\Account;
+use Application\Model\AccountData;
 
 interface AccountDataRepositoryInterface
 {
 
     /**
      * Find data by account
-     * @param AccountEntity $account
-     * @return AccountDataEntity
+     * @param Account $account
+     * @return AccountData
      */
-    public function findByAccount(AccountEntity $account);
+    public function findByAccount(Account $account);
 
     /**
      * Save account data
-     * @param AccountDataEntity $data
+     * @param AccountData $data
      * @return AccountDataRepositoryInterface
      */
-    public function save(AccountDataEntity $data);
+    public function save(AccountData $data);
 }

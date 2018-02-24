@@ -2,7 +2,7 @@
 
 namespace Application\Model;
 
-class EncryptionKeyEntity
+class EncryptionKey
 {
 
     /**
@@ -32,7 +32,7 @@ class EncryptionKeyEntity
     /**
      * Set id
      * @param int $id
-     * @return EncryptionKeyEntity
+     * @return EncryptionKey
      */
     function setId($id)
     {
@@ -52,7 +52,7 @@ class EncryptionKeyEntity
     /**
      * Set user_id
      * @param int $user_id
-     * @return EncryptionKeyEntity
+     * @return EncryptionKey
      */
     function setUserId($user_id)
     {
@@ -72,7 +72,7 @@ class EncryptionKeyEntity
     /**
      * Set key
      * @param string $key
-     * @return EncryptionKeyEntity
+     * @return EncryptionKey
      */
     function setKey($key)
     {
@@ -83,7 +83,7 @@ class EncryptionKeyEntity
     /**
      * Load data from array
      * @param array $data
-     * @return EncryptionKeyEntity
+     * @return EncryptionKey
      */
     public function exchangeArray($data)
     {

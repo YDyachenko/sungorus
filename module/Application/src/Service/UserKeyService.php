@@ -2,9 +2,9 @@
 
 namespace Application\Service;
 
-use Application\Model\UserEntity;
+use Application\Model\User;
 use Application\Exception\InvalidUserKeyException;
-use Application\Model\EncryptionKeyEntity;
+use Application\Model\EncryptionKey;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Crypt\BlockCipher;
 
@@ -32,10 +32,10 @@ class UserKeyService
     /**
      * Add key to DB and generate cookie value
      * @param string $key User's encryption key
-     * @param UserEntity $user
+     * @param User $user
      * @return string
      */
-    public function generateCookie($key, UserEntity $user)
+    public function generateCookie($key, User $user)
     {
         $cookieKey = \Zend\Math\Rand::getString(20);
         $this->blockCipher->setKey($cookieKey);
@@ -53,11 +53,11 @@ class UserKeyService
     /**
      * Get encryption key from cookie param
      * @param string $cookieValue
-     * @param UserEntity $user
+     * @param User $user
      * @return string
      * @throws InvalidUserKeyException
      */
-    public function getUserKey($cookieValue, UserEntity $user)
+    public function getUserKey($cookieValue, User $user)
     {
         if (($pos = strpos($cookieValue, '-')) < 1) {
             throw new InvalidUserKeyException('Delimiter not found');
@@ -70,7 +70,7 @@ class UserKeyService
             'user_id' => $user->getId()
         ];
         $entity = $this->keysTable->select($where)->current();
-        if (!($entity instanceof EncryptionKeyEntity)) {
+        if (!($entity instanceof EncryptionKey)) {
             throw new InvalidUserKeyException('Key not found');
         }
 

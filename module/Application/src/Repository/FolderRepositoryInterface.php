@@ -2,8 +2,8 @@
 
 namespace Application\Repository;
 
-use Application\Model\FolderEntity;
-use Application\Model\UserEntity;
+use Application\Model\Folder;
+use Application\Model\User;
 
 interface FolderRepositoryInterface
 {
@@ -11,29 +11,29 @@ interface FolderRepositoryInterface
     /**
      * Find folder by id
      * @param int $id
-     * @return FolderEntity
+     * @return Folder
      * @throws FolderNotFoundException
      */
     public function findById($id);
 
     /**
      * Find folders by user
-     * @param UserEntity $user
-     * @return FolderEntity[]
+     * @param User $user
+     * @return Folder[]
      */
-    public function findByUser(UserEntity $user);
+    public function findByUser(User $user);
 
     /**
      * Save folder
-     * @param FolderEntity $folder
+     * @param Folder $folder
      * @return FolderRepository
      */
-    public function save(FolderEntity $folder);
+    public function save(Folder $folder);
 
     /**
      * Delete folder
-     * @param FolderEntity $folder
+     * @param Folder $folder
      * @return FolderRepository
      */
-    public function delete(FolderEntity $folder);
+    public function delete(Folder $folder);
 }

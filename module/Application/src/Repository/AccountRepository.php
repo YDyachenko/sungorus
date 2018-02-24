@@ -2,9 +2,9 @@
 
 namespace Application\Repository;
 
-use Application\Model\UserEntity;
-use Application\Model\AccountEntity;
-use Application\Model\FolderEntity;
+use Application\Model\User;
+use Application\Model\Account;
+use Application\Model\Folder;
 use Application\Exception\AccountNotFoundException;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\Sql\Select;
@@ -45,7 +45,7 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByUser(UserEntity $user)
+    public function findByUser(User $user)
     {
         $rowset = $this->table->select(function (Select $select) use ($user) {
             $select
@@ -58,7 +58,7 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findUserFavorites(UserEntity $user)
+    public function findUserFavorites(User $user)
     {
         $rowset = $this->table->select(function (Select $select) use ($user) {
             $select
@@ -74,7 +74,7 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByFolder(FolderEntity $folder)
+    public function findByFolder(Folder $folder)
     {
         $rowset = $this->table->select(function (Select $select) use ($folder) {
             $select
@@ -90,7 +90,7 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByName($name, UserEntity $user)
+    public function findByName($name, User $user)
     {
         $rowset = $this->table->select(function (Select $select) use ($name, $user) {
             $param = '%' . str_replace(['_', '%'], ['\_', '\%'], $name) . '%';
@@ -107,7 +107,7 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function save(AccountEntity $account)
+    public function save(Account $account)
     {
         $data = $account->getArrayCopy();
         $id   = $data['id'];
@@ -128,7 +128,7 @@ class AccountRepository implements AccountRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(AccountEntity $account)
+    public function delete(Account $account)
     {
         $this->table->delete(['id' => $account->getId()]);
         return $this;

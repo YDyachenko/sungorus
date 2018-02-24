@@ -2,9 +2,9 @@
 
 namespace Application\Repository;
 
-use Application\Model\AccountEntity;
-use Application\Model\FolderEntity;
-use Application\Model\UserEntity;
+use Application\Model\Account;
+use Application\Model\Folder;
+use Application\Model\User;
 
 interface AccountRepositoryInterface
 {
@@ -12,51 +12,51 @@ interface AccountRepositoryInterface
     /**
      * find account by id
      * @param int $id
-     * @return AccountEntity
+     * @return Account
      * @throws AccountNotFoundException
      */
     public function findById($id);
 
     /**
      * Find accounts by user
-     * @param UserEntity $user
-     * @return AccountEntity[]
+     * @param User $user
+     * @return Account[]
      */
-    public function findByUser(UserEntity $user);
+    public function findByUser(User $user);
 
     /**
      * Find user favorite accounts
-     * @param UserEntity $user
-     * @return AccountEntity[]
+     * @param User $user
+     * @return Account[]
      */
-    public function findUserFavorites(UserEntity $user);
+    public function findUserFavorites(User $user);
 
     /**
      * Find accounts by folder
-     * @param FolderEntity $folder
-     * @return AccountEntity[]
+     * @param Folder $folder
+     * @return Account[]
      */
-    public function findByFolder(FolderEntity $folder);
+    public function findByFolder(Folder $folder);
 
     /**
      * Find accounts by name
      * @param string $name account name
-     * @param UserEntity $user
-     * @return AccountEntity[]
+     * @param User $user
+     * @return Account[]
      */
-    public function findByName($name, UserEntity $user);
+    public function findByName($name, User $user);
 
     /**
      * Save account
-     * @param AccountEntity $account
+     * @param Account $account
      * @return AccountRepositoryInterface
      */
-    public function save(AccountEntity $account);
+    public function save(Account $account);
 
     /**
      * Delete account
-     * @param AccountEntity $account
+     * @param Account $account
      * @return AccountRepositoryInterface
      */
-    public function delete(AccountEntity $account);
+    public function delete(Account $account);
 }

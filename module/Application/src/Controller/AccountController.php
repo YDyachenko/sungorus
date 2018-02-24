@@ -3,8 +3,8 @@
 namespace Application\Controller;
 
 use Application\Form\AccountForm;
-use Application\Model\AccountEntity;
-use Application\Model\AccountDataEntity;
+use Application\Model\Account;
+use Application\Model\AccountData;
 use Application\Exception\ForbiddenException;
 use Application\Exception\AccountNotFoundException;
 use Application\Exception\FolderNotFoundException;
@@ -81,8 +81,8 @@ class AccountController extends AbstractActionController
 
             if ($form->isValid()) {
                 $data        = $form->getData();
-                $accountData = new AccountDataEntity();
-                $account     = new AccountEntity();
+                $accountData = new AccountData();
+                $account     = new Account();
 
                 $accountData->setData($data['data']);
 

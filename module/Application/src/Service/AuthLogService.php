@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Model\UserEntity;
+use Application\Model\User;
 use Zend\Db\Sql\Expression;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
@@ -31,7 +31,7 @@ class AuthLogService
         $this->failureTable = $failureTable;
     }
 
-    public function getLastSuccess(UserEntity $user)
+    public function getLastSuccess(User $user)
     {
         return $this->successTable->select(function ($select) use ($user) {
                 $select->where(['user_id' => $user->getId()])
@@ -69,7 +69,7 @@ class AuthLogService
         return (bool) $result->count();
     }
 
-    public function logSuccess(UserEntity $user, $ip, $userAgent)
+    public function logSuccess(User $user, $ip, $userAgent)
     {
         $long = $this->ip2long($ip);
         $set  = [
