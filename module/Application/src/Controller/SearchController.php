@@ -33,13 +33,21 @@ class SearchController extends AbstractActionController
      */
     public function indexAction()
     {
-        $user     = $this->identity();
-        $name     = $this->params()->fromQuery('name', '');
-        
+        $user = $this->identity();
+        $name = $this->params()->fromQuery('name', '');
+
         if (empty($name))
             $accounts = [];
         else
             $accounts = $this->accounts->findByName($name, $user);
+
+        if (count($accounts) === 1) {
+            $account = $accounts->current();
+            return $this->redirect()->toRoute('folder/account', [
+                    'folderId'  => $account->getFolderId(),
+                    'accountId' => $account->getId(),
+            ]);
+        }
 
         return [
             'folders'  => $this->folders->findByUser($user)->buffer(),
