@@ -5,20 +5,19 @@ namespace Application\Controller\Factory;
 use Application\Controller\AuthController;
 use Application\Repository\UserRepositoryInterface;
 use Application\Service\UserKeyService;
+use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationServiceInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class AuthControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $controllers)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services    = $controllers->getServiceLocator();
-        $config      = $services->get('config');
-        $authService = $services->get(AuthenticationServiceInterface::class);
-        $keyService  = $services->get(UserKeyService::class);
-        $users       = $services->get(UserRepositoryInterface::class);
+        $config      = $container->get('config');
+        $authService = $container->get(AuthenticationServiceInterface::class);
+        $keyService  = $container->get(UserKeyService::class);
+        $users       = $container->get(UserRepositoryInterface::class);
 
         return new AuthController($config, $authService, $keyService, $users);
     }

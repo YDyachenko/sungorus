@@ -6,18 +6,17 @@ use Application\Controller\IndexController;
 use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
 use Application\Service\AuthLogService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class IndexControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $controllers)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services       = $controllers->getServiceLocator();
-        $folders        = $services->get(FolderRepositoryInterface::class);
-        $accounts       = $services->get(AccountRepositoryInterface::class);
-        $authLogService = $services->get(AuthLogService::class);
+        $folders        = $container->get(FolderRepositoryInterface::class);
+        $accounts       = $container->get(AccountRepositoryInterface::class);
+        $authLogService = $container->get(AuthLogService::class);
 
         return new IndexController($folders, $accounts, $authLogService);
     }

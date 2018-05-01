@@ -21,8 +21,8 @@ return [
     ],
     'controller_plugins' => [
         'aliases'   => [
-            'CheckUserEncryptionKey' => Plugin\CheckUserEncryptionKey::class,
-            'SetEncryptionKeyCookie' => Plugin\SetEncryptionKeyCookie::class,
+            'checkUserEncryptionKey' => Plugin\CheckUserEncryptionKey::class,
+            'setEncryptionKeyCookie' => Plugin\SetEncryptionKeyCookie::class,
         ],
         'factories' => [
             Plugin\CheckUserEncryptionKey::class => PluginFactory\CheckUserEncryptionKeyFactory::class,

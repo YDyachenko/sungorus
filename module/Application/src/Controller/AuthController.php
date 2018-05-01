@@ -90,11 +90,11 @@ class AuthController extends AbstractActionController
 
                 if ($result->isValid()) {
                     $event->setName(AuthEvent::EVENT_AUTHENTICATION_SUCCESS);
-                    $events->trigger($event);
+                    $events->triggerEvent($event);
                     return $this->redirect()->toRoute('home');
                 } else {
                     $event->setName(AuthEvent::EVENT_AUTHENTICATION_FAILURE);
-                    $events->trigger($event);
+                    $events->triggerEvent($event);
                     $error = true;
                 }
             }

@@ -3,9 +3,8 @@
 namespace Application\Repository\Factory;
 
 use Application\Repository\UserRepository;
-use Psr\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class UserRepositoryFactory implements FactoryInterface
 {
@@ -14,11 +13,6 @@ class UserRepositoryFactory implements FactoryInterface
     {
         $table = $container->get('UsersTable');
         return new UserRepository($table);
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, UserRepository::class);
     }
 
 }

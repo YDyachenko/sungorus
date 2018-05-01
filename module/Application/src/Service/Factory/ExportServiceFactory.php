@@ -4,10 +4,9 @@ namespace Application\Service\Factory;
 
 use Application\Service\AccountDataCipher;
 use Application\Service\ExportService;
-use Psr\Container\ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Zend\Db\Adapter\Adapter;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class ExportServiceFactory implements FactoryInterface
 {
@@ -18,11 +17,6 @@ class ExportServiceFactory implements FactoryInterface
         $cipher  = $container->get(AccountDataCipher::class);
 
         return new ExportService($adapter, $cipher);
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, ExportService::class);
     }
 
 }

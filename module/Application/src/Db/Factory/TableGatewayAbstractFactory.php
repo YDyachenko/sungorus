@@ -2,11 +2,10 @@
 
 namespace Application\Db\Factory;
 
+use Interop\Container\ContainerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\ServiceManager\AbstractFactoryInterface;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
 use Zend\Db\ResultSet\ResultSet;
 
 class TableGatewayAbstractFactory implements AbstractFactoryInterface
@@ -15,12 +14,12 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
         if (substr($requestedName, -5) !== 'Table')
             return false;
 
-        $config      = $serviceLocator->get('config');
+        $config      = $container->get('config');
         $gatewayName = $this->getConfigKey($requestedName);
 
         if (!isset($config['tablegateways'][$gatewayName]))
@@ -32,10 +31,10 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $dbAdapter   = $serviceLocator->get(Adapter::class);
-        $config      = $serviceLocator->get('config');
+        $dbAdapter   = $container->get(Adapter::class);
+        $config      = $container->get('config');
         $gatewayName = $this->getConfigKey($requestedName);
         $gwConfig    = $config['tablegateways'][$gatewayName];
         $entity      = $this->getEntityFromConfig($gwConfig, $requestedName);

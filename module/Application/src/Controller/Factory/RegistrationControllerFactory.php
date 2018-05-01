@@ -6,21 +6,20 @@ use Application\Controller\RegistrationController;
 use Application\Repository\UserRepositoryInterface;
 use Application\Form\SignupForm;
 use Application\Service\UserKeyService;
+use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationServiceInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class RegistrationControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $controllers)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services    = $controllers->getServiceLocator();
-        $config      = $services->get('config');
-        $form        = $services->get(SignupForm::class);
-        $authService = $services->get(AuthenticationServiceInterface::class);
-        $keyService  = $services->get(UserKeyService::class);
-        $users       = $services->get(UserRepositoryInterface::class);
+        $config      = $container->get('config');
+        $form        = $container->get(SignupForm::class);
+        $authService = $container->get(AuthenticationServiceInterface::class);
+        $keyService  = $container->get(UserKeyService::class);
+        $users       = $container->get(UserRepositoryInterface::class);
 
         return new RegistrationController($config, $form, $authService, $keyService, $users);
     }

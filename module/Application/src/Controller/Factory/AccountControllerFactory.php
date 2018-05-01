@@ -7,19 +7,18 @@ use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\AccountDataRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
 use Application\Service\FaviconService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class AccountControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $controllers)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services    = $controllers->getServiceLocator();
-        $folders     = $services->get(FolderRepositoryInterface::class);
-        $accounts    = $services->get(AccountRepositoryInterface::class);
-        $data        = $services->get(AccountDataRepositoryInterface::class);
-        $iconService = $services->get(FaviconService::class);
+        $folders     = $container->get(FolderRepositoryInterface::class);
+        $accounts    = $container->get(AccountRepositoryInterface::class);
+        $data        = $container->get(AccountDataRepositoryInterface::class);
+        $iconService = $container->get(FaviconService::class);
 
         return new AccountController($folders, $accounts, $data, $iconService);
     }

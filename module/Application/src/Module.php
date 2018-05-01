@@ -42,14 +42,14 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 }
             }, 1000);
             $em->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], -100);
-            $em->attachAggregate($sm->get(Listener\EncryptionKeyListener::class));
+            $aggregate = $sm->get(Listener\EncryptionKeyListener::class);
+            $aggregate->attach($em);
 
             $sharedManager = $em->getSharedManager();
             $sharedManager->attach(Controller\AuthController::class, MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
                 $controller = $e->getTarget();
-                $listener   = $sm->get(Authentication\AuthListener::class);
-
-                $controller->getEventManager()->attachAggregate($listener);
+                $aggregate   = $sm->get(Authentication\AuthListener::class);
+                $aggregate->attach($controller->getEventManager());
             }, 2);
         }
     }
@@ -127,7 +127,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
         return [
             'factories' => [
                 BlockCipher::class => function () {
-                    return \Zend\Crypt\BlockCipher::factory('mcrypt');
+                    return \Zend\Crypt\BlockCipher::factory('openssl');
                 },
         ]];
     }

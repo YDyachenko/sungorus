@@ -32,11 +32,11 @@ class AuthListener implements ListenerAggregateInterface
     /**
      * {@inheritdoc}
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION, [$this, 'checkIpBlocked']);
-        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION_SUCCESS, [$this, 'onSuccess']);
-        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION_FAILURE, [$this, 'onFailure']);
+        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION, [$this, 'checkIpBlocked'], $priority);
+        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION_SUCCESS, [$this, 'onSuccess'], $priority);
+        $this->listeners[] = $events->attach(AuthEvent::EVENT_AUTHENTICATION_FAILURE, [$this, 'onFailure'], $priority);
     }
 
     /**

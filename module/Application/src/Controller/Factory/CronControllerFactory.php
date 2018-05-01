@@ -5,17 +5,16 @@ namespace Application\Controller\Factory;
 use Application\Controller\CronController;
 use Application\Service\AuthLogService;
 use Application\Service\UserKeyService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class CronControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $controllers)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services       = $controllers->getServiceLocator();
-        $keysService    = $services->get(UserKeyService::class);
-        $authLogService = $services->get(AuthLogService::class);
+        $keysService    = $container->get(UserKeyService::class);
+        $authLogService = $container->get(AuthLogService::class);
 
         return new CronController($authLogService, $keysService);
     }

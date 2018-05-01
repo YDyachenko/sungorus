@@ -4,15 +4,15 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\ExportController;
 use Application\Service\ExportService;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class ExportControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $controllers)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services      = $controllers->getServiceLocator();
+        $services      = $container->getServiceLocator();
         $exportService = $services->get(ExportService::class);
 
         return new ExportController($exportService);

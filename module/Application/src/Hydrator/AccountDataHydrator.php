@@ -3,9 +3,9 @@
 namespace Application\Hydrator;
 
 use Application\Service\AccountDataCipher;
-use Zend\Stdlib\Hydrator\AbstractHydrator;
+use Zend\Hydrator\HydratorInterface;
 
-class AccountDataHydrator extends AbstractHydrator
+class AccountDataHydrator implements HydratorInterface
 {
 
     /**
@@ -18,7 +18,6 @@ class AccountDataHydrator extends AbstractHydrator
      */
     public function __construct(AccountDataCipher $cipher)
     {
-        parent::__construct();
         $this->cipher = $cipher;
     }
 

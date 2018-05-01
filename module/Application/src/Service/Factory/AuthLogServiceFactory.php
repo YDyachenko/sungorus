@@ -3,9 +3,8 @@
 namespace Application\Service\Factory;
 
 use Application\Service\AuthLogService;
-use Psr\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class AuthLogServiceFactory implements FactoryInterface
 {
@@ -17,11 +16,6 @@ class AuthLogServiceFactory implements FactoryInterface
         $failureTable = $container->get('AuthLogFailureTable');
 
         return new AuthLogService($config, $successTable, $failureTable);
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, AuthLogService::class);
     }
 
 }

@@ -5,17 +5,16 @@ namespace Application\Controller\Factory;
 use Application\Controller\FolderController;
 use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class FolderControllerFactory implements FactoryInterface
 {
 
-    public function createService(ServiceLocatorInterface $controllers)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services = $controllers->getServiceLocator();
-        $folders  = $services->get(FolderRepositoryInterface::class);
-        $accounts = $services->get(AccountRepositoryInterface::class);
+        $folders  = $container->get(FolderRepositoryInterface::class);
+        $accounts = $container->get(AccountRepositoryInterface::class);
 
         return new FolderController($folders, $accounts);
     }

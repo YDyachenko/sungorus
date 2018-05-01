@@ -4,17 +4,16 @@ namespace Application\Db\Factory;
 
 use Application\Hydrator\AccountDataHydrator;
 use Application\Model\AccountData;
-use Psr\Container\ContainerInterface;
+use Interop\Container\ContainerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class AccountsDataTableFactory implements FactoryInterface
 {
 
-    public function __invoke(ContainerInterface $container, $name, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $dbAdapter = $container->get(Adapter::class);
         $hydrator  = $container->get(AccountDataHydrator::class);
@@ -22,11 +21,6 @@ class AccountsDataTableFactory implements FactoryInterface
         $resultSetPrototype = new HydratingResultSet($hydrator, new AccountData());
 
         return new TableGateway('accounts_data', $dbAdapter, null, $resultSetPrototype);
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, 'AccountsDataTable');
     }
 
 }
