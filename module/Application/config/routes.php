@@ -7,8 +7,8 @@ use Application\Controller\FolderController;
 use Application\Controller\IndexController;
 use Application\Controller\RegistrationController;
 use Application\Controller\SearchController;
-use Zend\Mvc\Router\Http\Literal;
-use Zend\Mvc\Router\Http\Segment;
+use Zend\Router\Http\Literal;
+use Zend\Router\Http\Segment;
 
 return [
     'router' => [
