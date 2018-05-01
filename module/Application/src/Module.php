@@ -8,7 +8,7 @@ use Application\Authentication;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
-use Zend\Mvc\Router\RouteMatch;
+use Zend\Router\Http\RouteMatch;
 use Zend\Http\Request as HttpRequest;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\Crypt\BlockCipher;
@@ -64,7 +64,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     {
         $skipRoutes = ['login', 'signup'];
         $match      = $e->getRouteMatch();
-
+        
         if (!$match instanceof RouteMatch) {
             return;
         }
