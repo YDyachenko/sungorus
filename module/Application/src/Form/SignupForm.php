@@ -5,6 +5,7 @@ namespace Application\Form;
 use Zend\Form\Form;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Validator;
 
 class SignupForm extends Form implements InputFilterProviderInterface
 {
@@ -88,18 +89,18 @@ class SignupForm extends Form implements InputFilterProviderInterface
                 ),
                 'validators' => array(
                     array(
-                        'name'    => 'Db\NoRecordExists',
+                        'name'    => Validator\Db\NoRecordExists::class,
                         'options' => array(
                             'adapter'  => $this->dbAdapter,
                             'table'    => 'users',
                             'field'    => 'email',
                             'messages' => array(
-                                \Zend\Validator\Db\AbstractDb::ERROR_RECORD_FOUND => 'This email already used',
+                                Validator\Db\AbstractDb::ERROR_RECORD_FOUND => 'This email already used',
                             ),
                         ),
                     ),
                     array(
-                        'name'    => 'EmailAddress',
+                        'name'    => Validator\EmailAddress::class,
                         'options' => array(
                             'useDomainCheck' => true,
                         ),
@@ -115,12 +116,12 @@ class SignupForm extends Form implements InputFilterProviderInterface
                 'required'   => true,
                 'validators' => array(
                     array(
-                        'name'    => 'Identical',
+                        'name'    => Validator\Identical::class,
                         'options' => array(
                             'token'    => 'password',
                             'strict'   => true,
                             'messages' => array(
-                                \Zend\Validator\Identical::NOT_SAME => 'The two given passwords do not match',
+                                Validator\Identical::NOT_SAME => 'The two given passwords do not match',
                             ),
                         ),
                     ),
@@ -135,7 +136,7 @@ class SignupForm extends Form implements InputFilterProviderInterface
                 'required'   => true,
                 'validators' => array(
                     array(
-                        'name'    => 'Identical',
+                        'name'    => Validator\Identical::class,
                         'options' => array(
                             'token'    => 'key',
                             'strict'   => true,
