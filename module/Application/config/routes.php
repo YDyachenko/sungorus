@@ -120,6 +120,9 @@ return [
                             'constraints' => [
                                 'folderId' => '\d+',
                             ],
+                            'defaults' => [
+                                'controller' => FolderController::class,
+                            ],
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
