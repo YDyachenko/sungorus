@@ -102,6 +102,7 @@ class AccountController extends AbstractActionController
         $viewModel = new ViewModel([
             'form'     => $form,
             'folders'  => $folders,
+            'folder'   => $folder,
             'folderId' => $folder->getId(),
         ]);
 
@@ -125,12 +126,15 @@ class AccountController extends AbstractActionController
 
         if ($account->getUserId() != $user->getId())
             throw new ForbiddenException("Folder of another user");
+        
+        $folderId = (int)$this->params('folderId');
 
-        if ($account->getFolderId() != $this->params('folderId'))
+        if ($account->getFolderId() != $folderId)
             return $this->notFoundAction();
 
         $accountData = $this->dataRepository->findByAccount($account);
         $folders     = $this->folders->findByUser($user)->buffer();
+        $folder      = $this->folders->findById($folderId);
 
         $form = new AccountForm();
         $form->setFoldersOptions($folders);
@@ -161,7 +165,8 @@ class AccountController extends AbstractActionController
         return [
             'form'     => $form,
             'folders'  => $folders,
-            'folderId' => $this->params('folderId'),
+            'folder'   => $folder,
+            'folderId' => $folderId,
             'account'  => $account,
         ];
     }

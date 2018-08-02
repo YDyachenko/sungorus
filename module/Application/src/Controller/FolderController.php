@@ -52,6 +52,7 @@ class FolderController extends AbstractActionController
 
         return [
             'folders'  => $this->repository->findByUser($user),
+            'folder'   => $folder,
             'folderId' => $id,
             'accounts' => $this->accounts->findByFolder($folder),
         ];
@@ -119,7 +120,8 @@ class FolderController extends AbstractActionController
         }
 
         return [
-            'form' => $form
+            'form' => $form,
+            'folder' => $folder,
         ];
     }
 

@@ -1,4 +1,9 @@
 <?php
+$this->headTitle()
+    ->append($this->escapeHtml($name))
+    ->append('Search');
+    
+
 $folderNames = array();
 foreach ($folders as $folder) {
     $folderNames[$folder->getId()] = $folder->getName();
