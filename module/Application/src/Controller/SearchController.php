@@ -43,7 +43,7 @@ class SearchController extends AbstractActionController
 
         if (count($accounts) === 1) {
             $account = $accounts->current();
-            return $this->redirect()->toRoute('folder/account', [
+            return $this->redirect()->toRoute('folders/folder/accounts/account', [
                     'folderId'  => $account->getFolderId(),
                     'accountId' => $account->getId(),
             ]);

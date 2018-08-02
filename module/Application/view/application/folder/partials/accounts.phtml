@@ -8,9 +8,9 @@
             'folderId'  => $account->getFolderId(),
             'accountId' => $account->getId()
         );
-        $edit_url    = $this->url('folder/account', $params);
-        $delete_url  = $this->url('folder/account/delete', $params);
-        $favicon_url = $this->url('folder/account/favicon', $params);
+        $edit_url    = $this->url('folders/folder/accounts/account', $params);
+        $delete_url  = $this->url('folders/folder/accounts/account/delete', $params);
+        $favicon_url = $this->url('folders/folder/accounts/account/favicon', $params);
         ?>
         <a href="<?= $edit_url ?>" class="list-group-item">
             <img class="favicon" src="<?= $favicon_url ?>">

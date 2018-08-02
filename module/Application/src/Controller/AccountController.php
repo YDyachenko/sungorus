@@ -95,7 +95,7 @@ class AccountController extends AbstractActionController
                 $accountData->setAccountId($account->getId());
                 $this->dataRepository->save($accountData);
 
-                return $this->redirect()->toRoute('folder', ['folderId' => $folder->getId()]);
+                return $this->redirect()->toRoute('folders/folder/accounts', ['folderId' => $folder->getId()]);
             }
         }
 
@@ -150,7 +150,7 @@ class AccountController extends AbstractActionController
                 $this->dataRepository->save($accountData);
                 $this->accounts->save($account);
 
-                return $this->redirect()->toRoute('folder', ['folderId' => $account->getFolderId()]);
+                return $this->redirect()->toRoute('folders/folder/accounts', ['folderId' => $account->getFolderId()]);
             }
         } else {
             $data         = $account->getArrayCopy();

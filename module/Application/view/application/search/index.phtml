@@ -41,8 +41,8 @@ foreach ($folders as $folder) {
                         'accountId' => $account->getId()
                     );
                 ?>
-                    <a href="<?= $this->url('folder/account', $params) ?>" class="list-group-item">
-                        <img class="favicon" src="<?= $this->url('folder/account/favicon', $params) ?>">
+                    <a href="<?= $this->url('folders/folder/accounts/account', $params) ?>" class="list-group-item">
+                        <img class="favicon" src="<?= $this->url('folders/folder/accounts/account/favicon', $params) ?>">
                         <?= $this->escapeHtml($account->getName()) ?>
                         <span class="badge" title="Folder">
                             <?= $this->escapeHtml($folderNames[$account->getFolderId()]) ?>

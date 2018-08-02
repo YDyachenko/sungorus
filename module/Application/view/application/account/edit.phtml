@@ -27,7 +27,7 @@
                 $form->get('submit')->setAttribute('class', 'btn btn-primary');
                 echo $this->form($form);
                 
-                $openUrl = $this->url('folder/account/openUrl', array(
+                $openUrl = $this->url('folders/folder/accounts/account/openUrl', array(
                     'folderId' => $account->getFolderId(),
                     'accountId' => $account->getId()
                 ));

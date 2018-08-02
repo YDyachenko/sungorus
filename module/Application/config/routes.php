@@ -86,7 +86,7 @@ return [
                     ],
                 ],
             ],
-            'search'         => [
+            'search'        => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/search',
@@ -96,82 +96,112 @@ return [
                     ],
                 ],
             ],
-            'addFolder' => [
-                'type'    => Literal::class,
-                'options' => [
-                    'route'    => '/folder/add',
-                    'defaults' => [
-                        'controller' => FolderController::class,
-                        'action'     => 'add',
-                    ],
-                ],
-            ],
-            'folder'        => [
-                'type'          => Segment::class,
+            'folders'       => [
+                'type'          => Literal::class,
                 'options'       => [
-                    'route'       => '/folder/:folderId',
-                    'constraints' => [
-                        'folderId' => '\d+',
-                    ],
-                    'defaults'    => [
-                        'controller' => FolderController::class,
-                        'action'     => 'view',
-                    ],
+                    'route' => '/folders',
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'edit'       => [
-                        'type'    => Literal::class,
-                        'options' => [
-                            'route'    => '/edit',
-                            'defaults' => [
-                                'action' => 'edit',
-                            ],
-                        ],
-                    ],
-                    'delete'     => [
-                        'type'    => Literal::class,
-                        'options' => [
-                            'route'    => '/delete',
-                            'defaults' => [
-                                'action' => 'delete',
-                            ],
-                        ],
-                    ],
-                    'addAccount' => [
+                    'add'    => [
                         'type'    => Literal::class,
                         'options' => [
                             'route'    => '/add',
                             'defaults' => [
-                                'controller' => AccountController::class,
+                                'controller' => FolderController::class,
                                 'action'     => 'add',
                             ],
                         ],
                     ],
-                    'account'    => [
+                    'folder' => [
                         'type'          => Segment::class,
                         'options'       => [
-                            'route'       => '/:accountId',
+                            'route'       => '/:folderId',
                             'constraints' => [
-                                'accountId' => '\d+',
-                            ],
-                            'defaults'    => [
-                                'controller' => AccountController::class,
-                                'action'     => 'edit',
+                                'folderId' => '\d+',
                             ],
                         ],
                         'may_terminate' => true,
                         'child_routes'  => [
-                            'favicon' => [
+                            'accounts' => [
+                                'type'          => Literal::class,
+                                'options'       => [
+                                    'route'       => '/accounts',
+                                    'constraints' => [
+                                        'folderId' => '\d+',
+                                    ],
+                                    'defaults'    => [
+                                        'controller' => FolderController::class,
+                                        'action'     => 'accounts',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes'  => [
+                                    'add'     => [
+                                        'type'    => Literal::class,
+                                        'options' => [
+                                            'route'    => '/add',
+                                            'defaults' => [
+                                                'controller' => AccountController::class,
+                                                'action'     => 'add',
+                                            ],
+                                        ],
+                                    ],
+                                    'account' => [
+                                        'type'          => Segment::class,
+                                        'options'       => [
+                                            'route'       => '/:accountId',
+                                            'constraints' => [
+                                                'accountId' => '\d+',
+                                            ],
+                                            'defaults'    => [
+                                                'controller' => AccountController::class,
+                                                'action'     => 'edit',
+                                            ],
+                                        ],
+                                        'may_terminate' => true,
+                                        'child_routes'  => [
+                                            'favicon' => [
+                                                'type'    => Literal::class,
+                                                'options' => [
+                                                    'route'    => '/favicon',
+                                                    'defaults' => [
+                                                        'action' => 'favicon',
+                                                    ],
+                                                ],
+                                            ],
+                                            'delete'  => [
+                                                'type'    => Literal::class,
+                                                'options' => [
+                                                    'route'    => '/delete',
+                                                    'defaults' => [
+                                                        'action' => 'delete',
+                                                    ],
+                                                ],
+                                            ],
+                                            'openUrl' => [
+                                                'type'    => Literal::class,
+                                                'options' => [
+                                                    'route'    => '/open-url',
+                                                    'defaults' => [
+                                                        'action' => 'openUrl',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ]
+                            ],
+                            'edit'     => [
                                 'type'    => Literal::class,
                                 'options' => [
-                                    'route'    => '/favicon',
+                                    'route'    => '/edit',
                                     'defaults' => [
-                                        'action' => 'favicon',
+                                        'action' => 'edit',
                                     ],
                                 ],
                             ],
-                            'delete'  => [
+                            'delete'   => [
                                 'type'    => Literal::class,
                                 'options' => [
                                     'route'    => '/delete',
@@ -180,19 +210,10 @@ return [
                                     ],
                                 ],
                             ],
-                            'openUrl' => [
-                                'type'    => Literal::class,
-                                'options' => [
-                                    'route'    => '/open-url',
-                                    'defaults' => [
-                                        'action' => 'openUrl',
-                                    ],
-                                ],
-                            ],
                         ],
                     ],
                 ],
             ],
-        ]
-    ]
+        ],
+    ],
 ];

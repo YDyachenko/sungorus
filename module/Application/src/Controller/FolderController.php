@@ -36,7 +36,7 @@ class FolderController extends AbstractActionController
      * @return array
      * @throws ForbiddenException
      */
-    public function viewAction()
+    public function accountsAction()
     {
         $user = $this->identity();
         $id   = (int) $this->params('folderId', 0);
@@ -76,7 +76,7 @@ class FolderController extends AbstractActionController
 
                 $this->repository->save($folder);
 
-                return $this->redirect()->toRoute('folder', ['folderId' => $folder->getId()]);
+                return $this->redirect()->toRoute('folders/folder', ['folderId' => $folder->getId()]);
             }
         }
 
@@ -114,7 +114,7 @@ class FolderController extends AbstractActionController
             if ($form->isValid()) {
                 $this->repository->save($folder);
 
-                return $this->redirect()->toRoute('folder', ['folderId' => $folder->getId()]);
+                return $this->redirect()->toRoute('folders/folder', ['folderId' => $folder->getId()]);
             }
         }
 
