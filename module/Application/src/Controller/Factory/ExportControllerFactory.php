@@ -12,8 +12,7 @@ class ExportControllerFactory implements FactoryInterface
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $services      = $container->getServiceLocator();
-        $exportService = $services->get(ExportService::class);
+        $exportService = $container->get(ExportService::class);
 
         return new ExportController($exportService);
     }
