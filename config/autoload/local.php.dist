@@ -13,27 +13,19 @@
  */
 return [
     'db'             => [
-        'dsn'      => 'mysql:dbname=passwords;host=localhost',
+        'dsn'      => 'mysql:dbname=sungorus;host=localhost',
         'username' => '',
         'password' => '',
     ],
     'session_config' => [
-        'name'            => 'sessid',
-        'cookie_httponly' => true,
         'cookie_secure'   => true,
     ],
     'application'    => [
         'enc_key_cookie' => [
-            'name'     => 'encKey',
-            'lifetime' => 1209600, // 2 weeks
             'secure'   => true,
         ],
         'registration'   => [
-            'enabled' => true,
-        ],
-        'authentication' => [
-            'maxfailures' => 5,
-            'blocktime'   => 60 * 60 * 24,
+            'enabled' => false,
         ],
     ],
 ];

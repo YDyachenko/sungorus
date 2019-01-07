@@ -39,5 +39,11 @@
         "psr-4": {
             "Application\\": "module/Application/src/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "chmod a+w data/cache",
+            "chmod a+w data/favicons"
+        ]
     }
 }

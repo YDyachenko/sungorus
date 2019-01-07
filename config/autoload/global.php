@@ -21,6 +21,9 @@ return [
         'driver_options' => [
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ],
+        'dsn'            => 'mysql:dbname=sungorus;host=db',
+        'username'       => 'sungorus',
+        'password'       => 'sungorus',
     ],
     'service_manager' => [
         'factories' => [
@@ -30,7 +33,7 @@ return [
     'session_config'  => [
         'name'            => 'sessid',
         'cookie_httponly' => true,
-        'cookie_secure'   => true,
+        'cookie_secure'   => false,
     ],
     'session_manager' => [
         'enable_default_container_manager' => true,
@@ -46,7 +49,7 @@ return [
         'enc_key_cookie' => [
             'name'     => 'encKey',
             'lifetime' => 1209600, // 2 weeks
-            'secure'   => true,
+            'secure'   => false,
         ],
         'registration'   => [
             'enabled' => true,
