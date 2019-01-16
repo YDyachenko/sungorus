@@ -24,15 +24,34 @@ return [
                 ],
             ],
             'auth'          => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'       => '/auth/[:action]',
-                    'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ],
+                'type'          => Literal::class,
+                'options'       => [
+                    'route'       => '/auth',
                     'defaults'    => [
                         'controller' => AuthController::class,
-                        'action'     => 'index',
+                        'action'     => 'login',
+                    ],
+
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'clear-encryption-key' => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => '/clear-encryption-key',
+                            'defaults' => [
+                                'action' => 'clearEncryptionKey',
+                            ],
+                        ],
+                    ],
+                    'change-password' => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => '/change-password',
+                            'defaults' => [
+                                'action' => 'changePassword',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -79,7 +98,7 @@ return [
             'encryptionKey' => [
                 'type'    => Literal::class,
                 'options' => [
-                    'route'    => '/encryptionKey',
+                    'route'    => '/encryption-key',
                     'defaults' => [
                         'controller' => AuthController::class,
                         'action'     => 'encryptionKey',
@@ -120,7 +139,7 @@ return [
                             'constraints' => [
                                 'folderId' => '\d+',
                             ],
-                            'defaults' => [
+                            'defaults'    => [
                                 'controller' => FolderController::class,
                             ],
                         ],
