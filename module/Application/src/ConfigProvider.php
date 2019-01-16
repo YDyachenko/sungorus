@@ -25,7 +25,8 @@ class ConfigProvider
     public function __invoke()
     {
         return [
-            'dependencies' => $this->getDependencyConfig(),
+            'service_manager' => $this->getDependencyConfig(),
+            'hydrators'       => $this->getHydratorConfig(),
         ];
     }
 
@@ -53,7 +54,6 @@ class ConfigProvider
                 Service\AccountDataCipher::class                 => Service\Factory\AccountDataCipherFactory::class,
                 AuthenticationServiceInterface::class            => Authentication\Factory\AuthenticationServiceFactory::class,
                 AuthStorage::class                               => Authentication\Factory\StorageFactory::class,
-                Hydrator\AccountDataHydrator::class              => Hydrator\Factory\AccountDataHydratorFactory::class,
                 Repository\AccountRepositoryInterface::class     => Repository\Factory\AccountRepositoryFactory::class,
                 Repository\AccountDataRepositoryInterface::class => Repository\Factory\AccountDataRepositoryFactory::class,
                 Repository\FolderRepositoryInterface::class      => Repository\Factory\FolderRepositoryFactory::class,
@@ -66,6 +66,15 @@ class ConfigProvider
                 Form\SignupForm::class                           => Form\Factory\SignupFormFactory::class,
                 Listener\EncryptionKeyListener::class            => Listener\Factory\EncryptionKeyListenerFactory::class,
             ],
+        ];
+    }
+
+    public function getHydratorConfig()
+    {
+        return [
+            'factories' => [
+                Hydrator\AccountDataHydrator::class => Hydrator\Factory\AccountDataHydratorFactory::class,
+            ]
         ];
     }
 

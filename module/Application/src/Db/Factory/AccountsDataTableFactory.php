@@ -8,6 +8,7 @@ use Interop\Container\ContainerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Hydrator\HydratorPluginManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 class AccountsDataTableFactory implements FactoryInterface
@@ -16,7 +17,8 @@ class AccountsDataTableFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $dbAdapter = $container->get(Adapter::class);
-        $hydrator  = $container->get(AccountDataHydrator::class);
+        $hydrators = $container->get(HydratorPluginManager::class);
+        $hydrator  = $hydrators->get(AccountDataHydrator::class);
 
         $resultSetPrototype = new HydratingResultSet($hydrator, new AccountData());
 

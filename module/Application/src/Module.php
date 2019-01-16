@@ -100,9 +100,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     public function getConfig()
     {
         $provider = new ConfigProvider();
-        $config   = [
-            'service_manager' => $provider->getDependencyConfig()
-        ];
+        $config   = $provider();
 
         $configs = [
             'module.config.php',

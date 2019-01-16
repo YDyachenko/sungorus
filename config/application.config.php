@@ -8,6 +8,7 @@ return [
         'Zend\Mvc\Plugin\Identity',
         'Zend\Router',
         'Zend\Session',
+        'Zend\Hydrator',
         'Application',
         'TwbBundle',
     ],
