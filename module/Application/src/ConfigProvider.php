@@ -12,7 +12,6 @@ use Application\Service;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Authentication\Storage\StorageInterface as AuthStorage;
-use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
 use Zend\Crypt\BlockCipher;
 
 class ConfigProvider
@@ -42,7 +41,6 @@ class ConfigProvider
                 AuthenticationService::class => AuthenticationServiceInterface::class,
             ],
             'abstract_factories' => [
-                StorageCacheAbstractServiceFactory::class,
                 Db\Factory\TableGatewayAbstractFactory::class,
             ],
             'invokables'         => [
