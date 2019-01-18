@@ -42,15 +42,16 @@ class ConfigProvider
                 AuthenticationService::class => AuthenticationServiceInterface::class,
             ],
             'abstract_factories' => [
-                Db\Factory\TableGatewayAbstractFactory::class,
             ],
             'invokables'         => [
                 Service\FaviconService::class => Service\FaviconService::class,
+
             ],
             'shared'             => [
                 BlockCipher::class => false
             ],
             'factories'          => [
+                Db\TableGatewayPluginManager::class              => Db\Factory\TableGatewayPluginManagerFactory::class,
                 Service\AccountDataCipher::class                 => Service\Factory\AccountDataCipherFactory::class,
                 AuthenticationServiceInterface::class            => Authentication\Factory\AuthenticationServiceFactory::class,
                 AuthStorage::class                               => Authentication\Factory\StorageFactory::class,
@@ -58,7 +59,6 @@ class ConfigProvider
                 Repository\AccountDataRepositoryInterface::class => Repository\Factory\AccountDataRepositoryFactory::class,
                 Repository\FolderRepositoryInterface::class      => Repository\Factory\FolderRepositoryFactory::class,
                 Repository\UserRepositoryInterface::class        => Repository\Factory\UserRepositoryFactory::class,
-                'AccountsDataTable'                              => Db\Factory\AccountsDataTableFactory::class,
                 Authentication\AuthListener::class               => Authentication\Factory\AuthListenerFactory::class,
                 Service\ExportService::class                     => Service\Factory\ExportServiceFactory::class,
                 Service\UserKeyService::class                    => Service\Factory\UserKeyServiceFactory::class,

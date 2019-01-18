@@ -2,6 +2,7 @@
 
 namespace Application\Repository\Factory;
 
+use Application\Db\TableGatewayPluginManager;
 use Application\Hydrator\AccountDataHydrator;
 use Application\Repository\AccountDataRepository;
 use Interop\Container\ContainerInterface;
@@ -13,7 +14,8 @@ class AccountDataRepositoryFactory implements FactoryInterface
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $table     = $container->get('AccountsDataTable');
+        $tables    = $container->get(TableGatewayPluginManager::class);
+        $table     = $tables->get('AccountsDataTable');
         $hydrators = $container->get(HydratorPluginManager::class);
         $hydrator  = $hydrators->get(AccountDataHydrator::class);
 

@@ -1,32 +1,38 @@
 <?php
 
 use Application\Model;
+use Application\Hydrator\AccountDataHydrator;
 
 return [
     'tablegateways' => [
-        'users'            => [
+        'UsersTable'          => [
             'table_name'   => 'users',
             'entity_class' => Model\User::class
         ],
-        'folders'          => [
+        'FoldersTable'        => [
             'table_name'   => 'folders',
             'entity_class' => Model\Folder::class
         ],
-        'accounts'         => [
+        'AccountsTable'       => [
             'table_name'   => 'accounts',
             'entity_class' => Model\Account::class
         ],
-        'auth_log_success' => [
+        'AuthLogSuccessTable' => [
             'table_name'   => 'auth_log_success',
             'entity_class' => Model\AuthLogSuccess::class
         ],
-        'auth_log_failure' => [
+        'AuthLogFailureTable' => [
             'table_name'   => 'auth_log_failure',
             'entity_class' => Model\AuthLogFailure::class
         ],
-        'encryption_keys'  => [
+        'EncryptionKeysTable' => [
             'table_name'   => 'encryption_keys',
             'entity_class' => Model\EncryptionKey::class
+        ],
+        'AccountsDataTable'   => [
+            'table_name'    => 'accounts_data',
+            'entity_class'  => Model\AccountData::class,
+            'hydrator_name' => AccountDataHydrator::class
         ],
     ],
 ];
