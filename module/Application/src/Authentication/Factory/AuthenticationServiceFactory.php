@@ -27,5 +27,4 @@ class AuthenticationServiceFactory implements FactoryInterface
 
         return $service;
     }
-
 }

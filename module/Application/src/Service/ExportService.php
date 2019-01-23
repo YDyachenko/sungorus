@@ -16,7 +16,7 @@ class ExportService
 
     /**
      *
-     * @var Sql 
+     * @var Sql
      */
     protected $sql;
 
@@ -96,5 +96,4 @@ class ExportService
             $writer->endElement();
         }
     }
-
 }

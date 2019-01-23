@@ -18,5 +18,4 @@ class FolderControllerFactory implements FactoryInterface
 
         return new FolderController($folders, $accounts);
     }
-
 }

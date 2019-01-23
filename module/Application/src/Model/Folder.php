@@ -24,7 +24,7 @@ class Folder
      * Get id
      * @return int
      */
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -34,9 +34,9 @@ class Folder
      * @param int $id
      * @return Folder
      */
-    function setId($id)
+    public function setId($id)
     {
-        $this->id = (int) $id;
+        $this->id = (int)$id;
         return $this;
     }
 
@@ -44,7 +44,7 @@ class Folder
      * Get user_id
      * @return int
      */
-    function getUserId()
+    public function getUserId()
     {
         return $this->user_id;
     }
@@ -54,9 +54,9 @@ class Folder
      * @param int $user_id
      * @return Folder
      */
-    function setUserId($user_id)
+    public function setUserId($user_id)
     {
-        $this->user_id = (int) $user_id;
+        $this->user_id = (int)$user_id;
         return $this;
     }
 
@@ -64,7 +64,7 @@ class Folder
      * Get name
      * @return string
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -74,7 +74,7 @@ class Folder
      * @param string $name
      * @return Folder
      */
-    function setName($name)
+    public function setName($name)
     {
         $this->name = $name;
         return $this;
@@ -110,11 +110,10 @@ class Folder
      */
     public function getArrayCopy()
     {
-        return array(
+        return [
             'id'      => $this->id,
             'user_id' => $this->user_id,
             'name'    => $this->name,
-        );
+        ];
     }
-
 }

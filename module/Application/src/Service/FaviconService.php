@@ -22,7 +22,7 @@ class FaviconService
     {
         $filepath = sprintf(self::FAVICON_PATH, self::DEFAULT_NAME);
 
-        if (!($host = parse_url($url, PHP_URL_HOST))) {
+        if (! ($host = parse_url($url, PHP_URL_HOST))) {
             return $filepath;
         }
 
@@ -39,5 +39,4 @@ class FaviconService
 
         return $filepath;
     }
-
 }

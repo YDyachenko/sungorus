@@ -28,8 +28,11 @@ class IndexController extends AbstractActionController
      */
     protected $authLogService;
 
-    public function __construct(FolderRepositoryInterface $folders, AccountRepositoryInterface $accounts, AuthLogService $authLogService)
-    {
+    public function __construct(
+        FolderRepositoryInterface $folders,
+        AccountRepositoryInterface $accounts,
+        AuthLogService $authLogService
+    ) {
         $this->folders        = $folders;
         $this->accounts       = $accounts;
         $this->authLogService = $authLogService;
@@ -49,5 +52,4 @@ class IndexController extends AbstractActionController
             'lastAuth' => $this->authLogService->getLastSuccess($user)
         ];
     }
-
 }

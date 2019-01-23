@@ -36,5 +36,4 @@ class ExportController extends AbstractActionController
 
         return $response;
     }
-
 }

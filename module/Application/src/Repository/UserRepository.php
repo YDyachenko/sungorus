@@ -29,10 +29,10 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findById($id)
     {
-        $id     = (int) $id;
+        $id     = (int)$id;
         $rowset = $this->table->select(['id' => $id]);
         $row    = $rowset->current();
-        if (!$row) {
+        if (! $row) {
             throw new UserNotFoundException('Couldn not find user #' . $id);
         }
 
@@ -42,12 +42,12 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function FindByIdentity($identity)
+    public function findByIdentity($identity)
     {
         $identity = $identity;
-        $rowset   = $this->table->select(array('email' => $identity));
+        $rowset   = $this->table->select(['email' => $identity]);
         $row      = $rowset->current();
-        if (!$row) {
+        if (! $row) {
             throw new UserNotFoundException('Couldn not find user "' . $identity . '"');
         }
 
@@ -82,7 +82,7 @@ class UserRepository implements UserRepositoryInterface
 
         $id = $data['id'];
         if ($id) {
-            $this->table->update($data, array('id' => $id));
+            $this->table->update($data, ['id' => $id]);
         } else {
             $id = $this->table->insert($data);
             $user->setId($this->table->getLastInsertValue());
@@ -90,5 +90,4 @@ class UserRepository implements UserRepositoryInterface
 
         return $this;
     }
-
 }

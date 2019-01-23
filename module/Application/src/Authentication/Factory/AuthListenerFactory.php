@@ -16,5 +16,4 @@ class AuthListenerFactory implements FactoryInterface
 
         return new AuthListener($authLogService);
     }
-
 }

@@ -16,5 +16,4 @@ class UserRepositoryFactory implements FactoryInterface
         $table  = $tables->get('UsersTable');
         return new UserRepository($table);
     }
-
 }

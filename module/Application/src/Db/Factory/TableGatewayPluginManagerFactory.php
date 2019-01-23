@@ -7,7 +7,6 @@ use Application\Db\Factory\TableGatewayAbstractFactory;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-
 class TableGatewayPluginManagerFactory implements FactoryInterface
 {
     /**

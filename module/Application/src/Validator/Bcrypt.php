@@ -7,12 +7,11 @@ use Application\Exception\InvalidArgumentException;
 
 class Bcrypt extends AbstractValidator
 {
-
     const HASH = 'hash';
 
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::HASH => "'%value%' is not a valid value"
-    );
+    ];
     protected $hash;
 
     /**
@@ -27,7 +26,7 @@ class Bcrypt extends AbstractValidator
             $options = ArrayUtils::iteratorToArray($options);
         }
 
-        if (!array_key_exists('hash', $options)) {
+        if (! array_key_exists('hash', $options)) {
             throw new InvalidArgumentException("Missing option 'hash'");
         }
 
@@ -63,12 +62,11 @@ class Bcrypt extends AbstractValidator
     public function isValid($value)
     {
         $bcrypt = new \Zend\Crypt\Password\Bcrypt();
-        if (!$bcrypt->verify($value, $this->hash)) {
+        if (! $bcrypt->verify($value, $this->hash)) {
             $this->error(self::HASH, $value);
             return false;
         }
 
         return true;
     }
-
 }

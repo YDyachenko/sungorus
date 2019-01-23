@@ -13,8 +13,7 @@ class FolderRepositoryFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $tables = $container->get(TableGatewayPluginManager::class);
-        $table = $tables->get('FoldersTable');
+        $table  = $tables->get('FoldersTable');
         return new FolderRepository($table);
     }
-
 }

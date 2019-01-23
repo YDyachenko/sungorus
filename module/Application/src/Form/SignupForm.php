@@ -17,62 +17,62 @@ class SignupForm extends Form implements InputFilterProviderInterface
     public function __construct(AdapterInterface $dbAdapter)
     {
         parent::__construct('form-signup');
-        
+
         $this->dbAdapter = $dbAdapter;
 
-        $this->add(array(
+        $this->add([
             'name'       => 'email',
             'type'       => 'Text',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Email',
                 'autofocus'   => 'autofocus'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'password',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Password'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'confirm_pwd',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Confirm your password'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'key',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Encryption key'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'confirm_key',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Confirm your key'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'token',
             'type' => 'Csrf'
-        ));
+        ]);
 
-        $this->add(array(
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'options' => array(
+        $this->add([
+            'name'    => 'submit',
+            'type'    => 'Submit',
+            'options' => [
                 'label' => 'Submit'
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -80,74 +80,73 @@ class SignupForm extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            array(
+        return [
+            [
                 'name'       => 'email',
                 'required'   => true,
-                'filters'    => array(
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    [
                         'name'    => Validator\Db\NoRecordExists::class,
-                        'options' => array(
+                        'options' => [
                             'adapter'  => $this->dbAdapter,
                             'table'    => 'users',
                             'field'    => 'email',
-                            'messages' => array(
+                            'messages' => [
                                 Validator\Db\AbstractDb::ERROR_RECORD_FOUND => 'This email already used',
-                            ),
-                        ),
-                    ),
-                    array(
+                            ],
+                        ],
+                    ],
+                    [
                         'name'    => Validator\EmailAddress::class,
-                        'options' => array(
+                        'options' => [
                             'useDomainCheck' => true,
-                        ),
-                    ),
-                )
-            ),
-            array(
+                        ],
+                    ],
+                ]
+            ],
+            [
                 'name'     => 'password',
                 'required' => true
-            ),
-            array(
+            ],
+            [
                 'name'       => 'confirm_pwd',
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name'    => Validator\Identical::class,
-                        'options' => array(
+                        'options' => [
                             'token'    => 'password',
                             'strict'   => true,
-                            'messages' => array(
+                            'messages' => [
                                 Validator\Identical::NOT_SAME => 'The two given passwords do not match',
-                            ),
-                        ),
-                    ),
-                )
-            ),
-            array(
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            [
                 'name'     => 'key',
                 'required' => true
-            ),
-            array(
+            ],
+            [
                 'name'       => 'confirm_key',
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name'    => Validator\Identical::class,
-                        'options' => array(
+                        'options' => [
                             'token'    => 'key',
                             'strict'   => true,
-                            'messages' => array(
+                            'messages' => [
                                 \Zend\Validator\Identical::NOT_SAME => 'The two given keys do not match',
-                            ),
-                        ),
-                    ),
-                )
-            ),
-        );
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+        ];
     }
-
 }

@@ -14,23 +14,23 @@ class AuthLogSuccess
      * @var int
      */
     protected $ip;
-    
+
     /**
      * @var string
      */
     protected $datetime;
-    
+
     /**
      * @var string
      */
     protected $user_agent;
 
-    
+
     /**
      * Get user_id
      * @return int
      */
-    function getUserId()
+    public function getUserId()
     {
         return $this->user_id;
     }
@@ -40,10 +40,10 @@ class AuthLogSuccess
      * @param int $id
      * @return AuthLogSuccess
      */
-    function setUserId($id)
+    public function setUserId($id)
     {
-        $this->user_id = (int) $id;
-        
+        $this->user_id = (int)$id;
+
         return $this;
     }
 
@@ -51,7 +51,7 @@ class AuthLogSuccess
      * Get ip
      * @return int
      */
-    function getIp()
+    public function getIp()
     {
         return $this->ip;
     }
@@ -61,7 +61,7 @@ class AuthLogSuccess
      * @param int $ip
      * @return AuthLogSuccess
      */
-    function setIp($ip)
+    public function setIp($ip)
     {
         $this->ip = $ip;
         return $this;
@@ -71,7 +71,7 @@ class AuthLogSuccess
      * Get datetime
      * @return string
      */
-    function getDatetime()
+    public function getDatetime()
     {
         return $this->datetime;
     }
@@ -81,7 +81,7 @@ class AuthLogSuccess
      * @param string $datetime
      * @return AuthLogSuccess
      */
-    function setDatetime($datetime)
+    public function setDatetime($datetime)
     {
         $this->datetime = $datetime;
         return $this;
@@ -91,7 +91,7 @@ class AuthLogSuccess
      * Get user_agent
      * @return string
      */
-    function getUserAgent()
+    public function getUserAgent()
     {
         return $this->user_agent;
     }
@@ -101,7 +101,7 @@ class AuthLogSuccess
      * @param string $userAgent
      * @return AuthLogSuccess
      */
-    function setUserAgent($userAgent)
+    public function setUserAgent($userAgent)
     {
         $this->user_agent = $userAgent;
         return $this;
@@ -142,5 +142,4 @@ class AuthLogSuccess
     {
         return get_object_vars($this);
     }
-
 }

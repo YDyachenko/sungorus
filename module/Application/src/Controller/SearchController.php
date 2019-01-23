@@ -36,16 +36,17 @@ class SearchController extends AbstractActionController
         $user = $this->identity();
         $name = $this->params()->fromQuery('name', '');
 
-        if (empty($name))
+        if (empty($name)) {
             $accounts = [];
-        else
+        } else {
             $accounts = $this->accounts->findByName($name, $user);
+        }
 
         if (count($accounts) === 1) {
             $account = $accounts->current();
             return $this->redirect()->toRoute('folders/folder/accounts/account', [
-                    'folderId'  => $account->getFolderId(),
-                    'accountId' => $account->getId(),
+                'folderId'  => $account->getFolderId(),
+                'accountId' => $account->getId(),
             ]);
         }
 
@@ -55,5 +56,4 @@ class SearchController extends AbstractActionController
             'name'     => $name,
         ];
     }
-
 }

@@ -34,11 +34,11 @@ class AuthLogService
     public function getLastSuccess(User $user)
     {
         return $this->successTable->select(function ($select) use ($user) {
-                $select->where(['user_id' => $user->getId()])
-                    ->order('datetime DESC')
-                    ->limit(1)
-                    ->offset(1);
-            })->current();
+            $select->where(['user_id' => $user->getId()])
+                ->order('datetime DESC')
+                ->limit(1)
+                ->offset(1);
+        })->current();
     }
 
     public function deleteOldFailures()
@@ -46,7 +46,7 @@ class AuthLogService
         $blocktime = $this->config['application']['authentication']['blocktime'];
 
         return $this->failureTable->delete([
-                '`datetime` < NOW() - INTERVAL ? SECOND' => $blocktime
+            '`datetime` < NOW() - INTERVAL ? SECOND' => $blocktime
         ]);
     }
 
@@ -66,7 +66,7 @@ class AuthLogService
             $select->where($where)->limit(1);
         });
 
-        return (bool) $result->count();
+        return (bool)$result->count();
     }
 
     public function logSuccess(User $user, $ip, $userAgent)
@@ -86,12 +86,13 @@ class AuthLogService
                 ->limit(1)
                 ->offset(50);
         });
-        
-        if (!$result->count())
+
+        if (! $result->count()) {
             return;
-        
+        }
+
         $this->successTable->delete([
-            'user_id'  => $user->getId(),
+            'user_id'       => $user->getId(),
             'datetime <= ?' => $result->current()->getDatetime()
         ]);
     }
@@ -105,7 +106,7 @@ class AuthLogService
             $this->failureTable->update([
                 'count'    => new Expression('count + 1'),
                 'datetime' => new Expression('now()')
-                ], ['ip' => $long]);
+            ], ['ip' => $long]);
         } else {
             $this->failureTable->insert([
                 'ip'       => $long,
@@ -119,5 +120,4 @@ class AuthLogService
     {
         return sprintf('%u', ip2long($ip));
     }
-
 }

@@ -19,7 +19,7 @@ class AccountData
      * Get account_id
      * @return int
      */
-    function getAccountId()
+    public function getAccountId()
     {
         return $this->account_id;
     }
@@ -29,9 +29,9 @@ class AccountData
      * @param int $id
      * @return AccountData
      */
-    function setAccountId($id)
+    public function setAccountId($id)
     {
-        $this->account_id = (int) $id;
+        $this->account_id = (int)$id;
         return $this;
     }
 
@@ -39,7 +39,7 @@ class AccountData
      * Get data
      * @return array
      */
-    function getData()
+    public function getData()
     {
         return $this->data;
     }
@@ -49,7 +49,7 @@ class AccountData
      * @param array $data
      * @return AccountData
      */
-    function setData(array $data)
+    public function setData(array $data)
     {
         $this->data = $data;
         return $this;
@@ -82,10 +82,9 @@ class AccountData
      */
     public function getArrayCopy()
     {
-        return array(
+        return [
             'account_id' => $this->account_id,
             'data'       => $this->data,
-        );
+        ];
     }
-
 }

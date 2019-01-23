@@ -21,5 +21,4 @@ class AccountDataRepositoryFactory implements FactoryInterface
 
         return new AccountDataRepository($table, $hydrator);
     }
-
 }

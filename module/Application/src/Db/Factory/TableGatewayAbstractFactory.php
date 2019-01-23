@@ -21,8 +21,9 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
     {
         $config = $container->get('config');
 
-        if (!isset($config['tablegateways'][$requestedName]))
+        if (! isset($config['tablegateways'][$requestedName])) {
             return false;
+        }
 
         return true;
     }
@@ -52,9 +53,10 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
      */
     protected function getEntityFromConfig(array $config, $requestedName)
     {
-        if (!isset($config['entity_class']) || !class_exists($config['entity_class'])) {
+        if (! isset($config['entity_class']) || ! class_exists($config['entity_class'])) {
             throw new ServiceNotCreatedException(sprintf(
-                'Unable to create instance for service "%s"; entity class cannot be found', $requestedName
+                'Unable to create instance for service "%s"; entity class cannot be found',
+                $requestedName
             ));
         }
         return $config['entity_class'];
@@ -77,5 +79,4 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
         $hydrators    = $container->get(HydratorPluginManager::class);
         return $hydrators->get($hydratorName);
     }
-
 }

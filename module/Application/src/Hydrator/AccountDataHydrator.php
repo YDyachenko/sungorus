@@ -9,7 +9,7 @@ class AccountDataHydrator implements HydratorInterface
 {
 
     /**
-     * @var AccountDataCipher 
+     * @var AccountDataCipher
      */
     protected $cipher;
 
@@ -44,5 +44,4 @@ class AccountDataHydrator implements HydratorInterface
 
         return $object;
     }
-
 }

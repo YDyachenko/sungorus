@@ -22,5 +22,4 @@ class AccountControllerFactory implements FactoryInterface
 
         return new AccountController($folders, $accounts, $data, $iconService);
     }
-
 }

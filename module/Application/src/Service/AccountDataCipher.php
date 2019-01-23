@@ -11,5 +11,4 @@ class AccountDataCipher extends BlockCipher
      * {@inheritdoc}
      */
     protected $binaryOutput = true;
-
 }

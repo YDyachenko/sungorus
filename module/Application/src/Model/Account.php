@@ -11,33 +11,32 @@ class Account
      * @var int
      */
     protected $id;
-    
+
     /**
      * @var int
      */
     protected $user_id;
-    
+
     /**
      * @var int
      */
     protected $folder_id;
-    
+
     /**
      * @var int
      */
     protected $favorite;
-    
-    
+
     /**
      * @var string
      */
     protected $name = '';
-    
+
     /**
      * @var string
      */
     protected $date_created;
-    
+
     /**
      * @var string
      */
@@ -47,7 +46,7 @@ class Account
      * Get id
      * @return int
      */
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -56,9 +55,9 @@ class Account
      * Set id
      * @return Account
      */
-    function setId($id)
+    public function setId($id)
     {
-        $this->id = (int) $id;
+        $this->id = (int)$id;
         return $this;
     }
 
@@ -66,7 +65,7 @@ class Account
      * Get user_id
      * @return int
      */
-    function getUserId()
+    public function getUserId()
     {
         return $this->user_id;
     }
@@ -75,9 +74,9 @@ class Account
      * Set user_id
      * @return Account
      */
-    function setUserId($userId)
+    public function setUserId($userId)
     {
-        $this->user_id = (int) $userId;
+        $this->user_id = (int)$userId;
         return $this;
     }
 
@@ -85,7 +84,7 @@ class Account
      * Get folder_id
      * @return int
      */
-    function getFolderId()
+    public function getFolderId()
     {
         return $this->folder_id;
     }
@@ -94,17 +93,17 @@ class Account
      * Set folder_id
      * @return Account
      */
-    function setFolderId($folderId)
+    public function setFolderId($folderId)
     {
-        $this->folder_id = (int) $folderId;
+        $this->folder_id = (int)$folderId;
         return $this;
     }
-    
+
     /**
      * Get favorite flag
      * @return int
      */
-    function getFavorite()
+    public function getFavorite()
     {
         return $this->favorite;
     }
@@ -114,7 +113,7 @@ class Account
      * @param int $value
      * @return Account
      */
-    function setFavorite($value)
+    public function setFavorite($value)
     {
         $this->favorite = $value ? 1 : 0;
         return $this;
@@ -124,7 +123,7 @@ class Account
      * Get name
      * @return string
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -134,17 +133,17 @@ class Account
      * @param string $name
      * @return Account
      */
-    function setName($name)
+    public function setName($name)
     {
         $this->name = $name;
         return $this;
     }
-    
+
     /**
      * Get date created
      * @return string
      */
-    function getDateCreated()
+    public function getDateCreated()
     {
         return $this->date_created;
     }
@@ -155,7 +154,7 @@ class Account
      * @return Account
      * @throws BadMethodCallException
      */
-    function setDateCreated($value)
+    public function setDateCreated($value)
     {
         if (is_null($this->date_created)) {
             $this->date_created = $value;
@@ -164,12 +163,12 @@ class Account
         }
         return $this;
     }
-    
+
     /**
      * Get date modified
      * @return string
      */
-    function getDateModified()
+    public function getDateModified()
     {
         return $this->date_modified;
     }
@@ -179,7 +178,7 @@ class Account
      * @param string $value
      * @return Account
      */
-    function setDateModified($value)
+    public function setDateModified($value)
     {
         $this->date_modified = $value;
         return $this;
@@ -229,5 +228,4 @@ class Account
     {
         return get_object_vars($this);
     }
-
 }

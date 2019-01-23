@@ -16,5 +16,4 @@ class AccountRepositoryFactory implements FactoryInterface
         $table  = $tables->get('AccountsTable');
         return new AccountRepository($table);
     }
-
 }

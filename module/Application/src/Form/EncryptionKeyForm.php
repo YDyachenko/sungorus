@@ -20,38 +20,38 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
 
         $this->keyHash = $keyHash;
 
-        $this->add(array(
+        $this->add([
             'name'       => 'key',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
 //                'placeholder' => 'Encryption key',
                 'autofocus' => 'autofocus'
-            )
-        ));
-        
-        $this->add(array(
+            ]
+        ]);
+
+        $this->add([
             'name'       => 'remember',
             'type'       => 'Checkbox',
-            'options' => array(
+            'options'    => [
                 'label' => 'Remember for 2 weeks'
-            ),
-            'attributes' => array(
+            ],
+            'attributes' => [
                 'value' => '1'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'token',
             'type' => 'Csrf'
-        ));
+        ]);
 
-        $this->add(array(
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'options' => array(
+        $this->add([
+            'name'    => 'submit',
+            'type'    => 'Submit',
+            'options' => [
                 'label' => 'Submit'
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -59,23 +59,22 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            array(
+        return [
+            [
                 'name'       => 'key',
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name'    => '\Application\Validator\Bcrypt',
-                        'options' => array(
+                        'options' => [
                             'hash'     => $this->keyHash,
-                            'messages' => array(
+                            'messages' => [
                                 Bcrypt::HASH => 'The key is not valid',
-                            ),
-                        ),
-                    ),
-                )
-            )
-        );
+                            ],
+                        ],
+                    ],
+                ]
+            ]
+        ];
     }
-
 }

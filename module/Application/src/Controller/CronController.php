@@ -32,9 +32,10 @@ class CronController extends AbstractActionController
         parent::setEventManager($events);
         $events->attach('dispatch', function ($e) {
             $request = $e->getRequest();
-            if (!$request instanceof ConsoleRequest) {
+            if (! $request instanceof ConsoleRequest) {
                 throw new \RuntimeException(sprintf(
-                    '%s can only be executed in a console environment', __CLASS__
+                    '%s can only be executed in a console environment',
+                    __CLASS__
                 ));
             }
         }, 100);
@@ -54,5 +55,4 @@ class CronController extends AbstractActionController
 
         return "Removed $rows row(s)\n";
     }
-
 }

@@ -49,5 +49,4 @@ class AccountDataRepository implements AccountDataRepositoryInterface
 
         return $this;
     }
-
 }

@@ -16,5 +16,4 @@ class StorageFactory implements FactoryInterface
 
         return new SessionProxy($users);
     }
-
 }

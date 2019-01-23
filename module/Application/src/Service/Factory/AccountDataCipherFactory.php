@@ -13,5 +13,4 @@ class AccountDataCipherFactory implements FactoryInterface
     {
         return AccountDataCipher::factory('openssl');
     }
-
 }

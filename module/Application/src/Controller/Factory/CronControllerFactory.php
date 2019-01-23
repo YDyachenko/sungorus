@@ -18,5 +18,4 @@ class CronControllerFactory implements FactoryInterface
 
         return new CronController($authLogService, $keysService);
     }
-
 }

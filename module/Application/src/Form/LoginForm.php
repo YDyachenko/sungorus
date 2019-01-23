@@ -12,35 +12,35 @@ class LoginForm extends Form implements InputFilterProviderInterface
     {
         parent::__construct('form-login');
 
-        $this->add(array(
+        $this->add([
             'name'       => 'identity',
             'type'       => 'Text',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Email',
                 'autofocus'   => 'autofocus'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'credential',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Password'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'token',
             'type' => 'Csrf'
-        ));
+        ]);
 
-        $this->add(array(
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'options' => array(
+        $this->add([
+            'name'    => 'submit',
+            'type'    => 'Submit',
+            'options' => [
                 'label' => 'Submit'
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -48,19 +48,18 @@ class LoginForm extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            array(
+        return [
+            [
                 'name'     => 'identity',
                 'required' => true,
-                'filters'  => array(
-                    array('name' => 'StringTrim'),
-                ),
-            ),
-            array(
+                'filters'  => [
+                    ['name' => 'StringTrim'],
+                ],
+            ],
+            [
                 'name'     => 'credential',
                 'required' => true
-            )
-        );
+            ]
+        ];
     }
-
 }

@@ -23,5 +23,4 @@ class RegistrationControllerFactory implements FactoryInterface
 
         return new RegistrationController($config, $form, $authService, $keyService, $users);
     }
-
 }

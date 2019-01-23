@@ -14,28 +14,28 @@ class User
      * @var string
      */
     protected $login;
-    
+
     /**
      * @var string
      */
     protected $email;
-    
+
     /**
      * @var string
      */
     protected $password;
-    
+
     /**
      * @var string
      */
     protected $key_hash;
 
-    
+
     /**
      * Get id
      * @return int
      */
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -45,10 +45,10 @@ class User
      * @param int $id
      * @return User
      */
-    function setId($id)
+    public function setId($id)
     {
-        $this->id = (int) $id;
-        
+        $this->id = (int)$id;
+
         return $this;
     }
 
@@ -56,7 +56,7 @@ class User
      * Get login
      * @return string
      */
-    function getLogin()
+    public function getLogin()
     {
         return $this->login;
     }
@@ -66,7 +66,7 @@ class User
      * @param string $login
      * @return User
      */
-    function setLogin($login)
+    public function setLogin($login)
     {
         $this->login = $login;
         return $this;
@@ -76,7 +76,7 @@ class User
      * Get email
      * @return string
      */
-    function getEmail()
+    public function getEmail()
     {
         return $this->email;
     }
@@ -86,7 +86,7 @@ class User
      * @param string $email
      * @return User
      */
-    function setEmail($email)
+    public function setEmail($email)
     {
         $this->email = $email;
         return $this;
@@ -96,7 +96,7 @@ class User
      * Get password
      * @return string
      */
-    function getPassword()
+    public function getPassword()
     {
         return $this->password;
     }
@@ -106,7 +106,7 @@ class User
      * @param string $password
      * @return User
      */
-    function setPassword($password)
+    public function setPassword($password)
     {
         $this->password = $password;
         return $this;
@@ -116,7 +116,7 @@ class User
      * Get key_hash
      * @return string
      */
-    function getKeyHash()
+    public function getKeyHash()
     {
         return $this->key_hash;
     }
@@ -126,7 +126,7 @@ class User
      * @param string $value
      * @return User
      */
-    function setKeyHash($value)
+    public function setKeyHash($value)
     {
         $this->key_hash = $value;
         return $this;
@@ -136,7 +136,7 @@ class User
      * Get cookie_key
      * @return string
      */
-    function getCookieKey()
+    public function getCookieKey()
     {
         return $this->cookie_key;
     }
@@ -146,7 +146,7 @@ class User
      * @param string $value
      * @return User
      */
-    function setCookieKey($value)
+    public function setCookieKey($value)
     {
         $this->cookie_key = $value;
         return $this;
@@ -193,5 +193,4 @@ class User
     {
         return get_object_vars($this);
     }
-
 }

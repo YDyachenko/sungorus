@@ -18,5 +18,4 @@ class SearchControllerFactory implements FactoryInterface
 
         return new SearchController($folders, $accounts);
     }
-
 }

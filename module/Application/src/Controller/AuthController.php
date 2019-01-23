@@ -37,8 +37,12 @@ class AuthController extends AbstractActionController
      */
     protected $users;
 
-    public function __construct(array $config, AuthenticationServiceInterface $authService, UserKeyService $keyService, UserRepositoryInterface $users)
-    {
+    public function __construct(
+        array $config,
+        AuthenticationServiceInterface $authService,
+        UserKeyService $keyService,
+        UserRepositoryInterface $users
+    ) {
         $this->config      = $config;
         $this->authService = $authService;
         $this->keyService  = $keyService;
@@ -71,7 +75,7 @@ class AuthController extends AbstractActionController
 
         $request = $this->getRequest();
 
-        if (!$error && $request->isPost()) {
+        if (! $error && $request->isPost()) {
             $form->setData($request->getPost());
 
             if ($form->isValid()) {
@@ -202,5 +206,4 @@ class AuthController extends AbstractActionController
             'changed' => $changed,
         ];
     }
-
 }

@@ -18,5 +18,4 @@ class ExportServiceFactory implements FactoryInterface
 
         return new ExportService($adapter, $cipher);
     }
-
 }

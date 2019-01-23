@@ -19,5 +19,4 @@ class SetEncryptionKeyCookieFactory implements FactoryInterface
         $config = $container->get('config');
         return new SetEncryptionKeyCookie($config);
     }
-
 }

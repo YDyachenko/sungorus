@@ -30,5 +30,4 @@ class SetEncryptionKeyCookie extends AbstractPlugin
         $cookie = new SetCookie($cfg['name'], $value, $expires, $path, null, $cfg['secure'], true);
         $this->controller->getResponse()->getHeaders()->addHeader($cookie);
     }
-
 }

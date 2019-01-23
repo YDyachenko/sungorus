@@ -1,6 +1,8 @@
 <?php
+
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.

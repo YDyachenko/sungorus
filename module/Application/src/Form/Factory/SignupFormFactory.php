@@ -15,5 +15,4 @@ class SignupFormFactory implements FactoryInterface
         $dbAdapter = $container->get(Adapter::class);
         return new SignupForm($dbAdapter);
     }
-
 }

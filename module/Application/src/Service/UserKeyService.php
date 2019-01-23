@@ -70,26 +70,26 @@ class UserKeyService
             'user_id' => $user->getId()
         ];
         $entity = $this->keysTable->select($where)->current();
-        if (!($entity instanceof EncryptionKey)) {
+        if (! ($entity instanceof EncryptionKey)) {
             throw new InvalidUserKeyException('Key not found');
         }
 
         $userKey = $this->blockCipher->decrypt($entity->getKey());
-        if (!$userKey) {
+        if (! $userKey) {
             throw new InvalidUserKeyException('Decryption fail');
         }
 
         return $userKey;
     }
-    
+
     /**
      * Delete expired user keys
      * @return int
      */
-    public function deleteExpiredKeys() {
+    public function deleteExpiredKeys()
+    {
         return $this->keysTable->delete([
             '`date` < NOW() - INTERVAL 2 WEEK'
         ]);
     }
-
 }

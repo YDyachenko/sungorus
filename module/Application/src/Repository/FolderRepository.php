@@ -18,7 +18,7 @@ class FolderRepository implements FolderRepositoryInterface
     protected $table;
 
     /**
-     * 
+     *
      * @param TableGatewayInterface $table
      */
     public function __construct(TableGatewayInterface $table)
@@ -31,10 +31,10 @@ class FolderRepository implements FolderRepositoryInterface
      */
     public function findById($id)
     {
-        $id     = (int) $id;
+        $id     = (int)$id;
         $rowset = $this->table->select(['id' => $id]);
         $row    = $rowset->current();
-        if (!$row) {
+        if (! $row) {
             throw new FolderNotFoundException('Could not find folder #' . $id);
         }
 
@@ -54,14 +54,14 @@ class FolderRepository implements FolderRepositoryInterface
 
         return $rowset;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function save(Folder $folder)
     {
         $data = $folder->getArrayCopy();
-        
+
         $id = $data['id'];
         if ($id) {
             $this->table->update($data, ['id' => $id]);
@@ -69,10 +69,10 @@ class FolderRepository implements FolderRepositoryInterface
             $id = $this->table->insert($data);
             $folder->setId($this->table->getLastInsertValue());
         }
-        
+
         return $this;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -81,5 +81,4 @@ class FolderRepository implements FolderRepositoryInterface
         $this->table->delete(['id' => $folder->getId()]);
         return $this;
     }
-
 }

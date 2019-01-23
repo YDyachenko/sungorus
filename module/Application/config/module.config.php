@@ -3,7 +3,7 @@
 use Application\Controller\CronController;
 
 return [
-    'view_manager'    => [
+    'view_manager' => [
         'display_not_found_reason' => false,
         'display_exceptions'       => false,
         'doctype'                  => 'HTML5',
@@ -23,7 +23,7 @@ return [
         ],
     ],
     // Placeholder for console routes
-    'console'         => [
+    'console'      => [
         'router' => [
             'routes' => [
                 'cron-clearKeysTable'       => [

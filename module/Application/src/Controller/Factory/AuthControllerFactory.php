@@ -21,5 +21,4 @@ class AuthControllerFactory implements FactoryInterface
 
         return new AuthController($config, $authService, $keyService, $users);
     }
-
 }

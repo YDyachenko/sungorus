@@ -32,10 +32,10 @@ class AccountRepository implements AccountRepositoryInterface
      */
     public function findById($id)
     {
-        $id     = (int) $id;
+        $id     = (int)$id;
         $rowset = $this->table->select(['id' => $id]);
         $row    = $rowset->current();
-        if (!$row) {
+        if (! $row) {
             throw new AccountNotFoundException('Could not find account #' . $id);
         }
 
@@ -133,5 +133,4 @@ class AccountRepository implements AccountRepositoryInterface
         $this->table->delete(['id' => $account->getId()]);
         return $this;
     }
-
 }

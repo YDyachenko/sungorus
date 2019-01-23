@@ -18,5 +18,4 @@ class UserKeyServiceFactory implements FactoryInterface
         $table       = $tables->get('EncryptionKeysTable');
         return new UserKeyService($table, $blockCipher);
     }
-
 }

@@ -21,7 +21,7 @@ interface UserRepositoryInterface
      * @return User
      * @throws UserNotFoundException
      */
-    public function FindByIdentity($identity);
+    public function findByIdentity($identity);
 
     /**
      * Create new user

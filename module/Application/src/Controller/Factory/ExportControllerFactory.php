@@ -16,5 +16,4 @@ class ExportControllerFactory implements FactoryInterface
 
         return new ExportController($exportService);
     }
-
 }

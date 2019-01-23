@@ -12,31 +12,30 @@ class FolderForm extends Form implements InputFilterProviderInterface
     {
         parent::__construct('form-folder');
 
-        $this->add(array(
+        $this->add([
             'name'       => 'name',
             'type'       => 'Text',
-            'options'    => array(
-//                'label' => 'Name',
-            ),
-            'attributes' => array(
+            'options'    => [//                'label' => 'Name',
+            ],
+            'attributes' => [
                 'autofocus'   => 'autofocus',
                 'placeholder' => 'Name',
                 'maxlength'   => 45
-            ),
-        ));
+            ],
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'token',
             'type' => 'Csrf'
-        ));
+        ]);
 
-        $this->add(array(
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'options' => array(
+        $this->add([
+            'name'    => 'submit',
+            'type'    => 'Submit',
+            'options' => [
                 'label' => 'Save'
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -44,23 +43,22 @@ class FolderForm extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            array(
+        return [
+            [
                 'name'       => 'name',
                 'required'   => true,
-                'filters'    => array(
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    [
                         'name'    => 'StringLength',
-                        'options' => array(
+                        'options' => [
                             'min' => 1,
                             'max' => '45',
-                        ),
-                    ),
-                ),
-        ));
+                        ],
+                    ],
+                ],
+            ]];
     }
-
 }

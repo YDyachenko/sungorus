@@ -39,7 +39,7 @@ class FolderController extends AbstractActionController
     public function accountsAction()
     {
         $user = $this->identity();
-        $id   = (int) $this->params('folderId', 0);
+        $id   = (int)$this->params('folderId', 0);
 
         try {
             $folder = $this->repository->findById($id);
@@ -47,8 +47,9 @@ class FolderController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($folder->getUserId() != $user->getId())
+        if ($folder->getUserId() != $user->getId()) {
             throw new ForbiddenException("Folder of another user");
+        }
 
         return [
             'folders'  => $this->repository->findByUser($user),
@@ -94,7 +95,7 @@ class FolderController extends AbstractActionController
     public function editAction()
     {
         $user = $this->identity();
-        $id   = (int) $this->params('folderId', 0);
+        $id   = (int)$this->params('folderId', 0);
 
         try {
             $folder = $this->repository->findById($id);
@@ -102,8 +103,9 @@ class FolderController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($folder->getUserId() != $user->getId())
+        if ($folder->getUserId() != $user->getId()) {
             throw new ForbiddenException("Folder of another user");
+        }
 
         $form = new Form\FolderForm();
         $form->bind($folder);
@@ -120,7 +122,7 @@ class FolderController extends AbstractActionController
         }
 
         return [
-            'form' => $form,
+            'form'   => $form,
             'folder' => $folder,
         ];
     }
@@ -133,7 +135,7 @@ class FolderController extends AbstractActionController
     public function deleteAction()
     {
         $user = $this->identity();
-        $id   = (int) $this->params('folderId', 0);
+        $id   = (int)$this->params('folderId', 0);
 
         try {
             $folder = $this->repository->findById($id);
@@ -141,8 +143,9 @@ class FolderController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($folder->getUserId() != $user->getId())
+        if ($folder->getUserId() != $user->getId()) {
             throw new ForbiddenException("Folder of another user");
+        }
 
         $request = $this->getRequest();
         $token   = new Csrf('deleteFolder');
@@ -165,5 +168,4 @@ class FolderController extends AbstractActionController
 
         return new JsonModel($return);
     }
-
 }

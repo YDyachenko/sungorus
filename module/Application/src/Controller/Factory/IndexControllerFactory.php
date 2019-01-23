@@ -20,5 +20,4 @@ class IndexControllerFactory implements FactoryInterface
 
         return new IndexController($folders, $accounts, $authLogService);
     }
-
 }

@@ -12,7 +12,7 @@ use Zend\Http\PhpEnvironment\RemoteAddress;
 class AuthListener implements ListenerAggregateInterface
 {
 
-    protected $listeners = array();
+    protected $listeners = [];
 
     /**
      * @var RemoteAddress
@@ -80,11 +80,10 @@ class AuthListener implements ListenerAggregateInterface
 
     protected function getIpAddress()
     {
-        if (!$this->remoteAddr) {
+        if (! $this->remoteAddr) {
             $this->remoteAddr = new RemoteAddress();
         }
 
         return $this->remoteAddr->getIpAddress();
     }
-
 }

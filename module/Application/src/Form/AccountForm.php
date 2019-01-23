@@ -12,58 +12,58 @@ class AccountForm extends Form implements InputFilterProviderInterface
     {
         parent::__construct('form-folder');
 
-        $this->add(array(
+        $this->add([
             'name'       => 'name',
             'type'       => 'Text',
-            'options'    => array(
+            'options'    => [
                 'label'            => 'Name',
                 'column-size'      => 'sm-10',
-                'label_attributes' => array('class' => 'col-sm-2')
-            ),
-            'attributes' => array(
+                'label_attributes' => ['class' => 'col-sm-2']
+            ],
+            'attributes' => [
                 'autofocus' => 'autofocus',
 //                'placeholder' => 'Name',
                 'maxlength' => 45
-            ),
-        ));
+            ],
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'    => 'folder_id',
             'type'    => 'Select',
-            'options' => array(
+            'options' => [
                 'label'            => 'Folder',
                 'column-size'      => 'sm-10',
-                'label_attributes' => array('class' => 'col-sm-2')
-            )
-        ));
+                'label_attributes' => ['class' => 'col-sm-2']
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'    => 'favorite',
             'type'    => 'Checkbox',
-            'options' => array(
+            'options' => [
                 'label'       => 'Favorite',
                 'column-size' => 'sm-10 col-sm-offset-2'
-            ),
-        ));
+            ],
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'data',
             'type' => '\Application\Form\AccountDataFieldset',
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'token',
             'type' => 'Csrf'
-        ));
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'    => 'submit',
             'type'    => 'Submit',
-            'options' => array(
+            'options' => [
                 'label'       => 'Save',
                 'column-size' => 'sm-10 col-sm-offset-2'
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -71,23 +71,23 @@ class AccountForm extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            array(
+        return [
+            [
                 'name'       => 'name',
                 'required'   => true,
-                'filters'    => array(
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array(
+                'filters'    => [
+                    ['name' => 'StringTrim'],
+                ],
+                'validators' => [
+                    [
                         'name'    => 'StringLength',
-                        'options' => array(
+                        'options' => [
                             'min' => 1,
                             'max' => '45',
-                        ),
-                    ),
-                ),
-        ));
+                        ],
+                    ],
+                ],
+            ]];
     }
 
     /**
@@ -97,7 +97,7 @@ class AccountForm extends Form implements InputFilterProviderInterface
      */
     public function setFoldersOptions($folders)
     {
-        $options = array();
+        $options = [];
 
         foreach ($folders as $folder) {
             $options[$folder->getId()] = $folder->getName();
@@ -116,5 +116,4 @@ class AccountForm extends Form implements InputFilterProviderInterface
     {
         $this->get('folder_id')->setValue($id);
     }
-
 }

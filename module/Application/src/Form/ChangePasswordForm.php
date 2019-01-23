@@ -14,43 +14,43 @@ class ChangePasswordForm extends Form implements InputFilterProviderInterface
     {
         parent::__construct('form-change-password');
 
-        $this->add(array(
+        $this->add([
             'name'       => 'old',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Old password',
                 'autofocus'   => 'autofocus'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'new',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'New password'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name'       => 'confirm',
             'type'       => 'Password',
-            'attributes' => array(
+            'attributes' => [
                 'placeholder' => 'Retype new password'
-            )
-        ));
+            ]
+        ]);
 
-        $this->add(array(
+        $this->add([
             'name' => 'token',
             'type' => 'Csrf'
-        ));
+        ]);
 
-        $this->add(array(
-            'name'       => 'submit',
-            'type'       => 'Submit',
-            'options' => array(
+        $this->add([
+            'name'    => 'submit',
+            'type'    => 'Submit',
+            'options' => [
                 'label' => 'Submit'
-            )
-        ));
+            ]
+        ]);
     }
 
     /**
@@ -70,43 +70,42 @@ class ChangePasswordForm extends Form implements InputFilterProviderInterface
      */
     public function getInputFilterSpecification()
     {
-        return array(
-            array(
+        return [
+            [
                 'name'       => 'old',
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name'    => '\Application\Validator\Bcrypt',
-                        'options' => array(
+                        'options' => [
                             'hash'     => $this->passwordHash,
-                            'messages' => array(
+                            'messages' => [
                                 \Application\Validator\Bcrypt::HASH => 'Wrong password',
-                            ),
-                        ),
-                    ),
-                )
-            ),
-            array(
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+            [
                 'name'     => 'new',
                 'required' => true
-            ),
-            array(
+            ],
+            [
                 'name'       => 'confirm',
                 'required'   => true,
-                'validators' => array(
-                    array(
+                'validators' => [
+                    [
                         'name'    => 'Identical',
-                        'options' => array(
+                        'options' => [
                             'token'    => 'new',
                             'strict'   => true,
-                            'messages' => array(
+                            'messages' => [
                                 \Zend\Validator\Identical::NOT_SAME => 'The two given passwords do not match',
-                            ),
-                        ),
-                    ),
-                )
-            ),
-        );
+                            ],
+                        ],
+                    ],
+                ]
+            ],
+        ];
     }
-
 }

@@ -16,5 +16,4 @@ class AccountDataHydratorFactory implements FactoryInterface
 
         return new AccountDataHydrator($cipher);
     }
-
 }

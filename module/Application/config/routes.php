@@ -26,8 +26,8 @@ return [
             'auth'          => [
                 'type'          => Literal::class,
                 'options'       => [
-                    'route'       => '/auth',
-                    'defaults'    => [
+                    'route'    => '/auth',
+                    'defaults' => [
                         'controller' => AuthController::class,
                         'action'     => 'login',
                     ],
@@ -44,7 +44,7 @@ return [
                             ],
                         ],
                     ],
-                    'change-password' => [
+                    'change-password'      => [
                         'type'    => Literal::class,
                         'options' => [
                             'route'    => '/change-password',

@@ -11,7 +11,7 @@ class SessionProxy implements StorageInterface
 {
 
     /**
-     * @var SessionStorage 
+     * @var SessionStorage
      */
     protected $storage;
 
@@ -21,7 +21,7 @@ class SessionProxy implements StorageInterface
     protected $resolvedIdentity;
 
     /**
-     * @var UserRepositoryInterface 
+     * @var UserRepositoryInterface
      */
     protected $users;
 
@@ -31,7 +31,7 @@ class SessionProxy implements StorageInterface
     }
 
     /**
-     * 
+     *
      * @return SessionStorage
      */
     protected function getStorage()
@@ -58,7 +58,7 @@ class SessionProxy implements StorageInterface
         if (null === $this->resolvedIdentity) {
             $identity = $this->getStorage()->read();
 
-            $this->resolvedIdentity = $this->users->FindByIdentity($identity);
+            $this->resolvedIdentity = $this->users->findByIdentity($identity);
         }
 
         return $this->resolvedIdentity;
@@ -69,5 +69,4 @@ class SessionProxy implements StorageInterface
         $this->resolvedIdentity = null;
         $this->getStorage()->write($contents);
     }
-
 }

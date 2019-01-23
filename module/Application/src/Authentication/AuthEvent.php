@@ -34,5 +34,4 @@ class AuthEvent extends Event
         $this->request = $request;
         return $this;
     }
-
 }

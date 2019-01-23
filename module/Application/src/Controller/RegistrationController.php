@@ -43,8 +43,13 @@ class RegistrationController extends AbstractActionController
      */
     protected $users;
 
-    public function __construct(array $config, SignupForm $form, AuthenticationServiceInterface $authService, UserKeyService $keyService, UserRepositoryInterface $users)
-    {
+    public function __construct(
+        array $config,
+        SignupForm $form,
+        AuthenticationServiceInterface $authService,
+        UserKeyService $keyService,
+        UserRepositoryInterface $users
+    ) {
         $this->config      = $config;
         $this->form        = $form;
         $this->authService = $authService;
@@ -58,12 +63,13 @@ class RegistrationController extends AbstractActionController
      */
     public function indexAction()
     {
-        if (!$this->config['application']['registration']['enabled']) {
+        if (! $this->config['application']['registration']['enabled']) {
             throw new ForbiddenException('Signup disabled');
         }
 
-        if ($this->authService->hasIdentity())
+        if ($this->authService->hasIdentity()) {
             return $this->redirect()->toRoute('home');
+        }
 
         $request = $this->getRequest();
 
@@ -87,5 +93,4 @@ class RegistrationController extends AbstractActionController
 
         return ['form' => $this->form];
     }
-
 }

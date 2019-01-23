@@ -41,8 +41,12 @@ class AccountController extends AbstractActionController
      */
     protected $iconService;
 
-    public function __construct(FolderRepositoryInterface $folders, AccountRepositoryInterface $accounts, AccountDataRepositoryInterface $data, FaviconService$iconService)
-    {
+    public function __construct(
+        FolderRepositoryInterface $folders,
+        AccountRepositoryInterface $accounts,
+        AccountDataRepositoryInterface $data,
+        FaviconService $iconService
+    ) {
         $this->folders        = $folders;
         $this->accounts       = $accounts;
         $this->dataRepository = $data;
@@ -59,15 +63,16 @@ class AccountController extends AbstractActionController
         $user = $this->identity();
 
         try {
-            $folder = $this->folders->findById((int) $this->params('folderId'));
+            $folder = $this->folders->findById((int)$this->params('folderId'));
         } catch (FolderNotFoundException $e) {
             return $this->notFoundAction();
         }
 
         $folders = $this->folders->findByUser($user)->buffer();
 
-        if ($folder->getUserId() != $user->getId())
+        if ($folder->getUserId() != $user->getId()) {
             throw new ForbiddenException("Folder of another user");
+        }
 
         $form    = new AccountForm();
         $request = $this->getRequest();
@@ -124,13 +129,15 @@ class AccountController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($account->getUserId() != $user->getId())
+        if ($account->getUserId() != $user->getId()) {
             throw new ForbiddenException("Folder of another user");
-        
+        }
+
         $folderId = (int)$this->params('folderId');
 
-        if ($account->getFolderId() != $folderId)
+        if ($account->getFolderId() != $folderId) {
             return $this->notFoundAction();
+        }
 
         $accountData = $this->dataRepository->findByAccount($account);
         $folders     = $this->folders->findByUser($user)->buffer();
@@ -179,7 +186,7 @@ class AccountController extends AbstractActionController
     public function deleteAction()
     {
         $user      = $this->identity();
-        $accountId = (int) $this->params('accountId');
+        $accountId = (int)$this->params('accountId');
 
         try {
             $account = $this->accounts->findById($accountId);
@@ -187,11 +194,13 @@ class AccountController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($account->getUserId() != $user->getId())
+        if ($account->getUserId() != $user->getId()) {
             throw new ForbiddenException("Account of another user");
+        }
 
-        if ($account->getFolderId() != $this->params('folderId'))
+        if ($account->getFolderId() != $this->params('folderId')) {
             return $this->notFoundAction();
+        }
 
         $request = $this->getRequest();
         $token   = new Csrf('deleteAccount');
@@ -222,7 +231,7 @@ class AccountController extends AbstractActionController
     public function openUrlAction()
     {
         $user      = $this->identity();
-        $accountId = (int) $this->params('accountId');
+        $accountId = (int)$this->params('accountId');
 
         try {
             $account = $this->accounts->findById($accountId);
@@ -230,11 +239,13 @@ class AccountController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($account->getUserId() != $user->getId())
+        if ($account->getUserId() != $user->getId()) {
             throw new ForbiddenException("Account of another user");
+        }
 
-        if ($account->getFolderId() != $this->params('folderId'))
+        if ($account->getFolderId() != $this->params('folderId')) {
             return $this->notFoundAction();
+        }
 
         $data         = $this->dataRepository->findByAccount($account)->getData();
         $url          = $data['url'];
@@ -253,7 +264,7 @@ class AccountController extends AbstractActionController
     public function faviconAction()
     {
         $user      = $this->identity();
-        $accountId = (int) $this->params('accountId');
+        $accountId = (int)$this->params('accountId');
 
         try {
             $account = $this->accounts->findById($accountId);
@@ -261,11 +272,13 @@ class AccountController extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($account->getUserId() != $user->getId())
+        if ($account->getUserId() != $user->getId()) {
             throw new ForbiddenException("Account of another user");
+        }
 
-        if ($account->getFolderId() != $this->params('folderId'))
+        if ($account->getFolderId() != $this->params('folderId')) {
             return $this->notFoundAction();
+        }
 
         $accountData = $this->dataRepository->findByAccount($account);
 
@@ -284,5 +297,4 @@ class AccountController extends AbstractActionController
 
         return $response;
     }
-
 }

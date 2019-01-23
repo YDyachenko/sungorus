@@ -29,5 +29,4 @@ class EncryptionKeyListenerFactory implements FactoryInterface
 
         return $listener;
     }
-
 }

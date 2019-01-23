@@ -9,12 +9,12 @@ class AuthLogFailure
      * @var int
      */
     protected $ip;
-    
+
     /**
      * @var string
      */
     protected $datetime;
-    
+
     /**
      * @var int
      */
@@ -24,7 +24,7 @@ class AuthLogFailure
      * Get ip
      * @return int
      */
-    function getIp()
+    public function getIp()
     {
         return $this->ip;
     }
@@ -34,7 +34,7 @@ class AuthLogFailure
      * @param int $ip
      * @return AuthLogFailure
      */
-    function setIp($ip)
+    public function setIp($ip)
     {
         $this->ip = $ip;
         return $this;
@@ -44,7 +44,7 @@ class AuthLogFailure
      * Get datetime
      * @return string
      */
-    function getDatetime()
+    public function getDatetime()
     {
         return $this->datetime;
     }
@@ -54,7 +54,7 @@ class AuthLogFailure
      * @param string $datetime
      * @return AuthLogFailure
      */
-    function setDatetime($datetime)
+    public function setDatetime($datetime)
     {
         $this->datetime = $datetime;
         return $this;
@@ -64,7 +64,7 @@ class AuthLogFailure
      * Get user_agent
      * @return int
      */
-    function getCount()
+    public function getCount()
     {
         return $this->count;
     }
@@ -74,7 +74,7 @@ class AuthLogFailure
      * @param string $value
      * @return AuthLogFailure
      */
-    function setCount($value)
+    public function setCount($value)
     {
         $this->count = $value;
         return $this;
@@ -112,5 +112,4 @@ class AuthLogFailure
     {
         return get_object_vars($this);
     }
-
 }

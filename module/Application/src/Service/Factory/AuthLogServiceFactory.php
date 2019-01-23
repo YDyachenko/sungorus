@@ -19,5 +19,4 @@ class AuthLogServiceFactory implements FactoryInterface
 
         return new AuthLogService($config, $successTable, $failureTable);
     }
-
 }

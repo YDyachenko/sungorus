@@ -24,7 +24,7 @@ class EncryptionKey
      * Get id
      * @return int
      */
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -34,9 +34,9 @@ class EncryptionKey
      * @param int $id
      * @return EncryptionKey
      */
-    function setId($id)
+    public function setId($id)
     {
-        $this->id = (int) $id;
+        $this->id = (int)$id;
         return $this;
     }
 
@@ -44,7 +44,7 @@ class EncryptionKey
      * Get user_id
      * @return int
      */
-    function getUserId()
+    public function getUserId()
     {
         return $this->user_id;
     }
@@ -54,9 +54,9 @@ class EncryptionKey
      * @param int $user_id
      * @return EncryptionKey
      */
-    function setUserId($user_id)
+    public function setUserId($user_id)
     {
-        $this->user_id = (int) $user_id;
+        $this->user_id = (int)$user_id;
         return $this;
     }
 
@@ -64,7 +64,7 @@ class EncryptionKey
      * Get key
      * @return string
      */
-    function getKey()
+    public function getKey()
     {
         return $this->key;
     }
@@ -74,7 +74,7 @@ class EncryptionKey
      * @param string $key
      * @return EncryptionKey
      */
-    function setKey($key)
+    public function setKey($key)
     {
         $this->key = $key;
         return $this;
@@ -112,5 +112,4 @@ class EncryptionKey
     {
         return get_object_vars($this);
     }
-
 }

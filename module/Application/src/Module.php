@@ -18,7 +18,11 @@ use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Session\SessionManager;
 
-class Module implements BootstrapListenerInterface, ConfigProviderInterface, ConsoleUsageProviderInterface, ServiceProviderInterface
+class Module implements
+    BootstrapListenerInterface,
+    ConfigProviderInterface,
+    ConsoleUsageProviderInterface,
+    ServiceProviderInterface
 {
 
     /**
@@ -46,9 +50,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
             $aggregate->attach($em);
 
             $sharedManager = $em->getSharedManager();
-            $sharedManager->attach(Controller\AuthController::class, MvcEvent::EVENT_DISPATCH, function($e) use ($sm) {
+            $sharedManager->attach(Controller\AuthController::class, MvcEvent::EVENT_DISPATCH, function ($e) use ($sm) {
                 $controller = $e->getTarget();
-                $aggregate   = $sm->get(Authentication\AuthListener::class);
+                $aggregate  = $sm->get(Authentication\AuthListener::class);
                 $aggregate->attach($controller->getEventManager());
             }, 2);
         }
@@ -64,8 +68,8 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
     {
         $skipRoutes = ['login', 'signup'];
         $match      = $e->getRouteMatch();
-        
-        if (!$match instanceof RouteMatch) {
+
+        if (! $match instanceof RouteMatch) {
             return;
         }
 
@@ -127,7 +131,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
                 BlockCipher::class => function () {
                     return \Zend\Crypt\BlockCipher::factory('openssl');
                 },
-        ]];
+            ]];
     }
 
     /**
@@ -140,5 +144,4 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Con
             'cron clearLogFailureTable' => '[CRONJOB] Remove out-of-date entries from authentication failure log'
         ];
     }
-
 }

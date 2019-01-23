@@ -6,7 +6,6 @@ namespace Application\Db;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
-
 class TableGatewayPluginManager extends AbstractPluginManager
 {
 
@@ -18,5 +17,4 @@ class TableGatewayPluginManager extends AbstractPluginManager
 
         throw new InvalidServiceException('This is not a valid service!');
     }
-
 }
