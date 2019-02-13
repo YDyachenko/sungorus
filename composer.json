@@ -33,7 +33,7 @@
         "zfcampus/zf-development-mode": "^3.1.0"
     },
     "require-dev": {
-        "ydyachenko/db-queries-toolbar": "^0.1.0",
+        "ydyachenko/db-queries-toolbar": "^0.2.0",
         "zendframework/zend-coding-standard": "^1.0",
         "zendframework/zend-developer-tools": "^1.2"
     },
