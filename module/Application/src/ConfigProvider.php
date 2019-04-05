@@ -27,6 +27,7 @@ class ConfigProvider
         return [
             'service_manager' => $this->getDependencyConfig(),
             'hydrators'       => $this->getHydratorConfig(),
+            'form_elements'   => $this->getFormConfig(),
         ];
     }
 
@@ -48,7 +49,7 @@ class ConfigProvider
 
             ],
             'shared'             => [
-                BlockCipher::class => false
+                BlockCipher::class => false,
             ],
             'factories'          => [
                 Db\TableGatewayPluginManager::class              => Db\Factory\TableGatewayPluginManagerFactory::class,
@@ -63,7 +64,6 @@ class ConfigProvider
                 Service\ExportService::class                     => Service\Factory\ExportServiceFactory::class,
                 Service\UserKeyService::class                    => Service\Factory\UserKeyServiceFactory::class,
                 Service\AuthLogService::class                    => Service\Factory\AuthLogServiceFactory::class,
-                Form\SignupForm::class                           => Form\Factory\SignupFormFactory::class,
                 Listener\EncryptionKeyListener::class            => Listener\Factory\EncryptionKeyListenerFactory::class,
             ],
         ];
@@ -74,7 +74,16 @@ class ConfigProvider
         return [
             'factories' => [
                 Hydrator\AccountDataHydrator::class => Hydrator\Factory\AccountDataHydratorFactory::class,
-            ]
+            ],
+        ];
+    }
+
+    public function getFormConfig()
+    {
+        return [
+            'factories' => [
+                Form\SignupForm::class => Form\Factory\SignupFormFactory::class,
+            ],
         ];
     }
 }

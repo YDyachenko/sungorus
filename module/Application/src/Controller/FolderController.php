@@ -2,7 +2,7 @@
 
 namespace Application\Controller;
 
-use Application\Form;
+use Application\Form\FolderForm;
 use Application\Model\Folder;
 use Application\Repository\FolderRepositoryInterface;
 use Application\Repository\AccountRepositoryInterface;
@@ -25,14 +25,24 @@ class FolderController extends AbstractActionController
      */
     protected $accounts;
 
-    public function __construct(FolderRepositoryInterface $repository, AccountRepositoryInterface $accounts)
-    {
+    /**
+     * @var FolderForm
+     */
+    protected $form;
+
+    public function __construct(
+        FolderRepositoryInterface $repository,
+        AccountRepositoryInterface $accounts,
+        FolderForm $form
+    ) {
         $this->repository = $repository;
         $this->accounts   = $accounts;
+        $this->form       = $form;
     }
 
     /**
      * List accounts
+     *
      * @return array
      * @throws ForbiddenException
      */
@@ -61,19 +71,19 @@ class FolderController extends AbstractActionController
 
     /**
      * Create new folder
+     *
      * @return array
      */
     public function addAction()
     {
-        $form    = new Form\FolderForm();
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $this->form->setData($request->getPost());
 
-            if ($form->isValid()) {
+            if ($this->form->isValid()) {
                 $folder = new Folder();
-                $folder->exchangeArray($form->getData());
+                $folder->exchangeArray($this->form->getData());
                 $folder->setUserId($this->identity()->getId());
 
                 $this->repository->save($folder);
@@ -83,12 +93,13 @@ class FolderController extends AbstractActionController
         }
 
         return [
-            'form' => $form
+            'form' => $this->form,
         ];
     }
 
     /**
      * Edit existing folder
+     *
      * @return array
      * @throws ForbiddenException
      */
@@ -107,14 +118,13 @@ class FolderController extends AbstractActionController
             throw new ForbiddenException("Folder of another user");
         }
 
-        $form = new Form\FolderForm();
-        $form->bind($folder);
+        $this->form->bind($folder);
 
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $this->form->setData($request->getPost());
 
-            if ($form->isValid()) {
+            if ($this->form->isValid()) {
                 $this->repository->save($folder);
 
                 return $this->redirect()->toRoute('folders/folder/accounts', ['folderId' => $folder->getId()]);
@@ -122,13 +132,14 @@ class FolderController extends AbstractActionController
         }
 
         return [
-            'form'   => $form,
+            'form'   => $this->form,
             'folder' => $folder,
         ];
     }
 
     /**
      * Delete existing folder
+     *
      * @return JsonModel
      * @throws ForbiddenException
      */

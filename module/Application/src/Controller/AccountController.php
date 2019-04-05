@@ -41,20 +41,28 @@ class AccountController extends AbstractActionController
      */
     protected $iconService;
 
+    /**
+     * @var AccountForm
+     */
+    protected $form;
+
     public function __construct(
         FolderRepositoryInterface $folders,
         AccountRepositoryInterface $accounts,
         AccountDataRepositoryInterface $data,
-        FaviconService $iconService
+        FaviconService $iconService,
+        AccountForm $form
     ) {
         $this->folders        = $folders;
         $this->accounts       = $accounts;
         $this->dataRepository = $data;
         $this->iconService    = $iconService;
+        $this->form           = $form;
     }
 
     /**
      * Create new account
+     *
      * @return ViewModel
      * @throws ForbiddenException
      */
@@ -73,19 +81,16 @@ class AccountController extends AbstractActionController
         if ($folder->getUserId() != $user->getId()) {
             throw new ForbiddenException("Folder of another user");
         }
-
-        $form    = new AccountForm();
         $request = $this->getRequest();
 
-        $form
-            ->setFoldersOptions($folders)
-            ->setFolderId($folder->getId());
+        $this->form->setFoldersOptions($folders)
+                   ->setFolderId($folder->getId());
 
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $this->form->setData($request->getPost());
 
-            if ($form->isValid()) {
-                $data        = $form->getData();
+            if ($this->form->isValid()) {
+                $data        = $this->form->getData();
                 $accountData = new AccountData();
                 $account     = new Account();
 
@@ -105,7 +110,7 @@ class AccountController extends AbstractActionController
         }
 
         $viewModel = new ViewModel([
-            'form'     => $form,
+            'form'     => $this->form,
             'folders'  => $folders,
             'folder'   => $folder,
             'folderId' => $folder->getId(),
@@ -116,6 +121,7 @@ class AccountController extends AbstractActionController
 
     /**
      * Edit existing account
+     *
      * @return array
      * @throws ForbiddenException
      */
@@ -143,16 +149,15 @@ class AccountController extends AbstractActionController
         $folders     = $this->folders->findByUser($user)->buffer();
         $folder      = $this->folders->findById($folderId);
 
-        $form = new AccountForm();
-        $form->setFoldersOptions($folders);
+        $this->form->setFoldersOptions($folders);
 
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $form->setData($request->getPost());
+            $this->form->setData($request->getPost());
 
-            if ($form->isValid()) {
-                $data = $form->getData();
+            if ($this->form->isValid()) {
+                $data = $this->form->getData();
                 $accountData->setData($data['data']);
 
                 unset($data['data']);
@@ -166,11 +171,11 @@ class AccountController extends AbstractActionController
         } else {
             $data         = $account->getArrayCopy();
             $data['data'] = $accountData->getData();
-            $form->setData($data);
+            $this->form->setData($data);
         }
 
         return [
-            'form'     => $form,
+            'form'     => $this->form,
             'folders'  => $folders,
             'folder'   => $folder,
             'folderId' => $folderId,
@@ -180,6 +185,7 @@ class AccountController extends AbstractActionController
 
     /**
      * Delete existing account
+     *
      * @return JsonModel
      * @throws ForbiddenException
      */
@@ -214,7 +220,7 @@ class AccountController extends AbstractActionController
                 $success = true;
             }
             return new JsonModel([
-                'success' => $success
+                'success' => $success,
             ]);
         }
 
@@ -225,6 +231,7 @@ class AccountController extends AbstractActionController
 
     /**
      * Open URL from account
+     *
      * @return Response
      * @throws ForbiddenException
      */
@@ -258,8 +265,9 @@ class AccountController extends AbstractActionController
 
     /**
      * Show favicon
-     * @throws ForbiddenException
+     *
      * @return Zend\Http\Response\Stream
+     * @throws ForbiddenException
      */
     public function faviconAction()
     {

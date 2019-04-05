@@ -3,6 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\AccountController;
+use Application\Form\AccountForm;
 use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\AccountDataRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
@@ -19,7 +20,8 @@ class AccountControllerFactory implements FactoryInterface
         $accounts    = $container->get(AccountRepositoryInterface::class);
         $data        = $container->get(AccountDataRepositoryInterface::class);
         $iconService = $container->get(FaviconService::class);
+        $form        = $container->get('FormElementManager')->get(AccountForm::class);
 
-        return new AccountController($folders, $accounts, $data, $iconService);
+        return new AccountController($folders, $accounts, $data, $iconService, $form);
     }
 }

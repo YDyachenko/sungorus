@@ -3,6 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\AuthController;
+use Application\Form\LoginForm;
 use Application\Repository\UserRepositoryInterface;
 use Application\Service\UserKeyService;
 use Interop\Container\ContainerInterface;
@@ -16,9 +17,8 @@ class AuthControllerFactory implements FactoryInterface
     {
         $config      = $container->get('config');
         $authService = $container->get(AuthenticationServiceInterface::class);
-        $keyService  = $container->get(UserKeyService::class);
-        $users       = $container->get(UserRepositoryInterface::class);
+        $form        = $container->get('FormElementManager')->get(LoginForm::class);
 
-        return new AuthController($config, $authService, $keyService, $users);
+        return new AuthController($authService, $config, $form);
     }
 }

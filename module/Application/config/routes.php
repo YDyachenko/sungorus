@@ -2,11 +2,13 @@
 
 use Application\Controller\AccountController;
 use Application\Controller\AuthController;
+use Application\Controller\EncryptionKeyController;
 use Application\Controller\ExportController;
 use Application\Controller\FolderController;
 use Application\Controller\IndexController;
 use Application\Controller\RegistrationController;
 use Application\Controller\SearchController;
+use Application\Controller\SettingsController;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 
@@ -35,21 +37,14 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'clear-encryption-key' => [
-                        'type'    => Literal::class,
-                        'options' => [
-                            'route'    => '/clear-encryption-key',
-                            'defaults' => [
-                                'action' => 'clearEncryptionKey',
-                            ],
-                        ],
-                    ],
-                    'change-password'      => [
+
+                    'change-password' => [
                         'type'    => Literal::class,
                         'options' => [
                             'route'    => '/change-password',
                             'defaults' => [
-                                'action' => 'changePassword',
+                                'controller' => SettingsController::class,
+                                'action'     => 'changePassword',
                             ],
                         ],
                     ],
@@ -95,13 +90,26 @@ return [
                     ],
                 ],
             ],
-            'encryptionKey' => [
-                'type'    => Literal::class,
-                'options' => [
+            'encryption-key' => [
+                'type'          => Literal::class,
+                'options'       => [
                     'route'    => '/encryption-key',
                     'defaults' => [
-                        'controller' => AuthController::class,
-                        'action'     => 'encryptionKey',
+                        'controller' => EncryptionKeyController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes'  => [
+                    'clear' => [
+                        'type'    => Literal::class,
+                        'options' => [
+                            'route'    => '/clear',
+                            'defaults' => [
+                                'controller' => EncryptionKeyController::class,
+                                'action'     => 'clear',
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -212,7 +220,7 @@ return [
                                             ],
                                         ],
                                     ],
-                                ]
+                                ],
                             ],
                             'edit'     => [
                                 'type'    => Literal::class,

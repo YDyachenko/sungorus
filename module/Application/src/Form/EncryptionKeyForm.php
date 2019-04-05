@@ -9,49 +9,51 @@ use Application\Validator\Bcrypt;
 class EncryptionKeyForm extends Form implements InputFilterProviderInterface
 {
 
+    /**
+     * @var string
+     */
     protected $keyHash;
 
-    /**
-     * @param string $keyHash hash of encryption key.
-     */
-    public function __construct($keyHash)
+    public function __construct()
     {
         parent::__construct('form-login');
-
-        $this->keyHash = $keyHash;
 
         $this->add([
             'name'       => 'key',
             'type'       => 'Password',
             'attributes' => [
-//                'placeholder' => 'Encryption key',
-                'autofocus' => 'autofocus'
-            ]
+                'autofocus' => 'autofocus',
+            ],
         ]);
 
         $this->add([
             'name'       => 'remember',
             'type'       => 'Checkbox',
             'options'    => [
-                'label' => 'Remember for 2 weeks'
+                'label' => 'Remember for 2 weeks',
             ],
             'attributes' => [
-                'value' => '1'
-            ]
+                'value' => '1',
+            ],
         ]);
 
         $this->add([
             'name' => 'token',
-            'type' => 'Csrf'
+            'type' => 'Csrf',
         ]);
 
         $this->add([
             'name'    => 'submit',
             'type'    => 'Submit',
             'options' => [
-                'label' => 'Submit'
-            ]
+                'label' => 'Submit',
+            ],
         ]);
+    }
+
+    public function setKeyHash($hash)
+    {
+        $this->keyHash = $hash;
     }
 
     /**
@@ -65,7 +67,7 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
                 'required'   => true,
                 'validators' => [
                     [
-                        'name'    => '\Application\Validator\Bcrypt',
+                        'name'    => Bcrypt::class,
                         'options' => [
                             'hash'     => $this->keyHash,
                             'messages' => [
@@ -73,8 +75,8 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
                             ],
                         ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 }

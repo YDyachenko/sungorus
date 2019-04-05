@@ -34,7 +34,7 @@ class EncryptionKeyListener implements ListenerAggregateInterface
     protected $listeners  = [];
     protected $cookieName = 'encKey';
     protected $skipRoutes = [
-        'login', 'logout', 'signup', 'encryptionKey'
+        'login', 'logout', 'signup', 'encryption-key'
     ];
 
     public function __construct(
@@ -97,7 +97,7 @@ class EncryptionKeyListener implements ListenerAggregateInterface
             $controller = $event->getTarget();
             $router     = $event->getRouter();
             $response   = $event->getResponse();
-            $url        = $router->assemble([], ['name' => 'encryptionKey']);
+            $url        = $router->assemble([], ['name' => 'encryption-key']);
             $container  = new Container('EncryptionKey');
 
             $container->redirectTo = $event->getRouteMatch();

@@ -9,15 +9,17 @@ use Zend\Mvc\Controller\PluginManager;
 return [
     'controllers'        => [
         'factories' => [
-            Controller\IndexController::class        => Factory\IndexControllerFactory::class,
-            Controller\AccountController::class      => Factory\AccountControllerFactory::class,
-            Controller\AuthController::class         => Factory\AuthControllerFactory::class,
-            Controller\CronController::class         => Factory\CronControllerFactory::class,
-            Controller\ExportController::class       => Factory\ExportControllerFactory::class,
-            Controller\FolderController::class       => Factory\FolderControllerFactory::class,
-            Controller\RegistrationController::class => Factory\RegistrationControllerFactory::class,
-            Controller\SearchController::class       => Factory\SearchControllerFactory::class,
-        ]
+            Controller\IndexController::class         => Factory\IndexControllerFactory::class,
+            Controller\AccountController::class       => Factory\AccountControllerFactory::class,
+            Controller\AuthController::class          => Factory\AuthControllerFactory::class,
+            Controller\CronController::class          => Factory\CronControllerFactory::class,
+            Controller\EncryptionKeyController::class => Factory\EncryptionKeyControllerFactory::class,
+            Controller\ExportController::class        => Factory\ExportControllerFactory::class,
+            Controller\FolderController::class        => Factory\FolderControllerFactory::class,
+            Controller\RegistrationController::class  => Factory\RegistrationControllerFactory::class,
+            Controller\SearchController::class        => Factory\SearchControllerFactory::class,
+            Controller\SettingsController::class      => Factory\SettingsControllerFactory::class,
+        ],
     ],
     'controller_plugins' => [
         'aliases'   => [
@@ -27,6 +29,6 @@ return [
         'factories' => [
             Plugin\CheckUserEncryptionKey::class => PluginFactory\CheckUserEncryptionKeyFactory::class,
             Plugin\SetEncryptionKeyCookie::class => PluginFactory\SetEncryptionKeyCookieFactory::class,
-        ]
-    ]
+        ],
+    ],
 ];

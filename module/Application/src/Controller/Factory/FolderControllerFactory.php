@@ -3,6 +3,7 @@
 namespace Application\Controller\Factory;
 
 use Application\Controller\FolderController;
+use Application\Form\FolderForm;
 use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
 use Interop\Container\ContainerInterface;
@@ -15,7 +16,8 @@ class FolderControllerFactory implements FactoryInterface
     {
         $folders  = $container->get(FolderRepositoryInterface::class);
         $accounts = $container->get(AccountRepositoryInterface::class);
+        $form     = $container->get('FormElementManager')->get(FolderForm::class);
 
-        return new FolderController($folders, $accounts);
+        return new FolderController($folders, $accounts, $form);
     }
 }
