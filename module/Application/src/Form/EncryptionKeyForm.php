@@ -2,9 +2,13 @@
 
 namespace Application\Form;
 
+use Application\Validator\Bcrypt;
+use Zend\Form\Element\Checkbox;
+use Zend\Form\Element\Csrf;
+use Zend\Form\Element\Password;
+use Zend\Form\Element\Submit;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Application\Validator\Bcrypt;
 
 class EncryptionKeyForm extends Form implements InputFilterProviderInterface
 {
@@ -16,11 +20,11 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
 
     public function __construct()
     {
-        parent::__construct('form-login');
+        parent::__construct('form-encryption-key');
 
         $this->add([
             'name'       => 'key',
-            'type'       => 'Password',
+            'type'       => Password::class,
             'attributes' => [
                 'autofocus' => 'autofocus',
             ],
@@ -28,7 +32,7 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
 
         $this->add([
             'name'       => 'remember',
-            'type'       => 'Checkbox',
+            'type'       => Checkbox::class,
             'options'    => [
                 'label' => 'Remember for 2 weeks',
             ],
@@ -39,12 +43,12 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
 
         $this->add([
             'name' => 'token',
-            'type' => 'Csrf',
+            'type' => Csrf::class,
         ]);
 
         $this->add([
             'name'    => 'submit',
-            'type'    => 'Submit',
+            'type'    => Submit::class,
             'options' => [
                 'label' => 'Submit',
             ],
