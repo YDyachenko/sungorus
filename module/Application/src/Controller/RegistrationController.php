@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Controller\Plugin\EncryptionKeyCookiePlugin;
 use Application\Exception\ForbiddenException;
 use Application\Form\SignupForm;
 use Application\Repository\UserRepositoryInterface;
@@ -10,35 +11,33 @@ use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container as SessionContainer;
 
+/**
+ * @method EncryptionKeyCookiePlugin encryptionKeyCookie()
+ */
 class RegistrationController extends AbstractActionController
 {
 
     /**
-     *
      * @var array
      */
     protected $config;
 
     /**
-     *
      * @var SignupForm
      */
     protected $form;
 
     /**
-     *
      * @var AuthenticationServiceInterface
      */
     protected $authService;
 
     /**
-     *
      * @var UserKeyService
      */
     protected $keyService;
 
     /**
-     *
      * @var UserRepositoryInterface
      */
     protected $users;
@@ -79,8 +78,8 @@ class RegistrationController extends AbstractActionController
                 $data = $this->form->getData();
                 $user = $this->users->createUser($data);
 
-                $cookieValue = $this->keyService->generateCookie($data['key'], $user);
-                $this->setEncryptionKeyCookie($cookieValue);
+                $cookieValue = $this->keyService->saveUserKey($data['key'], $user);
+                $this->encryptionKeyCookie()->send($cookieValue);
 
                 $this->authService->getStorage()->write($user->getEmail());
                 SessionContainer::getDefaultManager()->regenerateId();

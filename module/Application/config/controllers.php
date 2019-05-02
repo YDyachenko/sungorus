@@ -2,9 +2,7 @@
 
 use Application\Controller;
 use Application\Controller\Factory;
-use Application\Controller\Plugin\Factory as PluginFactory;
-use Zend\Mvc\Controller\ControllerManager;
-use Zend\Mvc\Controller\PluginManager;
+use Application\Controller\Plugin;
 
 return [
     'controllers'        => [
@@ -23,12 +21,10 @@ return [
     ],
     'controller_plugins' => [
         'aliases'   => [
-            'checkUserEncryptionKey' => Plugin\CheckUserEncryptionKey::class,
-            'setEncryptionKeyCookie' => Plugin\SetEncryptionKeyCookie::class,
+            'encryptionKeyCookie' => Plugin\EncryptionKeyCookiePlugin::class,
         ],
         'factories' => [
-            Plugin\CheckUserEncryptionKey::class => PluginFactory\CheckUserEncryptionKeyFactory::class,
-            Plugin\SetEncryptionKeyCookie::class => PluginFactory\SetEncryptionKeyCookieFactory::class,
+            Plugin\EncryptionKeyCookiePlugin::class => Plugin\Factory\EncryptionKeyCookiePluginFactory::class,
         ],
     ],
 ];

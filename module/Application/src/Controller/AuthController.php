@@ -59,7 +59,7 @@ class AuthController extends AbstractActionController
 
         $request = $this->getRequest();
 
-        if (!$error && $request->isPost()) {
+        if (! $error && $request->isPost()) {
             $this->form->setData($request->getPost());
 
             if ($this->form->isValid()) {

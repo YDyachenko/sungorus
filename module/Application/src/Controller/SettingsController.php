@@ -3,7 +3,6 @@
 
 namespace Application\Controller;
 
-
 use Application\Form\ChangePasswordForm;
 use Application\Repository\UserRepositoryInterface;
 use Zend\Crypt\Password\Bcrypt;

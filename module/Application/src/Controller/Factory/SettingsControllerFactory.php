@@ -2,7 +2,6 @@
 
 namespace Application\Controller\Factory;
 
-
 use Application\Controller\SettingsController;
 use Application\Form\ChangePasswordForm;
 use Application\Repository\UserRepositoryInterface;

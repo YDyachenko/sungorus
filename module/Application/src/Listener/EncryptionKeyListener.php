@@ -6,8 +6,8 @@ use Application\Exception\InvalidUserKeyException;
 use Application\Service\AccountDataCipher;
 use Application\Service\UserKeyService;
 use Zend\Authentication\AuthenticationServiceInterface;
-use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\Container;
 
@@ -15,27 +15,22 @@ class EncryptionKeyListener implements ListenerAggregateInterface
 {
 
     /**
-     *
      * @var AuthenticationServiceInterface
      */
     protected $authService;
 
     /**
-     *
      * @var UserKeyService
      */
     protected $keyService;
 
     /**
-     *
      * @var AccountDataCipher
      */
     protected $cipher;
     protected $listeners  = [];
     protected $cookieName = 'encKey';
-    protected $skipRoutes = [
-        'login', 'logout', 'signup', 'encryption-key'
-    ];
+    protected $skipRoutes = ['login', 'logout', 'signup', 'encryption-key'];
 
     public function __construct(
         AuthenticationServiceInterface $authService,
@@ -68,9 +63,8 @@ class EncryptionKeyListener implements ListenerAggregateInterface
     public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $index => $listener) {
-            if ($events->detach($listener)) {
-                unset($this->listeners[$index]);
-            }
+            $events->detach($listener);
+            unset($this->listeners[$index]);
         }
     }
 
@@ -82,23 +76,18 @@ class EncryptionKeyListener implements ListenerAggregateInterface
             return;
         }
 
+        $user    = $this->authService->getIdentity();
         $cookies = $event->getRequest()->getCookie();
 
         try {
-            if (! isset($cookies[$this->cookieName])) {
-                throw new InvalidUserKeyException('Cookie not found');
-            }
-
-            $user = $this->authService->getIdentity();
-            $key  = $this->keyService->getUserKey($cookies[$this->cookieName], $user);
+            $key = $this->keyService->getUserKey($cookies[$this->cookieName], $user);
 
             $this->cipher->setKey($key);
         } catch (InvalidUserKeyException $e) {
-            $controller = $event->getTarget();
-            $router     = $event->getRouter();
-            $response   = $event->getResponse();
-            $url        = $router->assemble([], ['name' => 'encryption-key']);
-            $container  = new Container('EncryptionKey');
+            $router    = $event->getRouter();
+            $response  = $event->getResponse();
+            $url       = $router->assemble([], ['name' => 'encryption-key']);
+            $container = new Container('EncryptionKey');
 
             $container->redirectTo = $event->getRouteMatch();
 

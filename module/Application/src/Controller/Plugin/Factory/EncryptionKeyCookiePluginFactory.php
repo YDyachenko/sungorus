@@ -2,21 +2,21 @@
 
 namespace Application\Controller\Plugin\Factory;
 
-use Application\Controller\Plugin\SetEncryptionKeyCookie;
+use Application\Controller\Plugin\EncryptionKeyCookiePlugin;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-class SetEncryptionKeyCookieFactory implements FactoryInterface
+class EncryptionKeyCookiePluginFactory implements FactoryInterface
 {
 
     /**
      * {@inheritDoc}
      *
-     * @return SetEncryptionKeyCookie
+     * @return EncryptionKeyCookiePlugin
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
-        return new SetEncryptionKeyCookie($config);
+        return new EncryptionKeyCookiePlugin($config['application']['enc_key_cookie']);
     }
 }

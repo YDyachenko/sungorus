@@ -2,11 +2,12 @@
 
 namespace Application\Service;
 
-use Application\Model\User;
 use Application\Exception\InvalidUserKeyException;
 use Application\Model\EncryptionKey;
-use Zend\Db\TableGateway\TableGatewayInterface;
+use Application\Model\User;
 use Zend\Crypt\BlockCipher;
+use Zend\Db\TableGateway\TableGatewayInterface;
+use Zend\Math\Rand;
 
 class UserKeyService
 {
@@ -31,19 +32,21 @@ class UserKeyService
 
     /**
      * Add key to DB and generate cookie value
+     *
      * @param string $key User's encryption key
-     * @param User $user
+     * @param User   $user
+     *
      * @return string
      */
-    public function generateCookie($key, User $user)
+    public function saveUserKey($key, User $user)
     {
-        $cookieKey = \Zend\Math\Rand::getString(20);
+        $cookieKey = Rand::getString(20);
         $this->blockCipher->setKey($cookieKey);
 
         $this->keysTable->insert([
             'user_id' => $user->getId(),
             'key'     => $this->blockCipher->encrypt($key),
-            'date'    => date('Y-m-d H:i:s')
+            'date'    => date('Y-m-d H:i:s'),
         ]);
 
         $id = $this->keysTable->getLastInsertValue();
@@ -51,45 +54,80 @@ class UserKeyService
     }
 
     /**
-     * Get encryption key from cookie param
-     * @param string $cookieValue
-     * @param User $user
+     * Get encryption key from db
+     *
+     * @param string $value
+     * @param User   $user
+     *
      * @return string
-     * @throws InvalidUserKeyException
      */
-    public function getUserKey($cookieValue, User $user)
+    public function getUserKey($value, User $user)
     {
-        if (($pos = strpos($cookieValue, '-')) < 1) {
-            throw new InvalidUserKeyException('Delimiter not found');
-        }
-        $id = substr($cookieValue, 0, $pos);
-        $this->blockCipher->setKey(substr($cookieValue, $pos + 1));
-
-        $where  = [
-            'id'      => $id,
-            'user_id' => $user->getId()
+        $data  = $this->parse($value);
+        $where = [
+            'id'      => $data['id'],
+            'user_id' => $user->getId(),
         ];
+
         $entity = $this->keysTable->select($where)->current();
         if (! ($entity instanceof EncryptionKey)) {
             throw new InvalidUserKeyException('Key not found');
         }
 
-        $userKey = $this->blockCipher->decrypt($entity->getKey());
-        if (! $userKey) {
+        $this->blockCipher->setKey($data['key']);
+        $key = $this->blockCipher->decrypt($entity->getKey());
+        if (! $key) {
             throw new InvalidUserKeyException('Decryption fail');
         }
 
-        return $userKey;
+        return $key;
+    }
+
+
+    public function parse($value)
+    {
+        if (($pos = strpos($value, '-')) < 1) {
+            throw new InvalidUserKeyException('Delimiter not found');
+        }
+
+        $id  = substr($value, 0, $pos);
+        $key = substr($value, $pos + 1);
+
+        return [
+            'id'  => (int)$id,
+            'key' => $key,
+        ];
+    }
+
+    /**
+     * Delete key
+     *
+     * @param string $value
+     * @param User   $user
+     *
+     * @return self
+     */
+    public function deleteKey($value, User $user)
+    {
+        $data = $this->parse($value);
+
+        $this->keysTable->delete([
+            'id'      => $data['id'],
+            'user_id' => $user->getId(),
+        ]);
+
+        return $this;
     }
 
     /**
      * Delete expired user keys
+     *
      * @return int
      */
     public function deleteExpiredKeys()
     {
         return $this->keysTable->delete([
-            '`date` < NOW() - INTERVAL 2 WEEK'
+            '`date` < NOW() - INTERVAL 2 WEEK',
         ]);
     }
 }

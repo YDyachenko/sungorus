@@ -2,13 +2,19 @@
 
 namespace Application\Controller;
 
-
+use Application\Controller\Plugin\EncryptionKeyCookiePlugin;
 use Application\Form\EncryptionKeyForm;
 use Application\Model\User;
 use Application\Service\UserKeyService;
+use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container as SessionContainer;
 
+/**
+ * @method User identity()
+ * @method EncryptionKeyCookiePlugin encryptionKeyCookie()
+ */
 class EncryptionKeyController extends AbstractActionController
 {
 
@@ -22,16 +28,11 @@ class EncryptionKeyController extends AbstractActionController
      */
     protected $keyService;
 
-    /**
-     * @var array
-     */
-    protected $config;
 
-    public function __construct(EncryptionKeyForm $form, UserKeyService $keyService, array $config)
+    public function __construct(EncryptionKeyForm $form, UserKeyService $keyService)
     {
         $this->form       = $form;
         $this->keyService = $keyService;
-        $this->config     = $config;
     }
 
     /**
@@ -39,9 +40,9 @@ class EncryptionKeyController extends AbstractActionController
      */
     public function indexAction()
     {
-        /* @var User $user */
-        $user    = $this->identity();
+        /* @var $request Request */
         $request = $this->getRequest();
+        $user    = $this->identity();
 
         $this->form->setKeyHash($user->getKeyHash());
 
@@ -50,13 +51,10 @@ class EncryptionKeyController extends AbstractActionController
 
             if ($this->form->isValid()) {
                 $data        = $this->form->getData();
-                $cookieValue = $this->keyService->generateCookie($data['key'], $user);
-                $lifetime    = $this->config['application']['enc_key_cookie']['lifetime'];
-                $expires     = $data['remember'] ? time() + $lifetime : null;
+                $cookieValue = $this->keyService->saveUserKey($data['key'], $user);
+                $container   = new SessionContainer('EncryptionKey');
 
-                $this->setEncryptionKeyCookie($cookieValue, $expires);
-
-                $container = new SessionContainer('EncryptionKey');
+                $this->encryptionKeyCookie()->send($cookieValue, $data['remember']);
 
                 if (isset($container->redirectTo)) {
                     $routeMatch = $container->redirectTo;
@@ -76,11 +74,15 @@ class EncryptionKeyController extends AbstractActionController
     /**
      * Clear cookie with encryption key
      *
-     * @return \Zend\Http\Response
+     * @return Response
      */
     public function clearAction()
     {
-        $this->setEncryptionKeyCookie(null, 0);
+        $plugin = $this->encryptionKeyCookie();
+        $value  = $plugin->getValue();
+
+        $this->keyService->deleteKey($value, $this->identity());
+        $plugin->delete();
 
         return $this->redirect()->toRoute('home');
     }
