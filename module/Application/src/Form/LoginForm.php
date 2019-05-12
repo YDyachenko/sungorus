@@ -2,6 +2,11 @@
 
 namespace Application\Form;
 
+use Zend\Filter\StringTrim;
+use Zend\Form\Element\Csrf;
+use Zend\Form\Element\Password;
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 
@@ -14,32 +19,32 @@ class LoginForm extends Form implements InputFilterProviderInterface
 
         $this->add([
             'name'       => 'identity',
-            'type'       => 'Text',
+            'type'       => Text::class,
             'attributes' => [
                 'placeholder' => 'Email',
-                'autofocus'   => 'autofocus'
-            ]
+                'autofocus'   => 'autofocus',
+            ],
         ]);
 
         $this->add([
             'name'       => 'credential',
-            'type'       => 'Password',
+            'type'       => Password::class,
             'attributes' => [
-                'placeholder' => 'Password'
-            ]
+                'placeholder' => 'Password',
+            ],
         ]);
 
         $this->add([
             'name' => 'token',
-            'type' => 'Csrf'
+            'type' => Csrf::class,
         ]);
 
         $this->add([
             'name'    => 'submit',
-            'type'    => 'Submit',
+            'type'    => Submit::class,
             'options' => [
-                'label' => 'Submit'
-            ]
+                'label' => 'Sign in',
+            ],
         ]);
     }
 
@@ -53,13 +58,13 @@ class LoginForm extends Form implements InputFilterProviderInterface
                 'name'     => 'identity',
                 'required' => true,
                 'filters'  => [
-                    ['name' => 'StringTrim'],
+                    ['name' => StringTrim::class],
                 ],
             ],
             [
                 'name'     => 'credential',
-                'required' => true
-            ]
+                'required' => true,
+            ],
         ];
     }
 }

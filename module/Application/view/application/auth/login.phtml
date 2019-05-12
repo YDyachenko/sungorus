@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-md-4" style="float: none; margin: 10px auto;">
-        <div class="panel panel-<?= $error ? 'danger' : 'info'; ?> panel-shadow">
+        <div class="panel panel-<?= $error ? 'danger' : 'default'; ?> panel-shadow">
             <div class="panel-heading">
-                <h3 class="panel-title">Sign in</h3>
+                <h3 class="panel-title">Sign in to Sungorus</h3>
             </div>
             <div class="panel-body">
                 <?php if ($message): ?>
@@ -13,20 +13,18 @@
                 <?php 
                     $form->setAttribute('action', $this->url('login'));
 
-                    $form->get('submit')->setAttribute('class', 'btn btn-primary');
+                    $form->get('submit')->setAttribute('class', 'btn btn-primary btn-block');
 
                     echo $this->form($form, null);
                 ?>
+                <?php if ($registrationEnabled): ?>
+                    <div class="text-center text-muted" style="margin-top: 20px;">
+                        Don't have an account?
+                        <a href="<?= $this->escapeHtmlAttr($this->url('signup')); ?>">Sign up</a>
+                    </div>
+                <?php endif; ?>
             </div>
-        </div>
 
-<?php if ($registrationEnabled): ?>
-        <div class="alert alert-info text-center">
-            <strong>
-                <a href="<?= $this->escapeHtmlAttr($this->url('signup')); ?>">Registration</a>
-            </strong>
-            is open for everyone!
         </div>
-<?php endif; ?>
     </div>
 </div>
