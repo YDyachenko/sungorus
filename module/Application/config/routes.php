@@ -15,7 +15,7 @@ use Zend\Router\Http\Segment;
 return [
     'router' => [
         'routes' => [
-            'home'          => [
+            'home'           => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/',
@@ -25,32 +25,29 @@ return [
                     ],
                 ],
             ],
-            'auth'          => [
+            'settings'       => [
                 'type'          => Literal::class,
                 'options'       => [
-                    'route'    => '/auth',
+                    'route'    => '/settings',
                     'defaults' => [
-                        'controller' => AuthController::class,
-                        'action'     => 'login',
+                        'controller' => SettingsController::class,
                     ],
 
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-
                     'change-password' => [
                         'type'    => Literal::class,
                         'options' => [
                             'route'    => '/change-password',
                             'defaults' => [
-                                'controller' => SettingsController::class,
-                                'action'     => 'changePassword',
+                                'action' => 'changePassword',
                             ],
                         ],
                     ],
                 ],
             ],
-            'login'         => [
+            'login'          => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/login',
@@ -60,7 +57,7 @@ return [
                     ],
                 ],
             ],
-            'logout'        => [
+            'logout'         => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/logout',
@@ -70,7 +67,7 @@ return [
                     ],
                 ],
             ],
-            'export'        => [
+            'export'         => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/export',
@@ -80,7 +77,7 @@ return [
                     ],
                 ],
             ],
-            'signup'        => [
+            'signup'         => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/signup',
@@ -113,7 +110,7 @@ return [
                     ],
                 ],
             ],
-            'search'        => [
+            'search'         => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/search',
@@ -123,7 +120,7 @@ return [
                     ],
                 ],
             ],
-            'folders'       => [
+            'folders'        => [
                 'type'          => Literal::class,
                 'options'       => [
                     'route' => '/folders',

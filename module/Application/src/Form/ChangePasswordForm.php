@@ -2,8 +2,13 @@
 
 namespace Application\Form;
 
+use Application\Validator\Bcrypt;
+use Zend\Form\Element\Csrf;
+use Zend\Form\Element\Password;
+use Zend\Form\Element\Submit;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Validator\Identical;
 
 class ChangePasswordForm extends Form implements InputFilterProviderInterface
 {
@@ -15,48 +20,53 @@ class ChangePasswordForm extends Form implements InputFilterProviderInterface
         parent::__construct('form-change-password');
 
         $this->add([
-            'name'       => 'old',
-            'type'       => 'Password',
+            'name'       => 'current',
+            'type'       => Password::class,
+            'options'    => [
+                'label' => 'Current',
+            ],
             'attributes' => [
-                'placeholder' => 'Old password',
-                'autofocus'   => 'autofocus'
-            ]
+                'autofocus' => 'autofocus',
+            ],
         ]);
 
         $this->add([
-            'name'       => 'new',
-            'type'       => 'Password',
-            'attributes' => [
-                'placeholder' => 'New password'
-            ]
+            'name'    => 'new',
+            'type'    => Password::class,
+            'options' => [
+                'label' => 'New',
+            ],
         ]);
 
         $this->add([
-            'name'       => 'confirm',
-            'type'       => 'Password',
-            'attributes' => [
-                'placeholder' => 'Retype new password'
-            ]
+            'name'    => 'confirm',
+            'type'    => Password::class,
+            'options' => [
+                'label' => 'Confirm',
+            ],
         ]);
 
         $this->add([
             'name' => 'token',
-            'type' => 'Csrf'
+            'type' => Csrf::class,
         ]);
 
         $this->add([
-            'name'    => 'submit',
-            'type'    => 'Submit',
-            'options' => [
-                'label' => 'Submit'
-            ]
+            'name'       => 'submit',
+            'type'       => Submit::class,
+            'options'    => [
+                'label' => 'Save',
+            ],
+            'attributes' => [
+                'class' => 'btn btn-primary',
+            ],
         ]);
     }
 
     /**
      * Set password hash. Hash used in \Application\Validator\Bcrypt
      * @param string $value Password hash
-     * @return ChangePasswordForm
+     * @return self
      */
     public function setPasswordHash($value)
     {
@@ -72,39 +82,39 @@ class ChangePasswordForm extends Form implements InputFilterProviderInterface
     {
         return [
             [
-                'name'       => 'old',
+                'name'       => 'current',
                 'required'   => true,
                 'validators' => [
                     [
-                        'name'    => '\Application\Validator\Bcrypt',
+                        'name'    => Bcrypt::class,
                         'options' => [
                             'hash'     => $this->passwordHash,
                             'messages' => [
-                                \Application\Validator\Bcrypt::HASH => 'Wrong password',
+                                Bcrypt::NOT_MATCH => 'Wrong password',
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
             [
                 'name'     => 'new',
-                'required' => true
+                'required' => true,
             ],
             [
                 'name'       => 'confirm',
                 'required'   => true,
                 'validators' => [
                     [
-                        'name'    => 'Identical',
+                        'name'    => Identical::class,
                         'options' => [
                             'token'    => 'new',
                             'strict'   => true,
                             'messages' => [
-                                \Zend\Validator\Identical::NOT_SAME => 'The two given passwords do not match',
+                                Identical::NOT_SAME => 'The two given passwords do not match',
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
         ];
     }

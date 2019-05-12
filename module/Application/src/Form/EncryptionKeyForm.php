@@ -75,7 +75,7 @@ class EncryptionKeyForm extends Form implements InputFilterProviderInterface
                         'options' => [
                             'hash'     => $this->keyHash,
                             'messages' => [
-                                Bcrypt::HASH => 'The key is not valid',
+                                Bcrypt::NOT_MATCH => 'The key is not valid',
                             ],
                         ],
                     ],

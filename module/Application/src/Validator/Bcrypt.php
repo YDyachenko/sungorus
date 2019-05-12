@@ -2,23 +2,27 @@
 
 namespace Application\Validator;
 
-use Zend\Validator\AbstractValidator;
 use Application\Exception\InvalidArgumentException;
+use Traversable;
+use Zend\Validator\AbstractValidator;
 
 class Bcrypt extends AbstractValidator
 {
-    const HASH = 'hash';
+    const NOT_MATCH = 'bcryptNotMatch';
 
     protected $messageTemplates = [
-        self::HASH => "'%value%' is not a valid value"
+        self::NOT_MATCH => "'%value%' is not a valid value",
     ];
+
+    /**
+     * @var string
+     */
     protected $hash;
 
     /**
      * Sets validator options
-     *
-     * @param  array|Traversable $options
-     * @throws Exception\InvalidArgumentException
+     * @param array|Traversable $options
+     * @throws InvalidArgumentException
      */
     public function __construct($options = null)
     {
@@ -47,7 +51,7 @@ class Bcrypt extends AbstractValidator
     /**
      * Set hash
      * @param string $hash
-     * @return Bcrypt
+     * @return self
      */
     public function setHash($hash)
     {
@@ -63,7 +67,7 @@ class Bcrypt extends AbstractValidator
     {
         $bcrypt = new \Zend\Crypt\Password\Bcrypt();
         if (! $bcrypt->verify($value, $this->hash)) {
-            $this->error(self::HASH, $value);
+            $this->error(self::NOT_MATCH, $value);
             return false;
         }
 
