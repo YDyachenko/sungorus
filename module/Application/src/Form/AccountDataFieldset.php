@@ -2,8 +2,13 @@
 
 namespace Application\Form;
 
+use Zend\Filter\StringTrim;
+use Zend\Form\Element\Text;
+use Zend\Form\Element\Textarea;
+use Zend\Form\Element\Url;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Validator\Uri;
 
 class AccountDataFieldset extends Fieldset implements InputFilterProviderInterface
 {
@@ -14,30 +19,28 @@ class AccountDataFieldset extends Fieldset implements InputFilterProviderInterfa
 
         $this->add([
             'name'       => 'login',
-            'type'       => 'Text',
+            'type'       => Text::class,
             'options'    => [
                 'label'            => 'Login',
                 'column-size'      => 'sm-10',
-                'label_attributes' => ['class' => 'col-sm-2']
+                'label_attributes' => ['class' => 'col-sm-2'],
             ],
             'attributes' => [
-//                'placeholder'  => 'Login',
                 'autocomplete' => 'off',
-            ]
+            ],
         ]);
 
         $this->add([
             'name'       => 'email',
-            'type'       => 'Text',
+            'type'       => Text::class,
             'options'    => [
                 'label'            => 'Email',
                 'column-size'      => 'sm-10',
-                'label_attributes' => ['class' => 'col-sm-2']
+                'label_attributes' => ['class' => 'col-sm-2'],
             ],
             'attributes' => [
-//                'placeholder'  => 'Email',
                 'autocomplete' => 'off',
-            ]
+            ],
         ]);
 
         $this->add([
@@ -45,40 +48,41 @@ class AccountDataFieldset extends Fieldset implements InputFilterProviderInterfa
             'options'    => [
                 'label'            => 'Password',
                 'column-size'      => 'sm-10',
-                'label_attributes' => ['class' => 'col-sm-2']
+                'label_attributes' => ['class' => 'col-sm-2'],
             ],
-            'type'       => 'Text',
+            'type'       => Text::class,
             'attributes' => [
-//                'placeholder'  => 'Password',
                 'autocomplete' => 'off',
             ],
         ]);
 
         $this->add([
             'name'       => 'url',
-            'type'       => 'url',
+            'type'       => Url::class,
             'options'    => [
                 'label'            => 'URL',
                 'column-size'      => 'sm-10',
-                'label_attributes' => ['class' => 'col-sm-2']
+                'label_attributes' => ['class' => 'col-sm-2'],
             ],
             'attributes' => [
-//                'placeholder'  => 'URL',
                 'autocomplete' => 'off',
-            ]
+            ],
         ]);
 
         $this->add([
             'name'    => 'notes',
-            'type'    => 'Textarea',
+            'type'    => Textarea::class,
             'options' => [
                 'label'            => 'Notes',
                 'column-size'      => 'sm-10',
-                'label_attributes' => ['class' => 'col-sm-2']
+                'label_attributes' => ['class' => 'col-sm-2'],
             ],
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getInputFilterSpecification()
     {
         return [
@@ -87,11 +91,11 @@ class AccountDataFieldset extends Fieldset implements InputFilterProviderInterfa
                 'required'    => true,
                 'allow_empty' => true,
                 'filters'     => [
-                    ['name' => 'StringTrim'],
+                    ['name' => StringTrim::class],
                 ],
                 'validators'  => [
                     [
-                        'name'    => 'Uri',
+                        'name'    => Uri::class,
                         'options' => [
                             'allowAbsolute' => true,
                             'allowRelative' => false,

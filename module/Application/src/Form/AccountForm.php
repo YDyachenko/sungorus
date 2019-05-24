@@ -2,8 +2,16 @@
 
 namespace Application\Form;
 
+use Application\Model\Folder;
+use Zend\Filter\StringTrim;
+use Zend\Form\Element\Checkbox;
+use Zend\Form\Element\Csrf;
+use Zend\Form\Element\Select;
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Validator\StringLength;
 
 class AccountForm extends Form implements InputFilterProviderInterface
 {
@@ -14,55 +22,57 @@ class AccountForm extends Form implements InputFilterProviderInterface
 
         $this->add([
             'name'       => 'name',
-            'type'       => 'Text',
+            'type'       => Text::class,
             'options'    => [
                 'label'            => 'Name',
                 'column-size'      => 'sm-10',
-                'label_attributes' => ['class' => 'col-sm-2']
+                'label_attributes' => ['class' => 'col-sm-2'],
             ],
             'attributes' => [
                 'autofocus' => 'autofocus',
-//                'placeholder' => 'Name',
-                'maxlength' => 45
+                'maxlength' => 45,
             ],
         ]);
 
         $this->add([
             'name'    => 'folder_id',
-            'type'    => 'Select',
+            'type'    => Select::class,
             'options' => [
                 'label'            => 'Folder',
                 'column-size'      => 'sm-10',
-                'label_attributes' => ['class' => 'col-sm-2']
-            ]
+                'label_attributes' => ['class' => 'col-sm-2'],
+            ],
         ]);
 
         $this->add([
             'name'    => 'favorite',
-            'type'    => 'Checkbox',
+            'type'    => Checkbox::class,
             'options' => [
                 'label'       => 'Favorite',
-                'column-size' => 'sm-10 col-sm-offset-2'
+                'column-size' => 'sm-10 col-sm-offset-2',
             ],
         ]);
 
         $this->add([
             'name' => 'data',
-            'type' => '\Application\Form\AccountDataFieldset',
+            'type' => AccountDataFieldset::class,
         ]);
 
         $this->add([
             'name' => 'token',
-            'type' => 'Csrf'
+            'type' => Csrf::class,
         ]);
 
         $this->add([
             'name'    => 'submit',
-            'type'    => 'Submit',
+            'type'    => Submit::class,
             'options' => [
                 'label'       => 'Save',
-                'column-size' => 'sm-10 col-sm-offset-2'
-            ]
+                'column-size' => 'sm-10 col-sm-offset-2',
+            ],
+            'attributes' => [
+                'class' => 'btn btn-primary',
+            ],
         ]);
     }
 
@@ -76,14 +86,14 @@ class AccountForm extends Form implements InputFilterProviderInterface
                 'name'       => 'name',
                 'required'   => true,
                 'filters'    => [
-                    ['name' => 'StringTrim'],
+                    ['name' => StringTrim::class],
                 ],
                 'validators' => [
                     [
-                        'name'    => 'StringLength',
+                        'name'    => StringLength::class,
                         'options' => [
                             'min' => 1,
-                            'max' => '45',
+                            'max' => 45,
                         ],
                     ],
                 ],
@@ -92,8 +102,8 @@ class AccountForm extends Form implements InputFilterProviderInterface
 
     /**
      * Setup folders select
-     * @param FolderEntity[] $folders array of folders
-     * @return AccountForm
+     * @param Folder[] $folders array of folders
+     * @return self
      */
     public function setFoldersOptions($folders)
     {
@@ -111,9 +121,12 @@ class AccountForm extends Form implements InputFilterProviderInterface
     /**
      * Set selected folder
      * @param int $id Folder id
+     * @return self
      */
     public function setFolderId($id)
     {
         $this->get('folder_id')->setValue($id);
+
+        return $this;
     }
 }
