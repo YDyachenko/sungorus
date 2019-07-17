@@ -63,12 +63,16 @@
                                     <a href="<?= $this->url('export') ?>">Export accounts</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">
+                                    Settings
+                                </li>
                                 <li>
-                                    <a href="<?= $this->url('settings/change-password') ?>">Change password</a>
+                                    <a href="<?= $this->url('settings/password') ?>">Password</a>
                                 </li>
                                 <li>
                                     <a href="<?= $this->url('encryption-key/clear') ?>">Forget encryption key</a>
                                 </li>
+                                <li role="separator" class="divider"></li>
                                 <li>
                                     <a href="<?= $this->url('logout') ?>">Sign out</a>
                                 </li>

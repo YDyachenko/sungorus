@@ -4,14 +4,18 @@
 namespace Application\Controller;
 
 use Application\Form\ChangePasswordForm;
+use Application\Model\User;
 use Application\Repository\UserRepositoryInterface;
 use Zend\Crypt\Password\Bcrypt;
+use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 
+/**
+ * @method User identity()
+ */
 class SettingsController extends AbstractActionController
 {
     /**
-     *
      * @var UserRepositoryInterface
      */
     protected $users;
@@ -27,21 +31,26 @@ class SettingsController extends AbstractActionController
         $this->form  = $form;
     }
 
+    public function indexAction()
+    {
+        return $this->redirect()->toRoute('settings/password');
+    }
+
     /**
      * Change password form
-     *
      * @return array
      */
-    public function changePasswordAction()
+    public function passwordAction()
     {
+        /* @var Request $request */
         $request = $this->getRequest();
         $changed = false;
 
         if ($request->isPost()) {
             $user = $this->identity();
 
-            $this->form->setData($request->getPost())
-                       ->setPasswordHash($user->getPassword());
+            $this->form->setPasswordHash($user->getPassword())
+                       ->setData($request->getPost());
 
             if ($this->form->isValid()) {
                 $bcrypt  = new Bcrypt();

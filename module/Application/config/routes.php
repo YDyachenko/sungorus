@@ -31,17 +31,18 @@ return [
                     'route'    => '/settings',
                     'defaults' => [
                         'controller' => SettingsController::class,
+                        'action'     => 'index',
                     ],
 
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                    'change-password' => [
+                    'password' => [
                         'type'    => Literal::class,
                         'options' => [
-                            'route'    => '/change-password',
+                            'route'    => '/password',
                             'defaults' => [
-                                'action' => 'changePassword',
+                                'action' => 'password',
                             ],
                         ],
                     ],
