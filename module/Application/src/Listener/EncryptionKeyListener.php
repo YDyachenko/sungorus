@@ -91,7 +91,6 @@ class EncryptionKeyListener implements ListenerAggregateInterface
 
             $container->redirectTo = $event->getRouteMatch();
 
-
             $response->getHeaders()->addHeaderLine('Location', $url);
             $response->setStatusCode(302);
 

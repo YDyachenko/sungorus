@@ -51,7 +51,7 @@ class EncryptionKeyController extends AbstractActionController
 
             if ($this->form->isValid()) {
                 $data        = $this->form->getData();
-                $cookieValue = $this->keyService->saveUserKey($data['key'], $user);
+                $cookieValue = $this->keyService->saveUserKey($data['key'], $user, $data['remember']);
                 $container   = new SessionContainer('EncryptionKey');
 
                 $this->encryptionKeyCookie()->send($cookieValue, $data['remember']);
