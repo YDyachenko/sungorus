@@ -9,6 +9,7 @@ use Application\Service\UserKeyService;
 use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\Session\ManagerInterface;
 
 class RegistrationControllerFactory implements FactoryInterface
 {
@@ -21,7 +22,8 @@ class RegistrationControllerFactory implements FactoryInterface
         $authService = $container->get(AuthenticationServiceInterface::class);
         $keyService  = $container->get(UserKeyService::class);
         $users       = $container->get(UserRepositoryInterface::class);
+        $manager     = $container->get(ManagerInterface::class);
 
-        return new RegistrationController($config, $form, $authService, $keyService, $users);
+        return new RegistrationController($config, $form, $authService, $keyService, $users, $manager);
     }
 }

@@ -5,7 +5,9 @@ namespace Application\Controller;
 use Application\Authentication\AuthEvent;
 use Application\Form\LoginForm;
 use Zend\Authentication\AuthenticationServiceInterface;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\ManagerInterface;
 
 class AuthController extends AbstractActionController
 {
@@ -25,18 +27,27 @@ class AuthController extends AbstractActionController
      */
     protected $form;
 
+    /**
+     * @var ManagerInterface
+     */
+    protected $sessionManager;
 
-    public function __construct(AuthenticationServiceInterface $authService, array $config, LoginForm $form)
-    {
-        $this->authService = $authService;
-        $this->config      = $config;
-        $this->form        = $form;
+
+    public function __construct(
+        AuthenticationServiceInterface $authService,
+        array $config,
+        LoginForm $form,
+        ManagerInterface $manager
+    ) {
+        $this->authService    = $authService;
+        $this->config         = $config;
+        $this->form           = $form;
+        $this->sessionManager = $manager;
     }
 
     /**
      * Login form
-     *
-     * @return array
+     * @return Response|array
      */
     public function loginAction()
     {
@@ -55,7 +66,6 @@ class AuthController extends AbstractActionController
             $error   = true;
             $this->form->get('submit')->setAttribute('disabled', 'disabled');
         }
-
 
         $request = $this->getRequest();
 
@@ -76,6 +86,7 @@ class AuthController extends AbstractActionController
                 $event->setRequest($request);
 
                 if ($result->isValid()) {
+                    $this->sessionManager->regenerateId();
                     $event->setName(AuthEvent::EVENT_AUTHENTICATION_SUCCESS);
                     $events->triggerEvent($event);
                     return $this->redirect()->toRoute('home');
@@ -99,8 +110,7 @@ class AuthController extends AbstractActionController
 
     /**
      * Logout and clear identity
-     *
-     * @return \Zend\Http\Response
+     * @return Response
      */
     public function logoutAction()
     {

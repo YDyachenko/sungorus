@@ -4,11 +4,10 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\AuthController;
 use Application\Form\LoginForm;
-use Application\Repository\UserRepositoryInterface;
-use Application\Service\UserKeyService;
 use Interop\Container\ContainerInterface;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\Session\ManagerInterface;
 
 class AuthControllerFactory implements FactoryInterface
 {
@@ -18,7 +17,8 @@ class AuthControllerFactory implements FactoryInterface
         $config      = $container->get('config');
         $authService = $container->get(AuthenticationServiceInterface::class);
         $form        = $container->get('FormElementManager')->get(LoginForm::class);
+        $manager     = $container->get(ManagerInterface::class);
 
-        return new AuthController($authService, $config, $form);
+        return new AuthController($authService, $config, $form, $manager);
     }
 }

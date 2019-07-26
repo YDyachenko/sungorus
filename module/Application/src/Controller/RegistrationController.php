@@ -10,6 +10,7 @@ use Application\Service\UserKeyService;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container as SessionContainer;
+use Zend\Session\ManagerInterface;
 
 /**
  * @method EncryptionKeyCookiePlugin encryptionKeyCookie()
@@ -42,18 +43,25 @@ class RegistrationController extends AbstractActionController
      */
     protected $users;
 
+    /**
+     * @var ManagerInterface
+     */
+    protected $sessionManager;
+
     public function __construct(
         array $config,
         SignupForm $form,
         AuthenticationServiceInterface $authService,
         UserKeyService $keyService,
-        UserRepositoryInterface $users
+        UserRepositoryInterface $users,
+        ManagerInterface $manager
     ) {
-        $this->config      = $config;
-        $this->form        = $form;
-        $this->authService = $authService;
-        $this->keyService  = $keyService;
-        $this->users       = $users;
+        $this->config         = $config;
+        $this->form           = $form;
+        $this->authService    = $authService;
+        $this->keyService     = $keyService;
+        $this->users          = $users;
+        $this->sessionManager = $manager;
     }
 
     /**
@@ -82,7 +90,7 @@ class RegistrationController extends AbstractActionController
                 $this->encryptionKeyCookie()->send($cookieValue);
 
                 $this->authService->getStorage()->write($user->getEmail());
-                SessionContainer::getDefaultManager()->regenerateId();
+                $this->sessionManager->regenerateId();
 
                 return $this->redirect()->toRoute('home');
             }
