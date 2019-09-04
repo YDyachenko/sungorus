@@ -31,7 +31,6 @@ class SessionProxy implements StorageInterface
     }
 
     /**
-     *
      * @return SessionStorage
      */
     protected function getStorage()

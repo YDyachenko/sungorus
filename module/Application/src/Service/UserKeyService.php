@@ -38,11 +38,9 @@ class UserKeyService
 
     /**
      * Add key to DB and generate cookie value
-     *
      * @param string $key      User's encryption key
      * @param User   $user
      * @param bool   $remember Save to DB or not
-     *
      * @return string
      */
     public function saveUserKey($key, User $user, $remember = false)
@@ -51,7 +49,7 @@ class UserKeyService
         $this->blockCipher->setKey($cookieKey);
         $cryptedKey = $this->blockCipher->encrypt($key);
 
-        If ($remember) {
+        if ($remember) {
             $this->keysTable->insert([
                 'user_id' => $user->getId(),
                 'key'     => $cryptedKey,
@@ -70,10 +68,8 @@ class UserKeyService
 
     /**
      * Get encryption key from db
-     *
      * @param string $value
      * @param User   $user
-     *
      * @return string
      */
     public function getUserKey($value, User $user)
@@ -125,10 +121,8 @@ class UserKeyService
 
     /**
      * Delete key
-     *
      * @param string $value
      * @param User   $user
-     *
      * @return self
      */
     public function deleteKey($value, User $user)
@@ -149,7 +143,6 @@ class UserKeyService
 
     /**
      * Delete expired user keys
-     *
      * @return int
      */
     public function deleteExpiredKeys()
@@ -173,7 +166,6 @@ class UserKeyService
 
     /**
      * @param Container $container
-     *
      * @return self
      */
     public function setContainer($container)

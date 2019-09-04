@@ -14,7 +14,6 @@ class EncryptionKeyListenerFactory implements FactoryInterface
 
     /**
      * {@inheritDoc}
-     *
      * @return EncryptionKeyListener
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)

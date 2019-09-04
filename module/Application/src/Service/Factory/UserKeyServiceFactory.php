@@ -2,11 +2,11 @@
 
 namespace Application\Service\Factory;
 
+use Application\Db\TableGatewayPluginManager;
 use Application\Service\UserKeyService;
 use Interop\Container\ContainerInterface;
 use Zend\Crypt\BlockCipher;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Db\TableGatewayPluginManager;
 
 class UserKeyServiceFactory implements FactoryInterface
 {

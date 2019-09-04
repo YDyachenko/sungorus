@@ -3,8 +3,8 @@
 
 namespace Application\Db;
 
-use Zend\ServiceManager\AbstractPluginManager;
 use Zend\Db\TableGateway\TableGatewayInterface;
+use Zend\ServiceManager\AbstractPluginManager;
 
 class TableGatewayPluginManager extends AbstractPluginManager
 {

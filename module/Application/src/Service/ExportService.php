@@ -2,12 +2,10 @@
 
 namespace Application\Service;
 
-use XMLWriter;
 use Application\Model\User;
-use Application\Service\AccountDataCipher;
+use XMLWriter;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
-use Zend\Crypt\BlockCipher;
 
 class ExportService
 {
@@ -15,13 +13,11 @@ class ExportService
     const ROOT_ELEMENT_NAME = 'sungorus';
 
     /**
-     *
      * @var Sql
      */
     protected $sql;
 
     /**
-     *
      * @var AccountDataCipher
      */
     protected $cipher;
@@ -70,7 +66,7 @@ class ExportService
     /**
      * Write into XMLWriter accounts in folder
      * @param FolderEntity $folder
-     * @param XMLWriter $writer
+     * @param XMLWriter    $writer
      */
     protected function writeAccounts($folder_id, XMLWriter $writer)
     {

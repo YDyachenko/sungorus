@@ -3,10 +3,9 @@
 namespace Application\Authentication;
 
 use Application\Service\AuthLogService;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventInterface;
-use Zend\Http\Request;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\PhpEnvironment\RemoteAddress;
 
 class AuthListener implements ListenerAggregateInterface
@@ -73,7 +72,7 @@ class AuthListener implements ListenerAggregateInterface
         if ($this->authLogService->isIpBlocked($ip)) {
             $event->stopPropagation(true);
             return [
-                'message' => 'Your IP address has been blocked'
+                'message' => 'Your IP address has been blocked',
             ];
         }
     }

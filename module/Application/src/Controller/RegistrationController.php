@@ -9,7 +9,6 @@ use Application\Repository\UserRepositoryInterface;
 use Application\Service\UserKeyService;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Session\Container as SessionContainer;
 use Zend\Session\ManagerInterface;
 
 /**

@@ -2,16 +2,20 @@
 
 namespace Application\Controller;
 
-use Application\Form\FolderForm;
-use Application\Model\Folder;
-use Application\Repository\FolderRepositoryInterface;
-use Application\Repository\AccountRepositoryInterface;
 use Application\Exception\FolderNotFoundException;
 use Application\Exception\ForbiddenException;
+use Application\Form\FolderForm;
+use Application\Model\Folder;
+use Application\Model\User;
+use Application\Repository\AccountRepositoryInterface;
+use Application\Repository\FolderRepositoryInterface;
 use Zend\Form\Element\Csrf;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
+/**
+ * @method User identity()
+ */
 class FolderController extends AbstractActionController
 {
 
@@ -42,8 +46,6 @@ class FolderController extends AbstractActionController
 
     /**
      * List accounts
-     *
-     * @return array
      * @throws ForbiddenException
      */
     public function accountsAction()
@@ -71,8 +73,6 @@ class FolderController extends AbstractActionController
 
     /**
      * Create new folder
-     *
-     * @return array
      */
     public function addAction()
     {
@@ -99,8 +99,6 @@ class FolderController extends AbstractActionController
 
     /**
      * Edit existing folder
-     *
-     * @return array
      * @throws ForbiddenException
      */
     public function editAction()
@@ -139,8 +137,6 @@ class FolderController extends AbstractActionController
 
     /**
      * Delete existing folder
-     *
-     * @return JsonModel
      * @throws ForbiddenException
      */
     public function deleteAction()

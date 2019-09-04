@@ -45,8 +45,7 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
 
     /**
      * Get entity class
-     *
-     * @param array $config
+     * @param array  $config
      * @param string $requestedName
      * @return string
      * @throws ServiceNotCreatedException
@@ -64,12 +63,10 @@ class TableGatewayAbstractFactory implements AbstractFactoryInterface
 
     /**
      * Retrieve the configured hydrator.
-     *
      * If configuration defines a `hydrator_name`, that service will be
      * retrieved from the HydratorManager; otherwise ArraySerializable
      * will be retrieved.
-     *
-     * @param array $config
+     * @param array              $config
      * @param ContainerInterface $container
      * @return \Zend\Hydrator\HydratorInterface
      */

@@ -2,21 +2,23 @@
 
 namespace Application\Controller;
 
+use Application\Model\User;
 use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
+/**
+ * @method User identity()
+ */
 class SearchController extends AbstractActionController
 {
 
     /**
-     *
      * @var FolderRepositoryInterface
      */
     protected $folders;
 
     /**
-     *
      * @var AccountRepositoryInterface
      */
     protected $accounts;
@@ -29,7 +31,6 @@ class SearchController extends AbstractActionController
 
     /**
      * Search accounts
-     * @return array
      */
     public function indexAction()
     {

@@ -39,7 +39,6 @@ class EncryptionKeyCookiePlugin extends AbstractPlugin
 
     /**
      * @param string $name
-     *
      * @return self
      */
     public function setName($name)
@@ -59,7 +58,6 @@ class EncryptionKeyCookiePlugin extends AbstractPlugin
 
     /**
      * @param int $lifetime
-     *
      * @return self
      */
     public function setLifetime($lifetime)
@@ -79,7 +77,6 @@ class EncryptionKeyCookiePlugin extends AbstractPlugin
 
     /**
      * @param bool $secure
-     *
      * @return self
      */
     public function setSecure($secure)
@@ -91,7 +88,6 @@ class EncryptionKeyCookiePlugin extends AbstractPlugin
 
     /**
      * @param array $options
-     *
      * @return self
      */
     public function setOptions(array $options)
@@ -117,10 +113,8 @@ class EncryptionKeyCookiePlugin extends AbstractPlugin
 
     /**
      * Send cookie with encryption key
-     *
      * @param string  $value Cookie value
      * @param boolean $remember
-     *
      * @return self
      */
     public function send($value, $remember = false)
@@ -132,7 +126,6 @@ class EncryptionKeyCookiePlugin extends AbstractPlugin
 
     /**
      * Delete cookie
-     *
      * @return self
      */
     public function delete()
@@ -152,7 +145,6 @@ class EncryptionKeyCookiePlugin extends AbstractPlugin
 
     /**
      * Get cookie value
-     *
      * @return string
      */
     public function getValue()

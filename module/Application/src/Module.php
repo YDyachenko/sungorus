@@ -2,20 +2,20 @@
 
 namespace Application;
 
+use Application\Authentication;
 use Application\Controller;
 use Application\Listener;
-use Application\Authentication;
 use Zend\Authentication\AuthenticationServiceInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\EventManager\EventInterface;
-use Zend\Router\Http\RouteMatch;
-use Zend\Http\Request as HttpRequest;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\Crypt\BlockCipher;
+use Zend\EventManager\EventInterface;
+use Zend\Http\Request as HttpRequest;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Mvc\MvcEvent;
+use Zend\Router\Http\RouteMatch;
 use Zend\Session\SessionManager;
 
 class Module implements
@@ -141,7 +141,7 @@ class Module implements
     {
         return [
             'cron clearKeysTable'       => '[CRONJOB] Remove out-of-date encryption keys from DB',
-            'cron clearLogFailureTable' => '[CRONJOB] Remove out-of-date entries from authentication failure log'
+            'cron clearLogFailureTable' => '[CRONJOB] Remove out-of-date entries from authentication failure log',
         ];
     }
 }

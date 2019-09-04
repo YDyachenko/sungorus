@@ -2,13 +2,13 @@
 
 namespace Application\Repository;
 
-use Application\Model\User;
+use Application\Exception\AccountNotFoundException;
 use Application\Model\Account;
 use Application\Model\Folder;
-use Application\Exception\AccountNotFoundException;
-use Zend\Db\TableGateway\TableGatewayInterface;
-use Zend\Db\Sql\Select;
+use Application\Model\User;
 use Zend\Db\Sql\Expression as SqlExpression;
+use Zend\Db\Sql\Select;
+use Zend\Db\TableGateway\TableGatewayInterface;
 
 class AccountRepository implements AccountRepositoryInterface
 {
@@ -64,7 +64,7 @@ class AccountRepository implements AccountRepositoryInterface
             $select
                 ->where([
                     'user_id'  => $user->getId(),
-                    'favorite' => true
+                    'favorite' => true,
                 ])
                 ->order('name ASC');
         });
@@ -97,7 +97,7 @@ class AccountRepository implements AccountRepositoryInterface
             $select
                 ->where([
                     'user_id'     => $user->getId(),
-                    'name LIKE ?' => $param
+                    'name LIKE ?' => $param,
                 ])
                 ->order(['favorite DESC', 'name ASC']);
         });

@@ -2,11 +2,11 @@
 
 namespace Application\Repository;
 
-use Zend\Db\TableGateway\TableGatewayInterface;
-use Zend\Db\Sql\Select;
-use Application\Model\User;
-use Application\Model\Folder;
 use Application\Exception\FolderNotFoundException;
+use Application\Model\Folder;
+use Application\Model\User;
+use Zend\Db\Sql\Select;
+use Zend\Db\TableGateway\TableGatewayInterface;
 
 class FolderRepository implements FolderRepositoryInterface
 {
@@ -18,7 +18,6 @@ class FolderRepository implements FolderRepositoryInterface
     protected $table;
 
     /**
-     *
      * @param TableGatewayInterface $table
      */
     public function __construct(TableGatewayInterface $table)

@@ -4,8 +4,8 @@ namespace Application\Repository;
 
 use Application\Exception\UserNotFoundException;
 use Application\Model\User;
-use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Crypt\Password\Bcrypt;
+use Zend\Db\TableGateway\TableGatewayInterface;
 
 class UserRepository implements UserRepositoryInterface
 {

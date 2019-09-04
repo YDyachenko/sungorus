@@ -4,8 +4,8 @@ namespace Application\Controller\Factory;
 
 use Application\Controller\AccountController;
 use Application\Form\AccountForm;
-use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\AccountDataRepositoryInterface;
+use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
 use Application\Service\FaviconService;
 use Interop\Container\ContainerInterface;

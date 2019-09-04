@@ -2,8 +2,8 @@
 
 namespace Application\Form;
 
-use Zend\Form\Form;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\Form\Form;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\Validator;
 
@@ -25,53 +25,53 @@ class SignupForm extends Form implements InputFilterProviderInterface
             'type'       => 'Text',
             'attributes' => [
                 'placeholder' => 'Email',
-                'autofocus'   => 'autofocus'
-            ]
+                'autofocus'   => 'autofocus',
+            ],
         ]);
 
         $this->add([
             'name'       => 'password',
             'type'       => 'Password',
             'attributes' => [
-                'placeholder' => 'Password'
-            ]
+                'placeholder' => 'Password',
+            ],
         ]);
 
         $this->add([
             'name'       => 'confirm_pwd',
             'type'       => 'Password',
             'attributes' => [
-                'placeholder' => 'Confirm your password'
-            ]
+                'placeholder' => 'Confirm your password',
+            ],
         ]);
 
         $this->add([
             'name'       => 'key',
             'type'       => 'Password',
             'attributes' => [
-                'placeholder' => 'Encryption key'
-            ]
+                'placeholder' => 'Encryption key',
+            ],
         ]);
 
         $this->add([
             'name'       => 'confirm_key',
             'type'       => 'Password',
             'attributes' => [
-                'placeholder' => 'Confirm your key'
-            ]
+                'placeholder' => 'Confirm your key',
+            ],
         ]);
 
         $this->add([
             'name' => 'token',
-            'type' => 'Csrf'
+            'type' => 'Csrf',
         ]);
 
         $this->add([
             'name'    => 'submit',
             'type'    => 'Submit',
             'options' => [
-                'label' => 'Submit'
-            ]
+                'label' => 'Submit',
+            ],
         ]);
     }
 
@@ -105,11 +105,11 @@ class SignupForm extends Form implements InputFilterProviderInterface
                             'useDomainCheck' => true,
                         ],
                     ],
-                ]
+                ],
             ],
             [
                 'name'     => 'password',
-                'required' => true
+                'required' => true,
             ],
             [
                 'name'       => 'confirm_pwd',
@@ -125,11 +125,11 @@ class SignupForm extends Form implements InputFilterProviderInterface
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
             [
                 'name'     => 'key',
-                'required' => true
+                'required' => true,
             ],
             [
                 'name'       => 'confirm_key',
@@ -145,7 +145,7 @@ class SignupForm extends Form implements InputFilterProviderInterface
                             ],
                         ],
                     ],
-                ]
+                ],
             ],
         ];
     }

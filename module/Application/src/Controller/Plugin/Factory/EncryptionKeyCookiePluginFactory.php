@@ -11,7 +11,6 @@ class EncryptionKeyCookiePluginFactory implements FactoryInterface
 
     /**
      * {@inheritDoc}
-     *
      * @return EncryptionKeyCookiePlugin
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)

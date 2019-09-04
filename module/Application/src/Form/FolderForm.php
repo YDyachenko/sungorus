@@ -20,21 +20,21 @@ class FolderForm extends Form implements InputFilterProviderInterface
             'attributes' => [
                 'autofocus'   => 'autofocus',
                 'placeholder' => 'Name',
-                'maxlength'   => 45
+                'maxlength'   => 45,
             ],
         ]);
 
         $this->add([
             'name' => 'token',
-            'type' => 'Csrf'
+            'type' => 'Csrf',
         ]);
 
         $this->add([
             'name'    => 'submit',
             'type'    => 'Submit',
             'options' => [
-                'label' => 'Save'
-            ]
+                'label' => 'Save',
+            ],
         ]);
     }
 

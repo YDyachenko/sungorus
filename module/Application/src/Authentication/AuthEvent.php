@@ -14,7 +14,6 @@ class AuthEvent extends Event
 
     /**
      * Get request
-     *
      * @return Request
      */
     public function getRequest()
@@ -24,7 +23,6 @@ class AuthEvent extends Event
 
     /**
      * Set request
-     *
      * @param Request $request
      * @return MvcEvent
      */

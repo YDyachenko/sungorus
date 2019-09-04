@@ -73,7 +73,6 @@ class EncryptionKeyController extends AbstractActionController
 
     /**
      * Clear cookie with encryption key
-     *
      * @return Response
      */
     public function clearAction()

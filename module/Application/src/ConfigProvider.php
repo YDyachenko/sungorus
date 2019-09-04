@@ -19,7 +19,6 @@ class ConfigProvider
 
     /**
      * Retrieve configuration for Application.
-     *
      * @return array
      */
     public function __invoke()
@@ -33,7 +32,6 @@ class ConfigProvider
 
     /**
      * Retrieve dependency config for Application.
-     *
      * @return array
      */
     public function getDependencyConfig()

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Application\Controller;
 
 use Application\Form\ChangePasswordForm;

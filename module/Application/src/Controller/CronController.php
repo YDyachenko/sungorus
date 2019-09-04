@@ -10,13 +10,11 @@ class CronController extends AbstractActionController
 {
 
     /**
-     *
      * @var \Application\Service\AuthLogService
      */
     protected $authLogService;
 
     /**
-     *
      * @var \Application\Service\UserKeyService
      */
     protected $keysService;

@@ -2,21 +2,26 @@
 
 namespace Application\Controller;
 
+use Application\Exception\AccountNotFoundException;
+use Application\Exception\FolderNotFoundException;
+use Application\Exception\ForbiddenException;
 use Application\Form\AccountForm;
 use Application\Model\Account;
 use Application\Model\AccountData;
-use Application\Exception\ForbiddenException;
-use Application\Exception\AccountNotFoundException;
-use Application\Exception\FolderNotFoundException;
-use Application\Repository\AccountRepositoryInterface;
+use Application\Model\User;
 use Application\Repository\AccountDataRepositoryInterface;
+use Application\Repository\AccountRepositoryInterface;
 use Application\Repository\FolderRepositoryInterface;
 use Application\Service\FaviconService;
 use Zend\Form\Element\Csrf;
+use Zend\Http\Response\Stream as ResponseStream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
+/**
+ * @method User identity()
+ */
 class AccountController extends AbstractActionController
 {
 
@@ -36,7 +41,6 @@ class AccountController extends AbstractActionController
     protected $dataRepository;
 
     /**
-     *
      * @var FaviconService
      */
     protected $iconService;
@@ -46,24 +50,8 @@ class AccountController extends AbstractActionController
      */
     protected $form;
 
-    public function __construct(
-        FolderRepositoryInterface $folders,
-        AccountRepositoryInterface $accounts,
-        AccountDataRepositoryInterface $data,
-        FaviconService $iconService,
-        AccountForm $form
-    ) {
-        $this->folders        = $folders;
-        $this->accounts       = $accounts;
-        $this->dataRepository = $data;
-        $this->iconService    = $iconService;
-        $this->form           = $form;
-    }
-
     /**
      * Create new account
-     *
-     * @return ViewModel
      * @throws ForbiddenException
      */
     public function addAction()
@@ -121,8 +109,6 @@ class AccountController extends AbstractActionController
 
     /**
      * Edit existing account
-     *
-     * @return array
      * @throws ForbiddenException
      */
     public function editAction()
@@ -183,15 +169,63 @@ class AccountController extends AbstractActionController
         ];
     }
 
+    public function __construct(
+        FolderRepositoryInterface $folders,
+        AccountRepositoryInterface $accounts,
+        AccountDataRepositoryInterface $data,
+        FaviconService $iconService,
+        AccountForm $form
+    ) {
+        $this->folders        = $folders;
+        $this->accounts       = $accounts;
+        $this->dataRepository = $data;
+        $this->iconService    = $iconService;
+        $this->form           = $form;
+    }
+
+    /**
+     * Open URL from account
+     * @throws ForbiddenException
+     */
+    public function openUrlAction()
+    {
+        $user = $this->identity();
+
+        $accountId = (int)$this->params('accountId');
+
+        try {
+            $account = $this->accounts->findById($accountId);
+        } catch (AccountNotFoundException $e) {
+            return $this->notFoundAction();
+        }
+
+        if ($account->getUserId() != $user->getId()) {
+            throw new ForbiddenException("Account of another user");
+        }
+
+        if ($account->getFolderId() != $this->params('folderId')) {
+            return $this->notFoundAction();
+        }
+
+        $data = $this->dataRepository->findByAccount($account)->getData();
+        $url  = $data['url'];
+
+        $validSchemes = ['http', 'https'];
+
+        if (in_array(parse_url($url, PHP_URL_SCHEME), $validSchemes)) {
+            return $this->redirect()->toUrl($url);
+        }
+    }
+
     /**
      * Delete existing account
-     *
      * @return JsonModel
      * @throws ForbiddenException
      */
     public function deleteAction()
     {
-        $user      = $this->identity();
+        $user = $this->identity();
+
         $accountId = (int)$this->params('accountId');
 
         try {
@@ -230,48 +264,13 @@ class AccountController extends AbstractActionController
     }
 
     /**
-     * Open URL from account
-     *
-     * @return Response
-     * @throws ForbiddenException
-     */
-    public function openUrlAction()
-    {
-        $user      = $this->identity();
-        $accountId = (int)$this->params('accountId');
-
-        try {
-            $account = $this->accounts->findById($accountId);
-        } catch (AccountNotFoundException $e) {
-            return $this->notFoundAction();
-        }
-
-        if ($account->getUserId() != $user->getId()) {
-            throw new ForbiddenException("Account of another user");
-        }
-
-        if ($account->getFolderId() != $this->params('folderId')) {
-            return $this->notFoundAction();
-        }
-
-        $data         = $this->dataRepository->findByAccount($account)->getData();
-        $url          = $data['url'];
-        $validSchemes = ['http', 'https'];
-
-        if (in_array(parse_url($url, PHP_URL_SCHEME), $validSchemes)) {
-            return $this->redirect()->toUrl($url);
-        }
-    }
-
-    /**
      * Show favicon
-     *
-     * @return Zend\Http\Response\Stream
      * @throws ForbiddenException
      */
     public function faviconAction()
     {
-        $user      = $this->identity();
+        $user = $this->identity();
+
         $accountId = (int)$this->params('accountId');
 
         try {
@@ -289,19 +288,17 @@ class AccountController extends AbstractActionController
         }
 
         $accountData = $this->dataRepository->findByAccount($account);
+        $filepath    = $this->iconService->getFileFromAccount($accountData);
 
-        $filepath = $this->iconService->getFileFromAccount($accountData);
-
-        $response = new \Zend\Http\Response\Stream();
+        $response = new ResponseStream();
         $response->setStream(fopen($filepath, 'r'));
 
         $headers = $response->getHeaders();
-        $headers
-            ->addHeaderLine('Content-Type', 'image/png')
-            ->addHeaderLine('Expires', '+ 7 day')
-            ->addHeaderLine('Cache-Control', 'public, max-age=604800')
-            ->addHeaderLine('Pragma', 'cache')
-            ->addHeaderLine('Content-Length', filesize($filepath));
+        $headers->addHeaderLine('Content-Type', 'image/png')
+                ->addHeaderLine('Expires', '+ 7 day')
+                ->addHeaderLine('Cache-Control', 'public, max-age=604800')
+                ->addHeaderLine('Pragma', 'cache')
+                ->addHeaderLine('Content-Length', filesize($filepath));
 
         return $response;
     }

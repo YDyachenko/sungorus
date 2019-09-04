@@ -4,8 +4,8 @@ namespace Application\Repository;
 
 use Application\Model\Account;
 use Application\Model\AccountData;
-use Zend\Hydrator\HydratorInterface;
 use Zend\Db\TableGateway\TableGatewayInterface;
+use Zend\Hydrator\HydratorInterface;
 
 class AccountDataRepository implements AccountDataRepositoryInterface
 {

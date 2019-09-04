@@ -64,9 +64,9 @@ class AccountForm extends Form implements InputFilterProviderInterface
         ]);
 
         $this->add([
-            'name'    => 'submit',
-            'type'    => Submit::class,
-            'options' => [
+            'name'       => 'submit',
+            'type'       => Submit::class,
+            'options'    => [
                 'label'       => 'Save',
                 'column-size' => 'sm-10 col-sm-offset-2',
             ],

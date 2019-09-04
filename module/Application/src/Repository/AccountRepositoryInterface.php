@@ -41,7 +41,7 @@ interface AccountRepositoryInterface
     /**
      * Find accounts by name
      * @param string $name account name
-     * @param User $user
+     * @param User   $user
      * @return Account[]
      */
     public function findByName($name, User $user);

@@ -35,9 +35,9 @@ class AuthLogService
     {
         return $this->successTable->select(function ($select) use ($user) {
             $select->where(['user_id' => $user->getId()])
-                ->order('datetime DESC')
-                ->limit(1)
-                ->offset(1);
+                   ->order('datetime DESC')
+                   ->limit(1)
+                   ->offset(1);
         })->current();
     }
 
@@ -46,7 +46,7 @@ class AuthLogService
         $blocktime = $this->config['application']['authentication']['blocktime'];
 
         return $this->failureTable->delete([
-            '`datetime` < NOW() - INTERVAL ? SECOND' => $blocktime
+            '`datetime` < NOW() - INTERVAL ? SECOND' => $blocktime,
         ]);
     }
 
@@ -59,7 +59,7 @@ class AuthLogService
         $where = [
             'ip'                                     => $long,
             'count >= ?'                             => $maxfailures,
-            '`datetime` > now() - INTERVAL ? SECOND' => $blocktime
+            '`datetime` > now() - INTERVAL ? SECOND' => $blocktime,
         ];
 
         $result = $this->failureTable->select(function ($select) use ($where) {
@@ -75,16 +75,16 @@ class AuthLogService
         $set  = [
             'user_id'    => $user->getId(),
             'ip'         => $long,
-            'user_agent' => substr($userAgent, 0, 255)
+            'user_agent' => substr($userAgent, 0, 255),
         ];
 
         $this->successTable->insert($set);
 
         $result = $this->successTable->select(function ($select) use ($user) {
             $select->where(['user_id' => $user->getId()])
-                ->order('datetime DESC')
-                ->limit(1)
-                ->offset(50);
+                   ->order('datetime DESC')
+                   ->limit(1)
+                   ->offset(50);
         });
 
         if (! $result->count()) {
@@ -93,7 +93,7 @@ class AuthLogService
 
         $this->successTable->delete([
             'user_id'       => $user->getId(),
-            'datetime <= ?' => $result->current()->getDatetime()
+            'datetime <= ?' => $result->current()->getDatetime(),
         ]);
     }
 
@@ -105,13 +105,13 @@ class AuthLogService
         if ($rowset->count()) {
             $this->failureTable->update([
                 'count'    => new Expression('count + 1'),
-                'datetime' => new Expression('now()')
+                'datetime' => new Expression('now()'),
             ], ['ip' => $long]);
         } else {
             $this->failureTable->insert([
                 'ip'       => $long,
                 'count'    => 1,
-                'datetime' => new Expression('now()')
+                'datetime' => new Expression('now()'),
             ]);
         }
     }
