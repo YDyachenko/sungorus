@@ -62,7 +62,10 @@ class ConfigProvider
                 Service\ExportService::class                     => Service\Factory\ExportServiceFactory::class,
                 Service\UserKeyService::class                    => Service\Factory\UserKeyServiceFactory::class,
                 Service\AuthLogService::class                    => Service\Factory\AuthLogServiceFactory::class,
+                Listener\AuthorizationListener::class            => Listener\Factory\AuthorizationListenerFactory::class,
                 Listener\EncryptionKeyListener::class            => Listener\Factory\EncryptionKeyListenerFactory::class,
+                Listener\SessionListener::class                  => Listener\Factory\SessionListenerFactory::class,
+                Listener\SharedEventManagerListener::class       => Listener\Factory\SharedEventManagerListenerFactory::class,
             ],
         ];
     }

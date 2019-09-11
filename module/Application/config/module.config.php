@@ -1,5 +1,7 @@
 <?php
 
+namespace Application;
+
 use Application\Controller\CronController;
 
 return [
@@ -21,6 +23,12 @@ return [
         'strategies'               => [
             'ViewJsonStrategy',
         ],
+    ],
+    'listeners'    => [
+        Listener\SessionListener::class,
+        Listener\AuthorizationListener::class,
+        Listener\SharedEventManagerListener::class,
+        Listener\EncryptionKeyListener::class,
     ],
     // Placeholder for console routes
     'console'      => [
