@@ -2,19 +2,29 @@
 
 namespace Application\Authentication;
 
+use Zend\Authentication\Result;
 use Zend\EventManager\Event;
-use Zend\Stdlib\RequestInterface as Request;
+use Zend\Stdlib\RequestInterface;
 
 class AuthEvent extends Event
 {
 
-    const EVENT_AUTHENTICATION         = 'authentication';
-    const EVENT_AUTHENTICATION_SUCCESS = 'authentication.success';
-    const EVENT_AUTHENTICATION_FAILURE = 'authentication.failure';
+    const EVENT_AUTHENTICATE_POST = 'authenticate.post';
+
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+
+    /**
+     * @var Result
+     */
+    protected $result;
 
     /**
      * Get request
-     * @return Request
+     * @return RequestInterface
      */
     public function getRequest()
     {
@@ -23,13 +33,36 @@ class AuthEvent extends Event
 
     /**
      * Set request
-     * @param Request $request
-     * @return MvcEvent
+     * @param RequestInterface $request
+     * @return self
      */
-    public function setRequest(Request $request)
+    public function setRequest(RequestInterface $request)
     {
         $this->setParam('request', $request);
         $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Get authentication result
+     * @return Result
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * Set authentication result
+     * @param Result $result
+     * @return self
+     */
+    public function setResult(Result $result)
+    {
+        $this->setParam('result', $result);
+        $this->result = $result;
+
         return $this;
     }
 }

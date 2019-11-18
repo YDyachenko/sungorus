@@ -2,18 +2,17 @@
 
 namespace Application\Authentication\Factory;
 
-use Application\Authentication\AuthListener;
+use Application\Authentication\AuthFailureListener;
 use Application\Service\AuthLogService;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-class AuthListenerFactory implements FactoryInterface
+class AuthFailureListenerFactory implements FactoryInterface
 {
-
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $authLogService = $container->get(AuthLogService::class);
-
-        return new AuthListener($authLogService);
+        return new AuthFailureListener(
+            $container->get(AuthLogService::class)
+        );
     }
 }

@@ -5,19 +5,14 @@
                 <h3 class="panel-title">Sign in to Sungorus</h3>
             </div>
             <div class="panel-body">
-                <?php if ($message): ?>
-                    <div class="alert alert-danger text-center">
-                        <?= $this->escapeHtml($message); ?>
-                    </div>
-                <?php endif; ?>
-                <?php 
+                <?php
                     $form->setAttribute('action', $this->url('login'));
 
                     $form->get('submit')->setAttribute('class', 'btn btn-primary btn-block');
 
                     echo $this->form($form, null);
                 ?>
-                <?php if ($registrationEnabled): ?>
+                <?php if ($registration): ?>
                     <div class="text-center text-muted" style="margin-top: 20px;">
                         Don't have an account?
                         <a href="<?= $this->escapeHtmlAttr($this->url('signup')); ?>">Sign up</a>

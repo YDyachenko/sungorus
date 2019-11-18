@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Application\Authentication\AuthEvent;
 use Application\Form\LoginForm;
+use Zend\Authentication\Adapter\ValidatableAdapterInterface;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -20,7 +21,7 @@ class AuthController extends AbstractActionController
     /**
      * @var AuthenticationServiceInterface
      */
-    protected $authService;
+    protected $service;
 
     /**
      * @var LoginForm
@@ -34,12 +35,12 @@ class AuthController extends AbstractActionController
 
 
     public function __construct(
-        AuthenticationServiceInterface $authService,
+        AuthenticationServiceInterface $service,
         array $config,
         LoginForm $form,
         ManagerInterface $manager
     ) {
-        $this->authService    = $authService;
+        $this->service        = $service;
         $this->config         = $config;
         $this->form           = $form;
         $this->sessionManager = $manager;
@@ -51,60 +52,49 @@ class AuthController extends AbstractActionController
      */
     public function loginAction()
     {
-        if ($this->authService->hasIdentity()) {
+        if ($this->service->hasIdentity()) {
             return $this->redirect()->toRoute('home');
         }
 
+        $this->layout('layout/login');
+
         $error   = false;
-        $message = '';
-        $events  = $this->getEventManager();
-
-        $results = $events->trigger(AuthEvent::EVENT_AUTHENTICATION);
-        if ($results->stopped()) {
-            $result  = $results->last();
-            $message = $result['message'];
-            $error   = true;
-            $this->form->get('submit')->setAttribute('disabled', 'disabled');
-        }
-
         $request = $this->getRequest();
 
-        if (! $error && $request->isPost()) {
+        if ($request->isPost()) {
             $this->form->setData($request->getPost());
 
             if ($this->form->isValid()) {
-                $authAdapter = $this->authService->getAdapter();
-                $data        = $this->form->getData();
+                /* @var ValidatableAdapterInterface $adapter */
+                $adapter = $this->service->getAdapter();
+                $data    = $this->form->getData();
 
-                $authAdapter->setIdentity($data['identity'])
-                            ->setCredential($data['credential']);
+                $adapter->setIdentity($data['identity'])
+                        ->setCredential($data['credential']);
 
-                $result = $this->authService->authenticate();
+                $result = $this->service->authenticate();
 
-                $event = new AuthEvent();
-                $event->setTarget($this);
+                $event = new AuthEvent(AuthEvent::EVENT_AUTHENTICATE_POST, $this);
                 $event->setRequest($request);
+                $event->setResult($result);
+
+                $events = $this->getEventManager();
+                $events->triggerEvent($event);
 
                 if ($result->isValid()) {
                     $this->sessionManager->regenerateId();
-                    $event->setName(AuthEvent::EVENT_AUTHENTICATION_SUCCESS);
-                    $events->triggerEvent($event);
+
                     return $this->redirect()->toRoute('home');
                 } else {
-                    $event->setName(AuthEvent::EVENT_AUTHENTICATION_FAILURE);
-                    $events->triggerEvent($event);
                     $error = true;
                 }
             }
         }
 
-        $this->layout('layout/login');
-
         return [
-            'form'                => $this->form,
-            'error'               => $error,
-            'message'             => $message,
-            'registrationEnabled' => $this->config['application']['registration']['enabled'],
+            'form'         => $this->form,
+            'error'        => $error,
+            'registration' => $this->config['application']['registration']['enabled'],
         ];
     }
 
@@ -114,7 +104,7 @@ class AuthController extends AbstractActionController
      */
     public function logoutAction()
     {
-        $this->authService->clearIdentity();
+        $this->service->clearIdentity();
 
         return $this->redirect()->toRoute('login');
     }
