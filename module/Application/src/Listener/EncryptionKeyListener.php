@@ -70,6 +70,10 @@ class EncryptionKeyListener implements ListenerAggregateInterface
 
     public function onDispatch(MvcEvent $event)
     {
+        if ($event->getRequest() instanceof \Zend\Console\Request) {
+            return;
+        }
+
         $routeMatch = $event->getRouteMatch();
 
         if (in_array($routeMatch->getMatchedRouteName(), $this->skipRoutes)) {
